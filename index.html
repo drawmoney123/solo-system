@@ -981,7 +981,7 @@ function renderGates(){
 function renderShop(){
   return '<div class="panel"><h2>Магазин наград</h2>'+
     '<div class="goldBig"><b>Б</b> '+S.hunter.gold+' баллов</div>'+
-    (S.shop.map(it=>{const restActive=it.kind==='restDay'&&S.restDay===today();return '<div class="qitem">'+
+    ([...S.shop].sort((a,b)=>a.cost-b.cost).map(it=>{const restActive=it.kind==='restDay'&&S.restDay===today();return '<div class="qitem">'+
       '<div class="qbody" data-act="editshop" data-id="'+it.id+'"><div class="qtitle">'+esc(it.title)+'</div>'+
       '<div class="qmeta"><span style="color:#ffd54d">'+it.cost+' баллов</span>'+(it.kind==='restDay'?'<span>Сохраняет серию сегодня</span>':'')+'</div></div>'+
       '<button class="btn small" data-act="buy" data-id="'+it.id+'" '+(S.hunter.gold<it.cost||restActive?'disabled':'')+'>'+(restActive?'Активно':'Получить')+'</button>'+
