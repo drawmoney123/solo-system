@@ -1,0 +1,1195 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>СИСТЕМА</title>
+<meta name="theme-color" content="#04060c">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="СИСТЕМА">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:#04060c radial-gradient(1200px 600px at 50% -10%,#0b1730 0%,#04060c 60%);
+  color:#cfe4ff;min-height:100vh;overscroll-behavior:none;
+}
+#app{max-width:520px;margin:0 auto;padding:0 12px calc(90px + env(safe-area-inset-bottom))}
+header{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;
+  padding:calc(12px + env(safe-area-inset-top)) 2px 12px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  background:rgba(4,6,12,.78);border-bottom:1px solid rgba(90,170,255,.18)}
+.logo{font-weight:800;letter-spacing:.35em;font-size:15px;color:#7fc4ff;text-shadow:0 0 12px rgba(80,170,255,.8)}
+.gold{font-weight:700;color:#ffd54d;font-size:14px;letter-spacing:.05em}
+.gold b,.goldBig b{border:1px solid rgba(255,213,77,.5);border-radius:50%;display:inline-block;width:17px;height:17px;line-height:17px;text-align:center;font-size:10px;margin-right:4px;font-style:normal}
+.panel{position:relative;border:1px solid rgba(90,170,255,.35);
+  background:linear-gradient(180deg,rgba(12,20,38,.92),rgba(8,13,26,.92));
+  box-shadow:0 0 18px rgba(40,120,255,.12), inset 0 0 30px rgba(40,120,255,.05);
+  padding:14px;margin:14px 0;border-radius:4px}
+.panel::before,.panel::after{content:"";position:absolute;width:14px;height:14px;pointer-events:none}
+.panel::before{top:-1px;left:-1px;border-top:2px solid #6fb9ff;border-left:2px solid #6fb9ff}
+.panel::after{bottom:-1px;right:-1px;border-bottom:2px solid #6fb9ff;border-right:2px solid #6fb9ff}
+.panel.danger{border-color:rgba(255,110,110,.45);box-shadow:0 0 18px rgba(255,80,80,.15), inset 0 0 30px rgba(255,80,80,.05)}
+.panel.danger::before{border-top-color:#ff7d7d;border-left-color:#ff7d7d}
+.panel.danger::after{border-bottom-color:#ff7d7d;border-right-color:#ff7d7d}
+.panel.danger h2{color:#ff9d9d;text-shadow:0 0 10px rgba(255,110,110,.5)}
+.panel.boss{border-color:rgba(185,139,255,.45);box-shadow:0 0 18px rgba(150,90,255,.15), inset 0 0 30px rgba(150,90,255,.05)}
+.panel.boss::before{border-top-color:#b98bff;border-left-color:#b98bff}
+.panel.boss::after{border-bottom-color:#b98bff;border-right-color:#b98bff}
+.panel.boss h2{color:#c9a4ff;text-shadow:0 0 10px rgba(185,139,255,.5)}
+.panel.hiddenq{border-color:rgba(255,213,77,.4);box-shadow:0 0 18px rgba(255,200,60,.12), inset 0 0 30px rgba(255,200,60,.04)}
+.panel.hiddenq::before{border-top-color:#ffd54d;border-left-color:#ffd54d}
+.panel.hiddenq::after{border-bottom-color:#ffd54d;border-right-color:#ffd54d}
+.panel.hiddenq h2{color:#ffe08a;text-shadow:0 0 10px rgba(255,213,77,.5)}
+h2{font-size:12px;letter-spacing:.28em;color:#8fc7ff;margin:0 0 12px;font-weight:700;text-transform:uppercase;text-shadow:0 0 10px rgba(80,170,255,.5)}
+.muted{color:#6f8cb0;font-size:11px;line-height:1.55}
+.sec-note{margin-top:10px}
+.empty{color:#5c7699;font-size:12px;padding:8px 0}
+.btn{display:inline-block;background:rgba(40,90,160,.15);border:1px solid rgba(110,185,255,.5);color:#9fd0ff;
+  padding:10px 14px;font-size:12px;letter-spacing:.15em;text-transform:uppercase;border-radius:3px;font-weight:700;font-family:inherit}
+.btn:active{background:rgba(80,150,255,.28)}
+.btn.primary{background:rgba(60,130,255,.25);color:#dff0ff;box-shadow:0 0 12px rgba(60,140,255,.3)}
+.btn.block{display:block;width:100%;text-align:center;margin-top:12px}
+.btn.small{padding:6px 10px;font-size:11px;letter-spacing:.08em}
+.btn:disabled{opacity:.35}
+.bar{height:10px;background:rgba(90,170,255,.12);border:1px solid rgba(90,170,255,.25);border-radius:2px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#2f7fe0,#54d7ff);box-shadow:0 0 10px rgba(84,215,255,.7);position:relative;overflow:hidden}
+.bar i::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);transform:translateX(-100%);animation:shine 2.8s infinite}
+@keyframes shine{60%{transform:translateX(100%)}100%{transform:translateX(100%)}}
+.xprow{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.15em;color:#8fb4de;margin-bottom:5px}
+.stTop{display:flex;gap:14px;align-items:center}
+.rankBox{width:64px;height:64px;flex:none;border:2px solid;display:flex;align-items:center;justify-content:center;
+  font-size:34px;font-weight:900;border-radius:4px;text-shadow:0 0 14px currentColor;animation:pulse 3s ease-in-out infinite}
+@keyframes pulse{0%,100%{filter:brightness(.92)}50%{filter:brightness(1.25)}}
+.stName{font-size:16px;font-weight:700;color:#eaf4ff}
+.pen{font-size:11px;color:#5f84ad}
+.titleLine{font-size:11px;color:#ffd54d;margin-top:2px;letter-spacing:.08em;text-shadow:0 0 8px rgba(255,213,77,.4)}
+.stLvl{font-size:12px;color:#8fb4de;margin-top:3px;letter-spacing:.05em}
+.statRow{display:flex;align-items:center;gap:10px;padding:7px 0}
+.statName{width:104px;flex:none;font-size:11px;letter-spacing:.12em;color:#9cc2ec}
+.statVal{width:34px;flex:none;text-align:right;font-weight:800;color:#dff0ff;font-size:14px}
+.statRow .bar{flex:1}
+.todayRow{display:flex;justify-content:space-between;font-size:13px;padding:6px 0;color:#c9defa}
+.todayRow b{color:#dff0ff}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid rgba(255,213,77,.4);color:#e8d28a;background:rgba(255,213,77,.06);
+  padding:6px 10px;font-size:11px;border-radius:3px;font-family:inherit;letter-spacing:.05em}
+.chip.on{color:#ffd54d;border-color:#ffd54d;box-shadow:0 0 10px rgba(255,213,77,.35)}
+.chip.cf{border-color:rgba(110,185,255,.4);color:#9cc2ec;background:rgba(90,170,255,.06)}
+.chip.cf.on{color:#8fd0ff;border-color:#8fd0ff;box-shadow:0 0 10px rgba(90,180,255,.4)}
+.fs{color:#ffd54d;font-style:normal;margin-right:3px;text-shadow:0 0 6px rgba(255,213,77,.6)}
+.chart{display:flex;gap:8px;align-items:flex-end}
+.col{flex:1;text-align:center}
+.colbar{height:70px;display:flex;align-items:flex-end;justify-content:center;border-bottom:1px solid rgba(90,170,255,.25);margin-bottom:6px}
+.colbar i{display:block;width:60%;background:linear-gradient(180deg,#54d7ff,#2f7fe0);box-shadow:0 0 8px rgba(84,215,255,.5);border-radius:2px 2px 0 0}
+.col span{display:block;font-size:10px;color:#6f8cb0;letter-spacing:.05em}
+.col b{display:block;font-size:10px;color:#9cc2ec;margin-top:2px;height:12px}
+.qitem{display:flex;align-items:center;gap:10px;padding:10px 2px;border-bottom:1px solid rgba(90,170,255,.12)}
+.qitem:last-of-type{border-bottom:0}
+.qcheck{font-size:20px;color:#5ab0ff;background:none;border:none;padding:2px 4px;font-family:inherit}
+.qcheck.on{color:#ffd54d;text-shadow:0 0 10px rgba(255,213,77,.8)}
+.qbody{flex:1;min-width:0}
+.qtitle{font-size:14px;color:#e6f1ff;word-wrap:break-word}
+.qtitle.done{color:#5f7ba0;text-decoration:line-through}
+.qmeta{font-size:11px;color:#7d9cc4;margin-top:3px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.badge{font-weight:800;font-size:10px;padding:1px 6px;border:1px solid;border-radius:3px;letter-spacing:.1em}
+.rE{color:#9aa5b1;border-color:#9aa5b1}
+.rD{color:#7ddba3;border-color:#7ddba3}
+.rC{color:#5ab6ff;border-color:#5ab6ff}
+.rB{color:#b98bff;border-color:#b98bff}
+.rA{color:#ff8f6b;border-color:#ff8f6b}
+.rS{color:#ffd54d;border-color:#ffd54d}
+.xdel{background:none;border:none;color:#4a5f80;font-size:14px;padding:6px;font-family:inherit}
+button.qcheck,button.xdel{min-width:44px;min-height:44px}
+.fold{display:block;width:100%;text-align:left;margin-top:10px;background:none;border:none;color:#6f93c0;
+  font-size:11px;letter-spacing:.15em;text-transform:uppercase;padding:8px 0;font-family:inherit}
+.dgHead{display:flex;align-items:center;gap:8px}
+.dgHead h2{margin:0;flex:1;min-width:0}
+.floor{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed rgba(90,170,255,.12)}
+.floor:last-of-type{border-bottom:0}
+.fmark{width:18px;flex:none;text-align:center;color:#3f5a80}
+.floor.cleared .fmark{color:#ffd54d}
+.ftitle{flex:1;font-size:13px;color:#c9defa}
+.floor.cleared .ftitle{color:#5f7ba0;text-decoration:line-through}
+.floor.boss .ftitle{color:#ff8f8f;font-weight:700}
+.goldBig{font-size:22px;color:#ffd54d;font-weight:800;margin-bottom:10px}
+.goldBig b{width:22px;height:22px;line-height:22px;font-size:12px}
+.logrow{font-size:12px;color:#9cbbe0;padding:6px 0;border-bottom:1px solid rgba(90,170,255,.08)}
+.logrow time{color:#5f7ba0;margin-right:8px;font-size:11px}
+.tabbar{position:fixed;bottom:0;left:0;right:0;z-index:30;display:flex;max-width:520px;margin:0 auto;
+  background:rgba(6,10,20,.95);border-top:1px solid rgba(90,170,255,.25);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  padding:6px 4px calc(8px + env(safe-area-inset-bottom))}
+.tabbar button{flex:1;background:none;border:none;color:#5f7fa8;font-size:10px;letter-spacing:.08em;padding:6px 2px;font-family:inherit}
+.tabbar button .ti{display:block;font-size:18px;margin-bottom:3px}
+.tabbar button.on{color:#8fd0ff;text-shadow:0 0 10px rgba(90,180,255,.7)}
+.toast{position:fixed;top:calc(12px + env(safe-area-inset-top));left:50%;transform:translate(-50%,-20px);opacity:0;z-index:60;
+  width:min(92vw,420px);pointer-events:none;transition:all .3s ease}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.sys-head{color:#7fc4ff;font-size:10px;letter-spacing:.35em;margin-bottom:5px;font-weight:700}
+.toast .msg{font-size:13px;color:#e8f3ff;line-height:1.4}
+.overlay{position:fixed;inset:0;background:rgba(2,4,10,.82);z-index:50;display:flex;align-items:center;justify-content:center;padding:16px}
+.overlay.hidden{display:none}
+.modal{width:100%;max-width:420px;margin:0}
+.askText{font-size:14px;line-height:1.5;color:#c9defa}
+label.f{display:block;font-size:10px;letter-spacing:.2em;color:#7fa6d4;margin:12px 0 5px;text-transform:uppercase}
+input[type=text],input[type=number],select,textarea{width:100%;background:rgba(10,18,34,.9);border:1px solid rgba(90,170,255,.4);
+  color:#e8f3ff;padding:10px;font-size:16px;border-radius:3px;font-family:inherit}
+textarea{min-height:110px;resize:vertical}
+.m-btns{display:flex;gap:10px;margin-top:16px}
+.m-btns .btn{flex:1;text-align:center}
+#levelup{position:fixed;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;background:rgba(2,5,12,.87)}
+#levelup.hidden{display:none}
+.lu{text-align:center;animation:luIn .5s ease}
+.lu-t{font-size:34px;font-weight:900;letter-spacing:.25em;color:#7fd0ff;animation:glowText 1.2s ease-in-out infinite}
+@keyframes glowText{0%,100%{text-shadow:0 0 30px #3fa9ff,0 0 60px #3fa9ff}50%{text-shadow:0 0 45px #6fc4ff,0 0 90px #3fa9ff}}
+.lu-l{margin-top:10px;font-size:16px;color:#dff0ff;letter-spacing:.2em}
+@keyframes luIn{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes viewIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="logo">СИСТЕМА</div>
+    <div class="gold" id="goldTop"><b>G</b> 0</div>
+  </header>
+  <main id="view"></main>
+</div>
+
+<nav class="tabbar">
+  <button data-tab="status"><span class="ti">◈</span>Статус</button>
+  <button data-tab="quests"><span class="ti">✦</span>Квесты</button>
+  <button data-tab="gates"><span class="ti">▣</span>Врата</button>
+  <button data-tab="shop"><span class="ti">⬡</span>Лавка</button>
+  <button data-tab="more"><span class="ti">≡</span>Ещё</button>
+</nav>
+
+<div class="toast" id="toast">
+  <div class="panel" style="margin:0">
+    <div class="sys-head">СИСТЕМА</div>
+    <div class="msg" id="toastMsg"></div>
+  </div>
+</div>
+
+<div id="overlay" class="overlay hidden"></div>
+
+<div id="levelup" class="hidden">
+  <div class="lu">
+    <div class="lu-t">LEVEL UP</div>
+    <div class="lu-l" id="luLvl"></div>
+    <div class="muted" style="margin-top:16px;letter-spacing:.2em">НАЖМИ, ЧТОБЫ ПРОДОЛЖИТЬ</div>
+  </div>
+</div>
+
+<input type="file" id="fileB" hidden accept=".json,application/json">
+<input type="file" id="fileP" hidden accept=".json,application/json">
+
+<script>
+(function(){
+"use strict";
+const KEY='soloSystemV1';
+const PREV_KEY='soloSystemBeforeRestoreV1';
+const SCHEMA_VERSION=3;
+const $=s=>document.querySelector(s);
+const DIFFS={E:{xp:15,gold:10},D:{xp:30,gold:20},C:{xp:60,gold:40},B:{xp:120,gold:80},A:{xp:250,gold:160},S:{xp:500,gold:320}};
+const DIFF_ORDER=['E','D','C','B','A','S'];
+const STATS={str:'СИЛА',int:'ИНТЕЛЛЕКТ',car:'КАРЬЕРА',vit:'ВЫНОСЛИВОСТЬ',cha:'ХАРИЗМА',wil:'ВОЛЯ',fin:'ФИНАНСЫ'};
+const RANKS=[[60,'S'],[45,'A'],[30,'B'],[20,'C'],[10,'D'],[0,'E']];
+
+const TITLES=[
+  {id:'awake',name:'Пробуждение',check:s=>s.done.quests>=1},
+  {id:'gate1',name:'Покоритель врат',check:s=>s.done.dungeons>=1},
+  {id:'q25',name:'Атакующий',check:s=>s.done.quests>=25},
+  {id:'q100',name:'Берсерк',check:s=>s.done.quests>=100},
+  {id:'streak7',name:'Неделя без слабостей',check:s=>s.done.bestStreak>=7},
+  {id:'streak30',name:'Машина дисциплины',check:s=>s.done.bestStreak>=30},
+  {id:'lvl10',name:'Охотник D-ранга',check:s=>s.hunter.level>=10},
+  {id:'lvl30',name:'Элита гильдии',check:s=>s.hunter.level>=30},
+  {id:'lvl60',name:'Охотник S-ранга',check:s=>s.hunter.level>=60},
+  {id:'str50',name:'Железное тело',check:s=>s.stats.str>=50},
+  {id:'int50',name:'Мудрец',check:s=>s.stats.int>=50},
+  {id:'vit50',name:'Неутомимый',check:s=>s.stats.vit>=50},
+  {id:'cha50',name:'Дипломат',check:s=>s.stats.cha>=50},
+  {id:'wil50',name:'Железная воля',check:s=>s.stats.wil>=50},
+  {id:'fin50',name:'Магнат',check:s=>s.stats.fin>=50},
+  {id:'car50',name:'Профессионал',check:s=>s.stats.car>=50},
+  {id:'gold1k',name:'Золотой запас',check:s=>s.hunter.gold>=1000},
+  {id:'shadow',name:'Монарх Теней',check:s=>Object.keys(STATS).every(k=>(s.stats[k]||0)>=30)},
+  {id:'boss5',name:'Убийца боссов',check:s=>(s.done.bosses||0)>=5},
+  {id:'hidden10',name:'Видящий скрытое',check:s=>(s.done.hidden||0)>=10}
+];
+const HIDDEN_POOL=[
+  {title:'20 приседаний прямо сейчас',stat:'str'},
+  {title:'Стакан воды и 10 глубоких вдохов',stat:'vit'},
+  {title:'Прочитай 10 страниц любой книги',stat:'int'},
+  {title:'Напиши человеку, которому давно не писал',stat:'cha'},
+  {title:'30 минут без телефона',stat:'wil'},
+  {title:'Отложи небольшую сумму в накопления',stat:'fin'},
+  {title:'Прогулка 15 минут',stat:'vit'},
+  {title:'Наведи порядок на рабочем столе',stat:'wil'},
+  {title:'Повтори 20 иностранных слов',stat:'int'},
+  {title:'Планка 60 секунд',stat:'str'},
+  {title:'Сделай кому-нибудь искренний комплимент',stat:'cha'},
+  {title:'Проверь баланс и последние траты',stat:'fin'},
+  {title:'Разбери рабочую почту до нуля',stat:'car'},
+  {title:'Запиши 3 рабочих результата за сегодня',stat:'car'}
+];
+const PENALTY_POOL=[
+  '20 минут наведения порядка',
+  '30 отжиманий или 40 приседаний',
+  '30 минут без соцсетей',
+  'Прогулка 20 минут без наушников'
+];
+
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function dayHash(str){let h=0;for(let i=0;i<str.length;i++){h=(h*31+str.charCodeAt(i))|0;}return Math.abs(h);}
+function weekKey(){
+  const d=new Date();const off=(d.getDay()+6)%7;
+  const mon=new Date(d);mon.setDate(d.getDate()-off);
+  return mon.getFullYear()+'-'+String(mon.getMonth()+1).padStart(2,'0')+'-'+String(mon.getDate()).padStart(2,'0');
+}
+
+function seed(){
+  const d=(t,st)=>({id:uid(),title:t,stat:st,done:false});
+  const q=(t,st,df)=>({id:uid(),title:t,stat:st,diff:df,done:false});
+  return {
+    v:SCHEMA_VERSION,
+    hunter:{name:'Охотник',level:1,xp:0,gold:50},
+    stats:{str:1,int:1,car:1,vit:1,cha:1,wil:1,fin:1},
+    dailies:[
+      d('Тренировка 20 минут','str'),
+      d('Учёба 30 минут (курс или книга)','int'),
+      d('Закрыть главную задачу дня','car'),
+      d('8 000 шагов','vit'),
+      d('План на завтра (3 задачи)','wil'),
+      d('Записать траты за день','fin')
+    ],
+    quests:[
+      q('Составить программу тренировок на неделю','str','C'),
+      q('Выбрать курс и записаться на него','int','C'),
+      q('Собрать бэклог рабочих задач','car','C')
+    ],
+    dungeons:[{
+      id:uid(),title:'Врата D-ранга: Спортивный старт',diff:'D',stat:'str',cleared:false,
+      floors:[
+        {title:'3 тренировки за неделю',cleared:false},
+        {title:'Замерить вес и обхваты',cleared:false},
+        {title:'Сон до 23:30 пять дней подряд',cleared:false},
+        {title:'50 000 шагов за неделю',cleared:false},
+        {title:'Месяц без пропусков тренировок',cleared:false}
+      ]
+    }],
+    shop:[
+      {id:uid(),title:'Серия любимого сериала',cost:40},
+      {id:uid(),title:'Доставка вкусной еды',cost:120},
+      {id:uid(),title:'День без квестов (без штрафа)',cost:250,kind:'restDay'},
+      {id:uid(),title:'Покупка для себя',cost:600}
+    ],
+    log:[],applied:[],lastDay:today(),streak:0,bonusDay:null,restDay:null,
+    titles:[],activeTitle:null,history:{},penalty:null,weeklyBoss:null,hiddenDay:null,
+    focus:['str','int','car'],
+    done:{quests:0,dungeons:0,buys:0,bestStreak:0,bosses:0,hidden:0}
+  };
+}
+const LIMITS={items:1000,floors:200,log:200,applied:5000,file:2*1024*1024};
+const isObj=v=>!!v&&typeof v==='object'&&!Array.isArray(v);
+const finite=(v,fallback,min,max)=>{
+  v=Number(v);if(!Number.isFinite(v))v=fallback;
+  return Math.min(max,Math.max(min,Math.floor(v)));
+};
+const cleanText=(v,fallback,max)=>{
+  const s=typeof v==='string'?v:typeof fallback==='string'?fallback:'';
+  return s.replace(/[\u0000-\u001f\u007f]/g,' ').trim().slice(0,max);
+};
+const isDateKey=v=>typeof v==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(v);
+function normalize(saved){
+  const base=seed(),src=isObj(saved)?saved:{};
+  const seen=new Set();
+  const idOf=v=>{
+    let id=typeof v==='string'&&/^[A-Za-z0-9_-]{1,100}$/.test(v)?v:uid();
+    while(seen.has(id))id=uid();
+    seen.add(id);return id;
+  };
+  const arr=(v,max=LIMITS.items)=>Array.isArray(v)?v.slice(0,max):[];
+  const hunter=isObj(src.hunter)?src.hunter:{};
+  const s={
+    v:SCHEMA_VERSION,
+    hunter:{
+      name:cleanText(hunter.name,base.hunter.name,24)||base.hunter.name,
+      level:finite(hunter.level,base.hunter.level,1,10000),
+      xp:finite(hunter.xp,base.hunter.xp,0,1e12),
+      gold:finite(hunter.gold,base.hunter.gold,0,1e12)
+    },
+    stats:{},dailies:[],quests:[],dungeons:[],shop:[],log:[],applied:[],
+    lastDay:isDateKey(src.lastDay)?src.lastDay:today(),
+    streak:finite(src.streak,0,0,100000),
+    bonusDay:isDateKey(src.bonusDay)?src.bonusDay:null,
+    restDay:isDateKey(src.restDay)?src.restDay:null,
+    titles:[],activeTitle:null,history:{},penalty:null,weeklyBoss:null,hiddenDay:null,
+    focus:[],done:{quests:0,dungeons:0,buys:0,bestStreak:0,bosses:0,hidden:0}
+  };
+  Object.keys(STATS).forEach(k=>s.stats[k]=finite(isObj(src.stats)?src.stats[k]:undefined,base.stats[k],0,1e9));
+  s.dailies=arr(src.dailies).filter(isObj).map(d=>({
+    id:idOf(d.id),title:cleanText(d.title,'Без названия',240)||'Без названия',
+    stat:STATS[d.stat]?d.stat:'wil',done:d.done===true
+  }));
+  s.quests=arr(src.quests).filter(isObj).map(q=>{
+    const out={id:idOf(q.id),title:cleanText(q.title,'Без названия',240)||'Без названия',
+      stat:STATS[q.stat]?q.stat:'wil',diff:DIFFS[q.diff]?q.diff:'D',done:q.done===true};
+    if(Number.isFinite(Number(q.doneAt)))out.doneAt=finite(q.doneAt,0,0,Number.MAX_SAFE_INTEGER);
+    return out;
+  });
+  s.dungeons=arr(src.dungeons).filter(isObj).map(dg=>{
+    const floors=arr(dg.floors,LIMITS.floors).map(f=>isObj(f)?f:{title:f,cleared:false}).map(f=>({
+      title:cleanText(f.title,'Этаж',240)||'Этаж',cleared:f.cleared===true
+    }));
+    return {id:idOf(dg.id),title:cleanText(dg.title,'Врата',240)||'Врата',
+      diff:DIFFS[dg.diff]?dg.diff:'D',stat:STATS[dg.stat]?dg.stat:null,
+      cleared:floors.length>0&&floors.every(f=>f.cleared),floors:floors.length?floors:[{title:'Босс',cleared:false}]};
+  });
+  s.shop=arr(src.shop).filter(isObj).map(it=>({
+    id:idOf(it.id),title:cleanText(it.title,'Награда',240)||'Награда',
+    cost:finite(it.cost,50,1,1e9),
+    kind:it.kind==='restDay'||it.title==='День без квестов (без штрафа)'?'restDay':null
+  }));
+  s.log=arr(src.log,LIMITS.log).filter(isObj).map(l=>({
+    t:finite(l.t,Date.now(),0,Number.MAX_SAFE_INTEGER),m:cleanText(l.m,'Событие',500)||'Событие'
+  }));
+  const applied=new Set();
+  arr(src.applied,LIMITS.applied).forEach(v=>{const x=cleanText(v,'',240);if(x)applied.add(x);});
+  s.applied=Array.from(applied);
+  const knownTitles=new Set(TITLES.map(t=>t.id));
+  s.titles=arr(src.titles,TITLES.length).filter(id=>knownTitles.has(id)).filter((id,i,a)=>a.indexOf(id)===i);
+  s.activeTitle=s.titles.indexOf(src.activeTitle)>=0?src.activeTitle:null;
+  const focus=arr(src.focus,3).filter(k=>STATS[k]).filter((k,i,a)=>a.indexOf(k)===i);
+  s.focus=Array.isArray(src.focus)?focus:base.focus.slice();
+  if(isObj(src.history))Object.keys(src.history).filter(isDateKey).sort().slice(-60).forEach(k=>s.history[k]=finite(src.history[k],0,0,100000));
+  if(isObj(src.done))Object.keys(s.done).forEach(k=>s.done[k]=finite(src.done[k],0,0,1e9));
+  if(isObj(src.penalty)&&typeof src.penalty.task==='string')s.penalty={
+    date:isDateKey(src.penalty.date)?src.penalty.date:today(),task:cleanText(src.penalty.task,'Штрафной квест',240),done:src.penalty.done===true
+  };
+  if(isObj(src.weeklyBoss)&&typeof src.weeklyBoss.title==='string')s.weeklyBoss={
+    title:cleanText(src.weeklyBoss.title,'Босс недели',240),week:isDateKey(src.weeklyBoss.week)?src.weeklyBoss.week:weekKey(),done:src.weeklyBoss.done===true
+  };
+  if(isObj(src.hiddenDay))s.hiddenDay={
+    date:isDateKey(src.hiddenDay.date)?src.hiddenDay.date:today(),idx:finite(src.hiddenDay.idx,0,0,HIDDEN_POOL.length-1),done:src.hiddenDay.done===true
+  };
+  return s;
+}
+function validateBackup(obj){
+  if(!isObj(obj))return {ok:false,error:'Файл не содержит объект данных'};
+  if(!isObj(obj.hunter)||!isObj(obj.stats))return {ok:false,error:'Повреждены данные охотника или характеристик'};
+  for(const k of ['level','xp','gold'])if(!Number.isFinite(obj.hunter[k]))return {ok:false,error:'Некорректное числовое поле hunter.'+k};
+  for(const k of Object.keys(STATS))if(!Number.isFinite(obj.stats[k]))return {ok:false,error:'Некорректная характеристика '+k};
+  for(const k of ['dailies','quests','dungeons','shop']){
+    if(!Array.isArray(obj[k]))return {ok:false,error:'Раздел '+k+' должен быть массивом'};
+    if(obj[k].length>LIMITS.items)return {ok:false,error:'Слишком много записей в разделе '+k};
+  }
+  if(obj.dailies.some(x=>!isObj(x)||typeof x.title!=='string')||obj.quests.some(x=>!isObj(x)||typeof x.title!=='string'))return {ok:false,error:'Повреждён список квестов'};
+  if(obj.dungeons.some(x=>!isObj(x)||typeof x.title!=='string'||!Array.isArray(x.floors)||x.floors.length>LIMITS.floors))return {ok:false,error:'Повреждён список врат'};
+  if(obj.shop.some(x=>!isObj(x)||typeof x.title!=='string'||!Number.isFinite(x.cost)))return {ok:false,error:'Повреждён список наград'};
+  return {ok:true,state:normalize(obj)};
+}
+function load(){
+  try{
+    const raw=localStorage.getItem(KEY);
+    if(raw)return normalize(JSON.parse(raw));
+  }catch(e){}
+  return seed();
+}
+let S=load();
+const isFocus=k=>Array.isArray(S.focus)&&S.focus.indexOf(k)>=0;
+const ui={showDone:false,showCleared:false};
+let tab='status',lastTab=null;
+
+function checkTitles(){
+  TITLES.forEach(t=>{
+    if(S.titles.indexOf(t.id)>=0)return;
+    let ok=false;try{ok=t.check(S);}catch(e){}
+    if(ok){
+      S.titles.push(t.id);
+      if(!S.activeTitle)S.activeTitle=t.id;
+      sysMsg('ПОЛУЧЕН ТИТУЛ: «'+t.name+'»');
+      log('Получен титул: '+t.name);
+    }
+  });
+}
+function save(){
+  checkTitles();
+  try{localStorage.setItem(KEY,JSON.stringify(S));return true;}
+  catch(e){sysMsg('Не удалось сохранить данные. Экспортируй бэкап и освободи место.');return false;}
+}
+function log(m){S.log.unshift({t:Date.now(),m:m});if(S.log.length>200)S.log.length=200;}
+function bump(){
+  const t=today();
+  S.history[t]=(S.history[t]||0)+1;
+  const keys=Object.keys(S.history);
+  if(keys.length>60){keys.sort();delete S.history[keys[0]];}
+}
+function rankOf(l){for(const r of RANKS){if(l>=r[0])return r[1];}return 'E';}
+function xpNeed(l){return Math.round(80*Math.pow(l,1.35));}
+
+/* ---------- системные сообщения ---------- */
+const msgQ=[];let msgActive=false;
+function sysMsg(t){msgQ.push(t);pumpMsg();}
+function pumpMsg(){
+  if(msgActive||!msgQ.length)return;
+  msgActive=true;
+  $('#toastMsg').textContent=msgQ.shift();
+  $('#toast').classList.add('show');
+  setTimeout(()=>{
+    $('#toast').classList.remove('show');
+    setTimeout(()=>{msgActive=false;pumpMsg();},350);
+  },2600);
+}
+
+/* ---------- опыт и уровни ---------- */
+let luTimer=null;
+function showLevelUp(l){
+  $('#luLvl').textContent='УРОВЕНЬ '+l;
+  $('#levelup').classList.remove('hidden');
+  clearTimeout(luTimer);
+  luTimer=setTimeout(()=>$('#levelup').classList.add('hidden'),2600);
+}
+function rewardXP(n){return S.penalty&&!S.penalty.done?Math.max(1,Math.floor(n/2)):n;}
+function addXP(n){
+  n=rewardXP(n);
+  const h=S.hunter;const r0=rankOf(h.level);
+  h.xp+=n;let up=false;
+  while(h.xp>=xpNeed(h.level)){h.xp-=xpNeed(h.level);h.level++;up=true;}
+  if(up){
+    showLevelUp(h.level);
+    log('Достигнут уровень '+h.level);
+    const r1=rankOf(h.level);
+    if(r1!==r0){sysMsg('РАНГ ПОВЫШЕН: '+r0+' → '+r1);log('Ранг повышен до '+r1);}
+  }
+  return n;
+}
+
+/* ---------- смена дня и недели ---------- */
+function calendarGap(from,to){
+  if(!isDateKey(from)||!isDateKey(to))return 1;
+  const a=from.split('-').map(Number),b=to.split('-').map(Number);
+  return Math.round((Date.UTC(b[0],b[1]-1,b[2])-Date.UTC(a[0],a[1]-1,a[2]))/86400000);
+}
+function checkDailyReset(){
+  const t=today();let changed=false;
+  if(S.lastDay!==t){
+    const prev=S.lastDay,gap=calendarGap(prev,t);
+    const had=S.dailies.length>0;
+    const all=had&&S.dailies.every(d=>d.done);
+    const restProtected=S.restDay===prev&&gap===1;
+    const missed=!!prev&&(gap>1||(had&&!all));
+    if(restProtected){
+      log('Использован день отдыха без штрафа ('+prev+')');
+      sysMsg('ДЕНЬ ОТДЫХА ЗАВЕРШЁН. Серия сохранена, штрафа нет.');
+    }else if(missed){
+      if(S.streak>0)sysMsg('ШТРАФ: ежедневные квесты не завершены. Серия сброшена.');
+      S.streak=0;
+      log(gap>1?'Серия прервана: пропущено дней — '+(gap-1):'Серия прервана ('+prev+')');
+      if(!S.penalty||S.penalty.done){
+        S.penalty={date:t,task:PENALTY_POOL[dayHash(t)%PENALTY_POOL.length],done:false};
+        sysMsg('ВЫ ВОШЛИ В ЗОНУ НАКАЗАНИЯ. Опыт ×½ до выполнения штрафного квеста.');
+        log('Открыта зона наказания');
+      }
+    }
+    S.dailies.forEach(d=>d.done=false);
+    S.bonusDay=null;
+    S.restDay=null;
+    S.lastDay=t;
+    changed=true;
+  }
+  if(!S.hiddenDay||S.hiddenDay.date!==t){
+    S.hiddenDay={date:t,idx:dayHash(t+'h')%HIDDEN_POOL.length,done:false};
+    changed=true;
+  }
+  const wk=weekKey();
+  if(S.weeklyBoss&&S.weeklyBoss.week!==wk){
+    if(!S.weeklyBoss.done)log('Босс недели ушёл непобеждённым: '+S.weeklyBoss.title);
+    S.weeklyBoss=null;
+    changed=true;
+  }
+  if(changed)save();
+  return changed;
+}
+let rolloverTimer=null;
+function scheduleRollover(){
+  clearTimeout(rolloverTimer);
+  const now=new Date(),next=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1,0,0,1);
+  rolloverTimer=setTimeout(()=>{checkDailyReset();render();scheduleRollover();},Math.max(1000,next-now));
+}
+function finishDailySet(){
+  if(!S.dailies.length||!S.dailies.every(x=>x.done)||S.bonusDay===today())return null;
+  S.bonusDay=today();S.streak++;
+  if(S.streak>S.done.bestStreak)S.done.bestStreak=S.streak;
+  S.hunter.gold+=20;
+  const xp=addXP(40);
+  log('Все ежедневные квесты выполнены. Серия: '+S.streak);
+  return {xp,gold:20};
+}
+
+/* ---------- действия ---------- */
+function doDaily(id){
+  const d=S.dailies.find(x=>x.id===id);
+  if(!d||d.done)return;
+  const m=isFocus(d.stat)?2:1;
+  d.done=true;
+  S.stats[d.stat]=(S.stats[d.stat]||0)+m;
+  S.hunter.gold+=5;
+  bump();
+  const gained=addXP(10*m);
+  log('Ежедневный квест: '+d.title);
+  const bonus=finishDailySet();
+  if(bonus){
+    sysMsg('ВСЕ ЕЖЕДНЕВНЫЕ КВЕСТЫ ВЫПОЛНЕНЫ. За действие +'+gained+' XP, бонус +'+bonus.xp+' XP и +20 G. Серия: '+S.streak+' дн.');
+  }else{
+    sysMsg('+'+gained+' XP, +5 G, +'+m+' '+STATS[d.stat]+(m>1?' · ФОКУС ×2':''));
+  }
+  save();render();
+}
+function doQuest(id){
+  const q=S.quests.find(x=>x.id===id);
+  if(!q||q.done)return;
+  const r=DIFFS[q.diff]||DIFFS.E;
+  const m=isFocus(q.stat)?2:1;
+  q.done=true;q.doneAt=Date.now();
+  S.stats[q.stat]=(S.stats[q.stat]||0)+2*m;
+  S.hunter.gold+=r.gold;
+  S.done.quests++;
+  bump();
+  const gained=addXP(r.xp*m);
+  log('Квест выполнен: '+q.title+' ['+q.diff+']');
+  sysMsg('КВЕСТ ВЫПОЛНЕН: +'+gained+' XP, +'+r.gold+' G'+(m>1?' · ФОКУС ×2':''));
+  save();render();
+}
+function doFloor(dgId){
+  const dg=S.dungeons.find(x=>x.id===dgId);
+  if(!dg||dg.cleared)return;
+  const f=dg.floors.find(x=>!x.cleared);
+  if(!f)return;
+  f.cleared=true;
+  const r=DIFFS[dg.diff]||DIFFS.E;
+  const m=dg.stat&&isFocus(dg.stat)?2:1;
+  const fx=Math.max(5,Math.round(r.xp/2))*m;
+  if(dg.stat&&STATS[dg.stat])S.stats[dg.stat]=(S.stats[dg.stat]||0)+m;
+  bump();
+  const floorXP=addXP(fx);
+  log('Этаж зачищен: '+f.title+' ('+dg.title+')');
+  if(dg.floors.every(x=>x.cleared)){
+    dg.cleared=true;
+    S.done.dungeons++;
+    S.hunter.gold+=r.gold*2;
+    if(dg.stat&&STATS[dg.stat])S.stats[dg.stat]=(S.stats[dg.stat]||0)+3*m;
+    const clearXP=addXP(r.xp*2*m);
+    sysMsg('ВРАТА ЗАКРЫТЫ: '+dg.title+'. За этаж +'+floorXP+' XP, за зачистку +'+clearXP+' XP, +'+(r.gold*2)+' G');
+    log('Врата закрыты: '+dg.title);
+  }else{
+    sysMsg('Этаж зачищен: +'+floorXP+' XP');
+  }
+  save();render();
+}
+function doHidden(){
+  const hd=S.hiddenDay;
+  if(!hd||hd.done)return;
+  const tpl=HIDDEN_POOL[hd.idx];
+  hd.done=true;
+  S.stats[tpl.stat]=(S.stats[tpl.stat]||0)+2;
+  S.hunter.gold+=DIFFS.D.gold*2;
+  S.done.hidden=(S.done.hidden||0)+1;
+  bump();
+  const gained=addXP(DIFFS.D.xp*2);
+  log('Скрытый квест выполнен: '+tpl.title);
+  sysMsg('СКРЫТЫЙ КВЕСТ ВЫПОЛНЕН: +'+gained+' XP, +'+(DIFFS.D.gold*2)+' G');
+  save();render();
+}
+function doPenalty(){
+  if(!S.penalty||S.penalty.done)return;
+  S.penalty.done=true;
+  log('Штрафной квест выполнен: '+S.penalty.task);
+  sysMsg('НАКАЗАНИЕ СНЯТО. Награды восстановлены.');
+  save();render();
+}
+function doBoss(){
+  const b=S.weeklyBoss;
+  if(!b||b.done)return;
+  b.done=true;
+  S.done.bosses=(S.done.bosses||0)+1;
+  S.hunter.gold+=DIFFS.A.gold*2;
+  bump();
+  const gained=addXP(DIFFS.A.xp*2);
+  log('Босс недели повержен: '+b.title);
+  sysMsg('БОСС ПОВЕРЖЕН: +'+gained+' XP, +'+(DIFFS.A.gold*2)+' G');
+  save();render();
+}
+function buy(id){
+  const it=S.shop.find(x=>x.id===id);
+  if(!it)return;
+  if(it.kind==='restDay'&&S.restDay===today()){sysMsg('День отдыха уже активирован на сегодня');return;}
+  if(S.hunter.gold<it.cost){sysMsg('Недостаточно золота');return;}
+  ask('Купить «'+it.title+'» за '+it.cost+' G?',()=>{
+    S.hunter.gold-=it.cost;
+    S.done.buys++;
+    if(it.kind==='restDay')S.restDay=today();
+    log('Награда куплена: '+it.title+' (-'+it.cost+' G)');
+    sysMsg(it.kind==='restDay'?'ДЕНЬ ОТДЫХА АКТИВИРОВАН. Сегодняшний пропуск не сбросит серию и не создаст штраф.':'НАГРАДА ПОЛУЧЕНА: '+it.title);
+    save();render();
+  });
+}
+function delFrom(arr,id,label){
+  const i=arr.findIndex(x=>x.id===id);
+  if(i<0)return;
+  ask('Удалить '+label+' «'+arr[i].title+'»?',()=>{
+    arr.splice(i,1);
+    if(arr===S.dailies){
+      const bonus=finishDailySet();
+      if(bonus)sysMsg('ПЛАН ДНЯ ЗАКРЫТ. Бонус +'+bonus.xp+' XP, +20 G. Серия: '+S.streak+' дн.');
+    }
+    save();render();
+  });
+}
+function delBoss(){
+  if(!S.weeklyBoss)return;
+  ask('Отпустить босса «'+S.weeklyBoss.title+'» без боя?',()=>{
+    log('Босс отпущен: '+S.weeklyBoss.title);
+    S.weeklyBoss=null;
+    save();render();
+  });
+}
+function resetAll(){
+  ask('Полностью сбросить весь прогресс? Это необратимо.',()=>{
+    localStorage.removeItem(KEY);
+    location.reload();
+  });
+}
+
+/* ---------- данные: экспорт / импорт / контент ---------- */
+function exportData(){
+  const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='solo-system-backup-'+today()+'.json';
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+  sysMsg('Бэкап сохранён');
+}
+function readFile(e,cb){
+  const f=e.target.files[0];
+  e.target.value='';
+  if(!f)return;
+  if(f.size>LIMITS.file){sysMsg('Файл слишком большой. Максимум 2 МБ.');return;}
+  const r=new FileReader();
+  r.onload=()=>{try{cb(JSON.parse(r.result));}catch(err){sysMsg('Ошибка чтения файла');}};
+  r.readAsText(f);
+}
+function hasRecoveryPoint(){try{return !!localStorage.getItem(PREV_KEY);}catch(e){return false;}}
+function saveRecoveryPoint(){
+  try{localStorage.setItem(PREV_KEY,JSON.stringify(S));return true;}
+  catch(e){sysMsg('Не удалось создать страховочную копию. Восстановление отменено.');return false;}
+}
+function restoreBackup(obj){
+  const checked=validateBackup(obj);
+  if(!checked.ok){sysMsg('Бэкап отклонён: '+checked.error);return;}
+  ask('Восстановить этот бэкап? Текущий прогресс будет сохранён для отката.',()=>{
+    if(!saveRecoveryPoint())return;
+    S=checked.state;
+    checkDailyReset();
+    log('Импортирован бэкап');
+    save();render();sysMsg('Бэкап загружен. При необходимости доступен откат.');
+  });
+}
+function rollbackRestore(){
+  let raw=null;try{raw=localStorage.getItem(PREV_KEY);}catch(e){}
+  if(!raw){sysMsg('Страховочная копия не найдена');return;}
+  let checked;try{checked=validateBackup(JSON.parse(raw));}catch(e){checked={ok:false,error:'файл повреждён'};}
+  if(!checked.ok){sysMsg('Не удалось прочитать страховочную копию');return;}
+  ask('Вернуть состояние до последнего восстановления?',()=>{
+    const current=JSON.stringify(S);
+    S=checked.state;checkDailyReset();log('Выполнен откат восстановления');
+    try{localStorage.setItem(PREV_KEY,current);}catch(e){}
+    save();render();sysMsg('Предыдущее состояние возвращено');
+  });
+}
+function applyPack(p){
+  if(!p||typeof p!=='object')return 0;
+  let n=0;
+  const take=(arr,src,norm)=>{
+    if(!Array.isArray(src))return;
+    src.slice(0,LIMITS.items).forEach(it=>{
+      if(!it||typeof it.id!=='string'||!it.id.trim())return;
+      const pid=cleanText(it.id,'',240);
+      if(!pid)return;
+      if(S.applied.indexOf(pid)>=0)return;
+      const o=norm(it);
+      if(!o)return;
+      arr.push(o);if(S.applied.length>=LIMITS.applied)S.applied.shift();S.applied.push(pid);n++;
+    });
+  };
+  take(S.dailies,p.dailies,it=>{const title=cleanText(it.title,'',240);return title?{id:uid(),title,stat:STATS[it.stat]?it.stat:'wil',done:false}:null;});
+  take(S.quests,p.quests,it=>{const title=cleanText(it.title,'',240);return title?{id:uid(),title,stat:STATS[it.stat]?it.stat:'wil',diff:DIFFS[it.diff]?it.diff:'D',done:false}:null;});
+  take(S.dungeons,p.dungeons,it=>{
+    if(!it||!it.title||!Array.isArray(it.floors)||!it.floors.length)return null;
+    const title=cleanText(it.title,'',240);
+    const floors=it.floors.slice(0,LIMITS.floors).map(f=>cleanText((f&&f.title)||f,'',240)).filter(Boolean);
+    return title&&floors.length?{id:uid(),title,diff:DIFFS[it.diff]?it.diff:'D',stat:STATS[it.stat]?it.stat:null,cleared:false,
+      floors:floors.map(title=>({title,cleared:false}))}:null;
+  });
+  take(S.shop,p.shop,it=>{const title=cleanText(it.title,'',240);return title?{id:uid(),title,cost:finite(it.cost,50,1,1e9),kind:null}:null;});
+  if(n){log('Загружен пакет: +'+n+' записей');save();render();}
+  return n;
+}
+function contentSync(manual){
+  fetch('content.json?t='+Date.now(),{cache:'no-store'})
+    .then(r=>r.ok?r.json():null)
+    .then(p=>{
+      if(!p){if(manual)sysMsg('content.json не найден');return;}
+      const n=applyPack(p);
+      if(manual)sysMsg(n?('Обновление контента: +'+n+' записей'):'Новых записей нет');
+      else if(n)sysMsg('С ПК загружено новых записей: '+n);
+    })
+    .catch(()=>{if(manual)sysMsg('Нет сети — офлайн-режим');});
+}
+
+/* ---------- модальные окна ---------- */
+const ov=$('#overlay');let modalReturnFocus=null;
+function closeModal(){
+  ov.classList.add('hidden');ov.innerHTML='';
+  if(modalReturnFocus&&typeof modalReturnFocus.focus==='function')modalReturnFocus.focus();
+  modalReturnFocus=null;
+}
+function modal(title,fields,ok,cb){
+  modalReturnFocus=document.activeElement;
+  ov.innerHTML='<div class="panel modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle">'+title+'</h2>'+fields+
+    '<div class="m-btns"><button class="btn" data-m="cancel">Отмена</button>'+
+    '<button class="btn primary" data-m="ok">'+ok+'</button></div></div>';
+  ov.classList.remove('hidden');
+  ov.querySelector('[data-m=cancel]').onclick=closeModal;
+  ov.querySelector('[data-m=ok]').onclick=()=>{if(cb()!==false)closeModal();};
+  requestAnimationFrame(()=>{const first=ov.querySelector('input,select,textarea,[data-m=ok]');if(first)first.focus();});
+}
+ov.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+function ask(text,cb){
+  modal('Подтверждение','<div class="askText">'+esc(text)+'</div>','Подтвердить',()=>{cb();});
+}
+const statOpts=sel=>Object.keys(STATS).map(k=>'<option value="'+k+'"'+(k===sel?' selected':'')+'>'+STATS[k]+'</option>').join('');
+const diffOpts=sel=>{sel=sel||'D';return DIFF_ORDER.map(d=>'<option value="'+d+'"'+(d===sel?' selected':'')+'>'+d+'-ранг · +'+DIFFS[d].xp+' XP · +'+DIFFS[d].gold+' G</option>').join('');};
+
+function formName(){
+  modal('Имя охотника',
+    '<label class="f">Имя</label><input type="text" id="mTitle" value="'+esc(S.hunter.name)+'" maxlength="24">',
+    'Сохранить',()=>{
+      const t=$('#mTitle').value.trim();if(!t)return false;
+      S.hunter.name=t.slice(0,24);
+      save();render();
+    });
+}
+function formDaily(){
+  modal('Новый ежедневный квест',
+    '<label class="f">Название</label><input type="text" id="mTitle" placeholder="Например: Растяжка 10 минут">'+
+    '<label class="f">Характеристика</label><select id="mStat">'+statOpts()+'</select>',
+    'Создать',()=>{
+      const t=$('#mTitle').value.trim();if(!t)return false;
+      S.dailies.push({id:uid(),title:t,stat:$('#mStat').value,done:false});
+      save();render();sysMsg('Ежедневный квест добавлен');
+    });
+}
+function formEditDaily(id){
+  const d=S.dailies.find(x=>x.id===id);if(!d)return;
+  modal('Изменить ежедневный квест',
+    '<label class="f">Название</label><input type="text" id="mTitle" value="'+esc(d.title)+'">'+
+    '<label class="f">Характеристика</label><select id="mStat">'+statOpts(d.stat)+'</select>',
+    'Сохранить',()=>{
+      const t=$('#mTitle').value.trim();if(!t)return false;
+      d.title=t;d.stat=$('#mStat').value;
+      save();render();
+    });
+}
+function formQuest(){
+  modal('Новый квест',
+    '<label class="f">Название</label><input type="text" id="mTitle" placeholder="Например: Записаться к врачу">'+
+    '<label class="f">Характеристика</label><select id="mStat">'+statOpts()+'</select>'+
+    '<label class="f">Сложность</label><select id="mDiff">'+diffOpts()+'</select>',
+    'Создать',()=>{
+      const t=$('#mTitle').value.trim();if(!t)return false;
+      S.quests.push({id:uid(),title:t,stat:$('#mStat').value,diff:$('#mDiff').value,done:false});
+      save();render();sysMsg('Квест добавлен');
+    });
+}
+function formEditQuest(id){
+  const q=S.quests.find(x=>x.id===id);if(!q)return;
+  modal('Изменить квест',
+    '<label class="f">Название</label><input type="text" id="mTitle" value="'+esc(q.title)+'">'+
+    '<label class="f">Характеристика</label><select id="mStat">'+statOpts(q.stat)+'</select>'+
+    '<label class="f">Сложность</label><select id="mDiff">'+diffOpts(q.diff)+'</select>',
+    'Сохранить',()=>{
+      const t=$('#mTitle').value.trim();if(!t)return false;
+      q.title=t;q.stat=$('#mStat').value;q.diff=$('#mDiff').value;
+      save();render();
+    });
+}
+function formDungeon(){
+  modal('Открыть врата',
+    '<label class="f">Название</label><input type="text" id="mTitle" placeholder="Например: Врата B-ранга: Английский A2">'+
+    '<label class="f">Характеристика</label><select id="mStat">'+statOpts()+'</select>'+
+    '<label class="f">Сложность</label><select id="mDiff">'+diffOpts()+'</select>'+
+    '<label class="f">Этажи (каждый с новой строки, последний — босс)</label>'+
+    '<textarea id="mFloors" placeholder="Выучить 100 слов\nПройти 5 уроков\nПосмотреть фильм с субтитрами\nРазговор 30 минут"></textarea>',
+    'Открыть',()=>{
+      const t=$('#mTitle').value.trim();
+      const fl=$('#mFloors').value.split('\n').map(s=>s.trim()).filter(Boolean);
+      if(!t||!fl.length)return false;
+      S.dungeons.push({id:uid(),title:t,diff:$('#mDiff').value,stat:$('#mStat').value,cleared:false,
+        floors:fl.map(f=>({title:f,cleared:false}))});
+      save();render();sysMsg('Врата открыты: '+t);
+    });
+}
+function formEditDungeon(id){
+  const dg=S.dungeons.find(x=>x.id===id);if(!dg)return;
+  modal('Изменить врата',
+    '<label class="f">Название</label><input type="text" id="mTitle" value="'+esc(dg.title)+'">'+
+    '<label class="f">Характеристика</label><select id="mStat">'+statOpts(dg.stat)+'</select>'+
+    '<label class="f">Сложность</label><select id="mDiff">'+diffOpts(dg.diff)+'</select>',
+    'Сохранить',()=>{
+      const t=$('#mTitle').value.trim();if(!t)return false;
+      dg.title=t;dg.stat=$('#mStat').value;dg.diff=$('#mDiff').value;
+      save();render();
+    });
+}
+function formShop(){
+  modal('Новая награда',
+    '<label class="f">Название</label><input type="text" id="mTitle" placeholder="Например: Вечер игр без чувства вины">'+
+    '<label class="f">Цена (золото)</label><input type="number" id="mCost" value="100" min="1">',
+    'Добавить',()=>{
+      const t=$('#mTitle').value.trim();if(!t)return false;
+      S.shop.push({id:uid(),title:t,cost:Math.max(1,parseInt($('#mCost').value)||100)});
+      save();render();sysMsg('Награда добавлена в лавку');
+    });
+}
+function formEditShop(id){
+  const it=S.shop.find(x=>x.id===id);if(!it)return;
+  modal('Изменить награду',
+    '<label class="f">Название</label><input type="text" id="mTitle" value="'+esc(it.title)+'">'+
+    '<label class="f">Цена (золото)</label><input type="number" id="mCost" value="'+it.cost+'" min="1">',
+    'Сохранить',()=>{
+      const t=$('#mTitle').value.trim();if(!t)return false;
+      it.title=t;it.cost=Math.max(1,parseInt($('#mCost').value)||it.cost);
+      save();render();
+    });
+}
+function formBoss(){
+  modal('Босс недели',
+    '<label class="f">Главная задача недели</label><input type="text" id="mTitle" placeholder="Например: Сдать проект клиенту">'+
+    '<div class="muted sec-note">Награда сейчас: +'+rewardXP(DIFFS.A.xp*2)+' XP, +'+(DIFFS.A.gold*2)+' G. Босс живёт до понедельника.</div>',
+    'Назначить',()=>{
+      const t=$('#mTitle').value.trim();if(!t)return false;
+      S.weeklyBoss={title:t,week:weekKey(),done:false};
+      save();render();sysMsg('БОСС НЕДЕЛИ НАЗНАЧЕН: '+t);
+    });
+}
+
+/* ---------- отрисовка вкладок ---------- */
+function activityChart(){
+  const names=['вс','пн','вт','ср','чт','пт','сб'];
+  const days=[];
+  for(let i=6;i>=0;i--){
+    const d=new Date();d.setDate(d.getDate()-i);
+    const key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    days.push({label:names[d.getDay()],v:S.history[key]||0});
+  }
+  const max=Math.max(4,...days.map(x=>x.v));
+  return '<div class="panel"><h2>Активность · 7 дней</h2><div class="chart">'+
+    days.map(x=>'<div class="col"><div class="colbar"><i style="height:'+Math.round(x.v/max*66)+'px"></i></div>'+
+      '<span>'+x.label+'</span><b>'+(x.v||'')+'</b></div>').join('')+
+    '</div><div class="muted sec-note">Каждое выполненное дело — засечка. Держи график живым.</div></div>';
+}
+function renderStatus(){
+  const h=S.hunter,r=rankOf(h.level),need=xpNeed(h.level);
+  const pct=Math.min(100,Math.round(h.xp/need*100));
+  const doneD=S.dailies.filter(d=>d.done).length;
+  const activeQ=S.quests.filter(q=>!q.done).length;
+  const activeDg=S.dungeons.filter(d=>!d.cleared).length;
+  const maxStat=Math.max(10,...Object.keys(STATS).map(k=>S.stats[k]||0));
+  const at=S.activeTitle?TITLES.find(t=>t.id===S.activeTitle):null;
+  const b=S.weeklyBoss;
+  return '<div class="panel"><h2>Статус</h2>'+
+    '<div class="stTop"><div class="rankBox r'+r+'">'+r+'</div>'+
+    '<div style="flex:1;min-width:0">'+
+    '<div class="stName" data-act="name">'+esc(h.name)+' <span class="pen">✎</span></div>'+
+    (at?'<div class="titleLine">«'+at.name+'»</div>':'')+
+    '<div class="stLvl">УРОВЕНЬ '+h.level+' · РАНГ '+r+'</div>'+
+    '<div class="stLvl">Серия: '+S.streak+' дн. · Рекорд: '+S.done.bestStreak+' дн.</div>'+
+    '</div></div>'+
+    '<div style="margin-top:14px"><div class="xprow"><span>ОПЫТ</span><span>'+h.xp+' / '+need+'</span></div>'+
+    '<div class="bar"><i style="width:'+pct+'%"></i></div></div></div>'+
+    '<div class="panel"><h2>Характеристики</h2>'+
+    Object.keys(STATS).map(k=>{
+      const v=S.stats[k]||0;const w=Math.round(v/maxStat*100);
+      return '<div class="statRow"><span class="statName">'+(isFocus(k)?'<i class="fs">★</i>':'')+STATS[k]+'</span>'+
+        '<div class="bar"><i style="width:'+w+'%"></i></div>'+
+        '<span class="statVal">'+v+'</span></div>';
+    }).join('')+'</div>'+
+    '<div class="panel"><h2>Фокус охотника</h2><div class="chips">'+
+    Object.keys(STATS).map(k=>'<button class="chip cf'+(isFocus(k)?' on':'')+'" data-act="setfocus" data-id="'+k+'">'+STATS[k]+'</button>').join('')+
+    '</div><div class="muted sec-note">До трёх приоритетных направлений: их задачи дают ×2 опыта и очков характеристик.</div></div>'+
+    activityChart()+
+    '<div class="panel"><h2>Титулы · '+S.titles.length+'/'+TITLES.length+'</h2>'+
+    (S.titles.length
+      ?'<div class="chips">'+S.titles.map(id=>{
+          const t=TITLES.find(x=>x.id===id);if(!t)return '';
+          return '<button class="chip'+(S.activeTitle===id?' on':'')+'" data-act="settitle" data-id="'+id+'">'+t.name+'</button>';
+        }).join('')+'</div>'+
+        '<div class="muted sec-note">Нажми на титул, чтобы носить его. Остальные скрыты — открой их делами.</div>'
+      :'<div class="empty">Титулы открываются за достижения. Первый — за первый выполненный квест.</div>')+
+    '</div>'+
+    '<div class="panel"><h2>Сегодня</h2>'+
+    '<div class="todayRow"><span>Ежедневные квесты</span><b>'+doneD+' / '+S.dailies.length+'</b></div>'+
+    '<div class="todayRow"><span>Скрытый квест</span><b>'+(S.hiddenDay&&S.hiddenDay.done?'выполнен':'ожидает')+'</b></div>'+
+    '<div class="todayRow"><span>Босс недели</span><b>'+(!b?'не назначен':(b.done?'повержен':'жив'))+'</b></div>'+
+    '<div class="todayRow"><span>Активные квесты</span><b>'+activeQ+'</b></div>'+
+    '<div class="todayRow"><span>Открытые врата</span><b>'+activeDg+'</b></div>'+
+    (S.restDay===today()?'<div class="todayRow" style="color:#8fd0ff"><span>День отдыха</span><b style="color:#8fd0ff">активирован</b></div>':'')+
+    (S.penalty&&!S.penalty.done?'<div class="todayRow" style="color:#ff9d9d"><span>Зона наказания</span><b style="color:#ff9d9d">опыт ×½</b></div>':'')+
+    '<div class="muted sec-note">Выполняй квесты — получай опыт, золото и очки характеристик. Невыполненные ежедневные квесты в полночь сбрасывают серию.</div>'+
+    '</div>';
+}
+function questRow(q,done){
+  const r=DIFFS[q.diff]||DIFFS.E;
+  return '<div class="qitem">'+
+    '<button class="qcheck '+(done?'on':'')+'" aria-label="'+(done?'Квест выполнен':'Выполнить квест')+'" '+(done?'disabled':'')+' data-act="quest" data-id="'+q.id+'">'+(done?'◆':'◇')+'</button>'+
+    '<div class="qbody"'+(done?'':' data-act="editq" data-id="'+q.id+'"')+'><div class="qtitle '+(done?'done':'')+'">'+esc(q.title)+'</div>'+
+    '<div class="qmeta"><span class="badge r'+q.diff+'">'+q.diff+'</span><span>'+(STATS[q.stat]||'')+'</span>'+
+    '<span>+'+rewardXP(r.xp*(isFocus(q.stat)?2:1))+' XP · +'+r.gold+' G</span>'+
+    (isFocus(q.stat)?'<span class="badge rS">×2</span>':'')+'</div></div>'+
+    '<button class="xdel" aria-label="Удалить квест" data-act="delq" data-id="'+q.id+'">✕</button></div>';
+}
+function renderQuests(){
+  const act=S.quests.filter(q=>!q.done),fin=S.quests.filter(q=>q.done);
+  const doneD=S.dailies.filter(d=>d.done).length;
+  let html='';
+  if(S.penalty&&!S.penalty.done){
+    html+='<div class="panel danger"><h2>Зона наказания</h2>'+
+      '<div class="qitem"><button class="qcheck" aria-label="Выполнить штрафной квест" data-act="penalty">◇</button>'+
+      '<div class="qbody"><div class="qtitle">'+esc(S.penalty.task)+'</div>'+
+      '<div class="qmeta"><span style="color:#ff8f8f">Пока не выполнено — весь опыт ×½</span></div></div></div></div>';
+  }
+  const b=S.weeklyBoss;
+  html+='<div class="panel boss"><h2>Босс недели</h2>';
+  if(!b){
+    html+='<div class="empty">Назначь одну главную задачу недели — награда двойного A-ранга.</div>'+
+      '<button class="btn block" data-act="setBoss">+ Назначить босса</button>';
+  }else if(b.done){
+    html+='<div class="qitem"><span class="qcheck on">◆</span>'+
+      '<div class="qbody"><div class="qtitle done">'+esc(b.title)+'</div>'+
+      '<div class="qmeta"><span style="color:#ffd54d">Повержен. Новый босс — в понедельник.</span></div></div></div>';
+  }else{
+    html+='<div class="qitem"><button class="qcheck" aria-label="Победить босса недели" data-act="boss">◇</button>'+
+      '<div class="qbody"><div class="qtitle">'+esc(b.title)+'</div>'+
+      '<div class="qmeta"><span class="badge rA">БОСС</span><span>+'+rewardXP(DIFFS.A.xp*2)+' XP · +'+(DIFFS.A.gold*2)+' G</span></div></div>'+
+      '<button class="xdel" aria-label="Удалить босса недели" data-act="delboss">✕</button></div>';
+  }
+  html+='</div>';
+  const hd=S.hiddenDay;
+  if(hd){
+    const tpl=HIDDEN_POOL[hd.idx];
+    html+='<div class="panel hiddenq"><h2>Скрытый квест дня</h2>'+
+      (hd.done
+        ?'<div class="qitem"><span class="qcheck on">◆</span>'+
+         '<div class="qbody"><div class="qtitle done">'+esc(tpl.title)+'</div>'+
+         '<div class="qmeta"><span>Выполнено. Новый появится завтра.</span></div></div></div>'
+        :'<div class="qitem"><button class="qcheck" aria-label="Выполнить скрытый квест" data-act="hiddenq">◇</button>'+
+         '<div class="qbody"><div class="qtitle">'+esc(tpl.title)+'</div>'+
+         '<div class="qmeta"><span class="badge rS">×2</span><span>'+STATS[tpl.stat]+'</span>'+
+         '<span>+'+rewardXP(DIFFS.D.xp*2)+' XP · +'+(DIFFS.D.gold*2)+' G</span></div></div></div>')+
+      '</div>';
+  }
+  html+='<div class="panel"><h2>Ежедневные квесты · '+doneD+'/'+S.dailies.length+'</h2>'+
+    (S.dailies.map(d=>'<div class="qitem">'+
+      '<button class="qcheck '+(d.done?'on':'')+'" aria-label="'+(d.done?'Ежедневный квест выполнен':'Выполнить ежедневный квест')+'" data-act="daily" data-id="'+d.id+'">'+(d.done?'◆':'◇')+'</button>'+
+      '<div class="qbody"'+(d.done?'':' data-act="editdaily" data-id="'+d.id+'"')+'><div class="qtitle '+(d.done?'done':'')+'">'+esc(d.title)+'</div>'+
+      '<div class="qmeta"><span>'+(STATS[d.stat]||'')+'</span><span>+'+rewardXP(isFocus(d.stat)?20:10)+' XP · +5 G</span>'+
+      (isFocus(d.stat)?'<span class="badge rS">×2</span>':'')+'</div></div>'+
+      '<button class="xdel" aria-label="Удалить ежедневный квест" data-act="deldaily" data-id="'+d.id+'">✕</button></div>').join('')||'<div class="empty">Нет ежедневных квестов</div>')+
+    '<button class="btn block" data-act="addDaily">+ Ежедневный квест</button>'+
+    '<div class="muted sec-note">Сброс в полночь. Выполнишь все — бонус +'+rewardXP(40)+' XP, +20 G и рост серии. Нажми на текст задачи, чтобы изменить её.</div></div>';
+  html+='<div class="panel"><h2>Квесты</h2>'+
+    (act.map(q=>questRow(q,false)).join('')||'<div class="empty">Нет активных квестов</div>')+
+    '<button class="btn block" data-act="addQuest">+ Новый квест</button>'+
+    (fin.length?'<button class="fold" data-act="foldDone">'+(ui.showDone?'▾':'▸')+' Выполненные ('+fin.length+')</button>'+
+      (ui.showDone?fin.map(q=>questRow(q,true)).join(''):''):'')+
+    '</div>';
+  return html;
+}
+function dungeonCard(dg){
+  const total=dg.floors.length,cl=dg.floors.filter(f=>f.cleared).length;
+  const r=DIFFS[dg.diff]||DIFFS.E;
+  const curIdx=dg.floors.findIndex(f=>!f.cleared);
+  return '<div class="panel"><div class="dgHead"><h2 data-act="editdun" data-id="'+dg.id+'">'+esc(dg.title)+'</h2>'+
+    '<span class="badge r'+dg.diff+'">'+dg.diff+'</span>'+
+    '<button class="xdel" aria-label="Удалить врата" data-act="deldun" data-id="'+dg.id+'">✕</button></div>'+
+    '<div class="xprow" style="margin-top:10px"><span>ЭТАЖИ</span><span>'+cl+' / '+total+'</span></div>'+
+    '<div class="bar"><i style="width:'+Math.round(cl/total*100)+'%"></i></div>'+
+    '<div style="margin-top:8px">'+
+    dg.floors.map((f,i)=>{
+      const boss=i===dg.floors.length-1;
+      const isCur=!f.cleared&&i===curIdx;
+      return '<div class="floor '+(f.cleared?'cleared':'')+' '+(boss?'boss':'')+'">'+
+        '<span class="fmark">'+(f.cleared?'◆':'◇')+'</span>'+
+        '<span class="ftitle">'+(boss?'БОСС: ':'')+esc(f.title)+'</span>'+
+        (isCur?'<button class="btn small" data-act="floor" data-id="'+dg.id+'">Зачистить</button>':'')+
+        '</div>';
+    }).join('')+'</div>'+
+    '<div class="muted sec-note">'+(dg.stat&&STATS[dg.stat]?STATS[dg.stat]+(isFocus(dg.stat)?' · ФОКУС ×2':'')+' · ':'')+
+    'Награда за зачистку: +'+rewardXP(r.xp*2*(dg.stat&&isFocus(dg.stat)?2:1))+' XP, +'+(r.gold*2)+' G</div></div>';
+}
+function renderGates(){
+  const act=S.dungeons.filter(d=>!d.cleared),fin=S.dungeons.filter(d=>d.cleared);
+  return (act.map(dungeonCard).join('')||'<div class="panel"><div class="empty">Открытых врат нет. Врата — это большой проект, разбитый на этажи.</div></div>')+
+    '<div class="panel"><button class="btn block" data-act="addDungeon">+ Открыть врата</button>'+
+    (fin.length?'<button class="fold" data-act="foldCleared">'+(ui.showCleared?'▾':'▸')+' Закрытые врата ('+fin.length+')</button>'+
+      (ui.showCleared?fin.map(d=>'<div class="qitem"><span class="qcheck on">◆</span>'+
+        '<div class="qbody"><div class="qtitle done">'+esc(d.title)+'</div></div>'+
+        '<button class="xdel" aria-label="Удалить закрытые врата" data-act="deldun" data-id="'+d.id+'">✕</button></div>').join(''):''):'')+
+    '<div class="muted sec-note">Этажи зачищаются по порядку, последний этаж — босс. За полную зачистку — крупная награда.</div></div>';
+}
+function renderShop(){
+  return '<div class="panel"><h2>Лавка наград</h2>'+
+    '<div class="goldBig"><b>G</b> '+S.hunter.gold+'</div>'+
+    (S.shop.map(it=>{const restActive=it.kind==='restDay'&&S.restDay===today();return '<div class="qitem">'+
+      '<div class="qbody" data-act="editshop" data-id="'+it.id+'"><div class="qtitle">'+esc(it.title)+'</div>'+
+      '<div class="qmeta"><span style="color:#ffd54d">'+it.cost+' G</span>'+(it.kind==='restDay'?'<span>Защищает серию сегодня</span>':'')+'</div></div>'+
+      '<button class="btn small" data-act="buy" data-id="'+it.id+'" '+(S.hunter.gold<it.cost||restActive?'disabled':'')+'>'+(restActive?'Активно':'Купить')+'</button>'+
+      '<button class="xdel" aria-label="Удалить награду" data-act="delshop" data-id="'+it.id+'">✕</button></div>';}).join('')||'<div class="empty">Добавь награды, ради которых стоит копить золото</div>')+
+    '<button class="btn block" data-act="addShop">+ Новая награда</button>'+
+    '<div class="muted sec-note">Золото начисляется за квесты. Покупай реальные удовольствия — так награды остаются честными.</div></div>';
+}
+function renderMore(){
+  return '<div class="panel"><h2>Достижения</h2>'+
+    '<div class="todayRow"><span>Квестов выполнено</span><b>'+S.done.quests+'</b></div>'+
+    '<div class="todayRow"><span>Врат закрыто</span><b>'+S.done.dungeons+'</b></div>'+
+    '<div class="todayRow"><span>Боссов повержено</span><b>'+(S.done.bosses||0)+'</b></div>'+
+    '<div class="todayRow"><span>Скрытых квестов</span><b>'+(S.done.hidden||0)+'</b></div>'+
+    '<div class="todayRow"><span>Наград куплено</span><b>'+S.done.buys+'</b></div>'+
+    '<div class="todayRow"><span>Лучшая серия</span><b>'+S.done.bestStreak+' дн.</b></div>'+
+    '<div class="todayRow"><span>Титулов открыто</span><b>'+S.titles.length+' / '+TITLES.length+'</b></div></div>'+
+    '<div class="panel"><h2>Данные · Синхронизация</h2>'+
+    '<button class="btn block" data-act="export">⇩ Экспорт бэкапа (JSON)</button>'+
+    '<button class="btn block" data-act="importP">⇪ Импорт пакета задач с ПК</button>'+
+    '<button class="btn block" data-act="importB">⟲ Восстановить из бэкапа</button>'+
+    (hasRecoveryPoint()?'<button class="btn block" data-act="rollback">↶ Откатить последнее восстановление</button>':'')+
+    '<button class="btn block" data-act="sync">⟳ Обновить контент (content.json)</button>'+
+    '<div class="muted sec-note">Пакет задач — JSON-файл с новыми квестами, вратами и наградами, подготовленный на компьютере. При запуске приложение само подтягивает content.json с сервера, если есть сеть. Всё остальное работает офлайн.</div></div>'+
+    '<div class="panel"><h2>Журнал</h2>'+
+    (S.log.slice(0,30).map(l=>{
+      const d=new Date(l.t);
+      const p=n=>String(n).padStart(2,'0');
+      return '<div class="logrow"><time>'+p(d.getDate())+'.'+p(d.getMonth()+1)+' '+p(d.getHours())+':'+p(d.getMinutes())+'</time>'+esc(l.m)+'</div>';
+    }).join('')||'<div class="empty">Журнал пуст</div>')+'</div>'+
+    '<div class="panel"><h2>Опасная зона</h2>'+
+    '<button class="btn block" data-act="reset" style="border-color:rgba(255,110,110,.5);color:#ff9d9d">Полный сброс</button></div>';
+}
+
+const TABS={status:renderStatus,quests:renderQuests,gates:renderGates,shop:renderShop,more:renderMore};
+function render(){
+  $('#goldTop').innerHTML='<b>G</b> '+S.hunter.gold;
+  const view=$('#view');
+  view.innerHTML=TABS[tab]();
+  if(lastTab!==tab){
+    view.style.animation='none';
+    void view.offsetWidth;
+    view.style.animation='viewIn .25s ease';
+    lastTab=tab;
+  }
+  document.querySelectorAll('.tabbar button').forEach(b=>b.classList.toggle('on',b.dataset.tab===tab));
+}
+
+/* ---------- события ---------- */
+document.querySelectorAll('.tabbar button').forEach(b=>{
+  b.addEventListener('click',()=>{checkDailyReset();scheduleRollover();tab=b.dataset.tab;render();});
+});
+$('#view').addEventListener('click',e=>{
+  const t=e.target.closest('[data-act]');
+  if(!t)return;
+  checkDailyReset();scheduleRollover();
+  const act=t.dataset.act,id=t.dataset.id;
+  switch(act){
+    case 'daily':doDaily(id);break;
+    case 'quest':doQuest(id);break;
+    case 'floor':doFloor(id);break;
+    case 'hiddenq':doHidden();break;
+    case 'penalty':doPenalty();break;
+    case 'boss':doBoss();break;
+    case 'setBoss':formBoss();break;
+    case 'delboss':delBoss();break;
+    case 'buy':buy(id);break;
+    case 'delq':delFrom(S.quests,id,'квест');break;
+    case 'deldaily':delFrom(S.dailies,id,'ежедневный квест');break;
+    case 'deldun':delFrom(S.dungeons,id,'врата');break;
+    case 'delshop':delFrom(S.shop,id,'награду');break;
+    case 'addDaily':formDaily();break;
+    case 'addQuest':formQuest();break;
+    case 'addDungeon':formDungeon();break;
+    case 'addShop':formShop();break;
+    case 'editq':formEditQuest(id);break;
+    case 'editdaily':formEditDaily(id);break;
+    case 'editdun':formEditDungeon(id);break;
+    case 'editshop':formEditShop(id);break;
+    case 'settitle':S.activeTitle=id;save();render();break;
+    case 'setfocus':{
+      const i=S.focus.indexOf(id);
+      if(i>=0)S.focus.splice(i,1);
+      else if(S.focus.length>=3){sysMsg('Максимум 3 направления в фокусе');break;}
+      else S.focus.push(id);
+      save();render();
+      break;
+    }
+    case 'name':formName();break;
+    case 'foldDone':ui.showDone=!ui.showDone;render();break;
+    case 'foldCleared':ui.showCleared=!ui.showCleared;render();break;
+    case 'export':exportData();break;
+    case 'importB':$('#fileB').click();break;
+    case 'importP':$('#fileP').click();break;
+    case 'rollback':rollbackRestore();break;
+    case 'sync':contentSync(true);break;
+    case 'reset':resetAll();break;
+  }
+});
+$('#fileB').addEventListener('change',e=>readFile(e,restoreBackup));
+$('#fileP').addEventListener('change',e=>readFile(e,obj=>{
+  const n=applyPack(obj);
+  sysMsg(n?('Загружено новых записей: '+n):'Новых записей нет');
+}));
+$('#levelup').addEventListener('click',()=>$('#levelup').classList.add('hidden'));
+document.addEventListener('visibilitychange',()=>{
+  if(!document.hidden){checkDailyReset();scheduleRollover();render();}
+});
+
+/* ---------- запуск ---------- */
+checkDailyReset();
+render();
+scheduleRollover();
+contentSync(false);
+if('serviceWorker' in navigator){
+  addEventListener('load',()=>{
+    const hadController=!!navigator.serviceWorker.controller;let refreshing=false;
+    navigator.serviceWorker.addEventListener('controllerchange',()=>{
+      if(hadController&&!refreshing){refreshing=true;location.reload();}
+    });
+    navigator.serviceWorker.register('./sw.js')
+      .then(()=>navigator.serviceWorker.ready)
+      .then(()=>{if(!hadController)sysMsg('ОФЛАЙН-РЕЖИМ ГОТОВ');})
+      .catch(err=>{console.error('Service worker:',err);sysMsg('Не удалось подготовить офлайн-режим');});
+  });
+}
+})();
+</script>
+</body>
+</html>
