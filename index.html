@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Личный план — задачи, проекты и тренировки</title>
-<meta name="theme-color" content="#04060c">
+<meta name="theme-color" content="#000000">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png" type="image/png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -170,6 +170,57 @@ input[type=text],input[type=number],input[type=date],select,textarea{width:100%;
 textarea{min-height:110px;resize:vertical}
 .m-btns{display:flex;gap:10px;margin-top:16px}
 .m-btns .btn{flex:1;text-align:center}
+
+/* ---------- монохромная тема ---------- */
+:root{
+  color-scheme:dark;
+  --bw-bg:#000;
+  --bw-surface:#090909;
+  --bw-surface-raised:#111;
+  --bw-line:#303030;
+  --bw-line-strong:#666;
+  --bw-text:#f5f5f5;
+  --bw-secondary:#b8b8b8;
+  --bw-muted:#858585;
+  --bw-dim:#5f5f5f;
+}
+body{background:var(--bw-bg) radial-gradient(1000px 500px at 50% -12%,#191919 0%,#000 62%);color:var(--bw-text)}
+header{background:rgba(0,0,0,.9);border-bottom-color:var(--bw-line)}
+.logo,.gold,.goldBig,.titleLine,.fs{color:#fff;text-shadow:none}
+.gold b,.goldBig b{border-color:#777}
+.panel,.train-plan,.train-kpi,.train-day{background:linear-gradient(180deg,var(--bw-surface-raised),var(--bw-surface));border-color:var(--bw-line);box-shadow:0 8px 24px rgba(0,0,0,.45)}
+.panel.danger,.panel.hiddenq,.train-plan.next{border-color:var(--bw-line-strong);box-shadow:none}
+.panel.danger h2,.panel.hiddenq h2,h2{color:#e8e8e8;text-shadow:none}
+.muted,.empty,.pen,.stLvl,.statName,.xprow,.col span,.col b,.qmeta,.logrow time,.train-kpi span,.train-day span,.train-exercise span,.train-session-meta,.train-note,label.f{color:var(--bw-muted)}
+.logrow,.train-session details{color:var(--bw-secondary)}
+.stName,.statVal,.todayRow,.todayRow b,.qtitle,.ftitle,.train-kpi b,.train-plan-head strong,.train-exercise b,.train-session-title,.train-form-block strong,.askText,.toast .msg{color:var(--bw-text)}
+.btn{background:#111;border-color:#707070;color:#f2f2f2;box-shadow:none}
+.btn:active{background:#292929}
+.btn.primary{background:#f2f2f2;border-color:#fff;color:#000;box-shadow:none}
+.btn:disabled{opacity:.3}
+.bar{background:#111;border-color:#333}
+.bar i,.colbar i{background:linear-gradient(90deg,#777,#f5f5f5);box-shadow:none}
+.rankBox{background:#0d0d0d!important;border-color:#777!important;color:#fff!important}
+.chip,.chip.cf{border-color:#555;color:#bdbdbd;background:#0d0d0d;box-shadow:none}
+.chip.on,.chip.cf.on{color:#000;border-color:#fff;background:#fff;box-shadow:none}
+.qcheck{color:#aaa}
+.qcheck.on,.floor.cleared .fmark{color:#fff;text-shadow:none}
+.qtitle.done,.floor.cleared .ftitle{color:#666}
+.badge,.rE,.rD,.rC,.rB,.rA,.rS{color:#d8d8d8;border-color:#777}
+.rS{color:#fff;border-color:#fff}
+.xdel,.fmark{color:#666}
+.fold,.floor.final .ftitle,.train-day b,.train-session summary,.source-links a{color:#d6d6d6}
+.fs{color:#fff}
+.qitem,.floor,.colbar,.logrow,.train-exercise,.train-session,.train-result,.train-form-block{border-color:#282828}
+.tabbar{background:rgba(0,0,0,.96);border-top-color:#333}
+.tabbar button{color:#777}
+.tabbar button.on{color:#fff;text-shadow:none}
+.toast .panel{background:#0b0b0b;border-color:#777}
+.sys-head{color:#aaa}
+.overlay{background:rgba(0,0,0,.9)}
+input[type=text],input[type=number],input[type=date],select,textarea{background:#080808;border-color:#555;color:#fff}
+input::placeholder,textarea::placeholder{color:#666}
+:focus-visible{outline:2px solid #fff;outline-offset:2px}
 @keyframes viewIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -1127,7 +1178,7 @@ function renderStrengthPlan(variant){
       const hint=strengthProgressHint(variant,ex);
       return '<div class="train-exercise"><b>'+esc(ex.title)+' · '+esc(ex.target)+'</b><span>'+esc(ex.options.join(' / '))+
         (last?'<br>Последнее: '+last.sets+'×'+last.reps+(last.load?' · '+last.load+' кг':''):'')+
-        (hint?'<br><span style="color:#ffd54d">'+esc(hint)+'</span>':'')+'</span></div>';
+        (hint?'<br><span style="color:#fff">'+esc(hint)+'</span>':'')+'</span></div>';
     }).join('')+'<button class="btn block" data-act="addstrength" data-id="'+variant+'">Записать '+plan.title+'</button></div>';
 }
 function renderTrainingSession(item){
@@ -1222,7 +1273,7 @@ function renderStatus(){
     '<div class="todayRow"><span>Активные задачи</span><b>'+activeQ+'</b></div>'+
     '<div class="todayRow"><span>Проекты в работе</span><b>'+activeDg+'</b></div>'+
     '<div class="todayRow"><span>Тренировки за неделю</span><b>'+tw.strength+' сил. · '+tw.run+' бег · '+tw.walk+' ходьба</b></div>'+
-    (S.restDay===today()?'<div class="todayRow" style="color:#8fd0ff"><span>День отдыха</span><b style="color:#8fd0ff">активирован</b></div>':'')+
+    (S.restDay===today()?'<div class="todayRow" style="color:#fff"><span>День отдыха</span><b style="color:#fff">активирован</b></div>':'')+
     '<div class="muted sec-note">За выполненные задачи начисляются баллы для магазина наград. Если ежедневный план не закрыт до полуночи, серия начинается заново.</div>'+
     '</div>';
 }
@@ -1312,7 +1363,7 @@ function renderShop(){
     '<div class="goldBig"><b>Б</b> '+S.hunter.gold+' баллов</div>'+
     ([...S.shop].sort((a,b)=>a.cost-b.cost).map(it=>{const restActive=it.kind==='restDay'&&S.restDay===today();return '<div class="qitem">'+
       '<div class="qbody" data-act="editshop" data-id="'+it.id+'"><div class="qtitle">'+esc(it.title)+'</div>'+
-      '<div class="qmeta"><span style="color:#ffd54d">'+it.cost+' баллов</span>'+(it.kind==='restDay'?'<span>Сохраняет серию сегодня</span>':'')+'</div></div>'+
+      '<div class="qmeta"><span style="color:#fff">'+it.cost+' баллов</span>'+(it.kind==='restDay'?'<span>Сохраняет серию сегодня</span>':'')+'</div></div>'+
       '<button class="btn small" data-act="buy" data-id="'+it.id+'" '+(S.hunter.gold<it.cost||restActive?'disabled':'')+'>'+(restActive?'Активно':'Получить')+'</button>'+
       '<button class="xdel" aria-label="Удалить награду" data-act="delshop" data-id="'+it.id+'">✕</button></div>';}).join('')||'<div class="empty">Добавь награды, ради которых стоит копить баллы</div>')+
     '<button class="btn block" data-act="addShop">+ Новая награда</button>'+
@@ -1345,7 +1396,7 @@ function renderMore(){
       return '<div class="logrow"><time>'+p(d.getDate())+'.'+p(d.getMonth()+1)+' '+p(d.getHours())+':'+p(d.getMinutes())+'</time>'+esc(l.m)+'</div>';
     }).join('')||'<div class="empty">Журнал пуст</div>')+'</div>'+
     '<div class="panel"><h2>Сброс данных</h2>'+
-    '<button class="btn block" data-act="reset" style="border-color:rgba(255,110,110,.5);color:#ff9d9d">Полный сброс</button></div>';
+    '<button class="btn block" data-act="reset" style="border-color:#666;color:#bbb">Полный сброс</button></div>';
 }
 
 const TABS={status:renderStatus,quests:renderQuests,training:renderTraining,gates:renderGates,shop:renderShop,more:renderMore};
