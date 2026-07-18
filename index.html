@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>СИСТЕМА</title>
+<title>Личный план — задачи и проекты</title>
 <meta name="theme-color" content="#04060c">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png" type="image/png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="СИСТЕМА">
+<meta name="apple-mobile-web-app-title" content="Личный план">
 <link rel="apple-touch-icon" href="icon-192.png">
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -23,29 +23,23 @@ body{
 header{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;
   padding:calc(12px + env(safe-area-inset-top)) 2px 12px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
   background:rgba(4,6,12,.78);border-bottom:1px solid rgba(90,170,255,.18)}
-.logo{font-weight:800;letter-spacing:.35em;font-size:15px;color:#7fc4ff;text-shadow:0 0 12px rgba(80,170,255,.8)}
+.logo{font-weight:800;letter-spacing:.18em;font-size:15px;color:#9bd1ff}
 .gold{font-weight:700;color:#ffd54d;font-size:14px;letter-spacing:.05em}
 .gold b,.goldBig b{border:1px solid rgba(255,213,77,.5);border-radius:50%;display:inline-block;width:17px;height:17px;line-height:17px;text-align:center;font-size:10px;margin-right:4px;font-style:normal}
-.panel{position:relative;border:1px solid rgba(90,170,255,.35);
+.panel{position:relative;border:1px solid rgba(90,170,255,.25);
   background:linear-gradient(180deg,rgba(12,20,38,.92),rgba(8,13,26,.92));
-  box-shadow:0 0 18px rgba(40,120,255,.12), inset 0 0 30px rgba(40,120,255,.05);
-  padding:14px;margin:14px 0;border-radius:4px}
-.panel::before,.panel::after{content:"";position:absolute;width:14px;height:14px;pointer-events:none}
-.panel::before{top:-1px;left:-1px;border-top:2px solid #6fb9ff;border-left:2px solid #6fb9ff}
-.panel::after{bottom:-1px;right:-1px;border-bottom:2px solid #6fb9ff;border-right:2px solid #6fb9ff}
+  box-shadow:0 8px 24px rgba(0,0,0,.18);
+  padding:14px;margin:14px 0;border-radius:12px}
+.panel::before,.panel::after{display:none}
 .panel.danger{border-color:rgba(255,110,110,.45);box-shadow:0 0 18px rgba(255,80,80,.15), inset 0 0 30px rgba(255,80,80,.05)}
 .panel.danger::before{border-top-color:#ff7d7d;border-left-color:#ff7d7d}
 .panel.danger::after{border-bottom-color:#ff7d7d;border-right-color:#ff7d7d}
 .panel.danger h2{color:#ff9d9d;text-shadow:0 0 10px rgba(255,110,110,.5)}
-.panel.boss{border-color:rgba(185,139,255,.45);box-shadow:0 0 18px rgba(150,90,255,.15), inset 0 0 30px rgba(150,90,255,.05)}
-.panel.boss::before{border-top-color:#b98bff;border-left-color:#b98bff}
-.panel.boss::after{border-bottom-color:#b98bff;border-right-color:#b98bff}
-.panel.boss h2{color:#c9a4ff;text-shadow:0 0 10px rgba(185,139,255,.5)}
 .panel.hiddenq{border-color:rgba(255,213,77,.4);box-shadow:0 0 18px rgba(255,200,60,.12), inset 0 0 30px rgba(255,200,60,.04)}
 .panel.hiddenq::before{border-top-color:#ffd54d;border-left-color:#ffd54d}
 .panel.hiddenq::after{border-bottom-color:#ffd54d;border-right-color:#ffd54d}
 .panel.hiddenq h2{color:#ffe08a;text-shadow:0 0 10px rgba(255,213,77,.5)}
-h2{font-size:12px;letter-spacing:.28em;color:#8fc7ff;margin:0 0 12px;font-weight:700;text-transform:uppercase;text-shadow:0 0 10px rgba(80,170,255,.5)}
+h2{font-size:12px;letter-spacing:.16em;color:#9dceff;margin:0 0 12px;font-weight:700;text-transform:uppercase}
 .muted{color:#6f8cb0;font-size:11px;line-height:1.55}
 .sec-note{margin-top:10px}
 .empty{color:#5c7699;font-size:12px;padding:8px 0}
@@ -54,30 +48,28 @@ h2{font-size:12px;letter-spacing:.28em;color:#8fc7ff;margin:0 0 12px;font-weight
 .btn:active{background:rgba(80,150,255,.28)}
 .btn.primary{background:rgba(60,130,255,.25);color:#dff0ff;box-shadow:0 0 12px rgba(60,140,255,.3)}
 .btn.block{display:block;width:100%;text-align:center;margin-top:12px}
-.btn.small{padding:6px 10px;font-size:11px;letter-spacing:.08em}
+.btn.small{padding:6px 10px;font-size:11px;letter-spacing:.08em;min-height:40px}
 .btn:disabled{opacity:.35}
 .bar{height:10px;background:rgba(90,170,255,.12);border:1px solid rgba(90,170,255,.25);border-radius:2px;overflow:hidden}
 .bar i{display:block;height:100%;background:linear-gradient(90deg,#2f7fe0,#54d7ff);box-shadow:0 0 10px rgba(84,215,255,.7);position:relative;overflow:hidden}
-.bar i::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);transform:translateX(-100%);animation:shine 2.8s infinite}
-@keyframes shine{60%{transform:translateX(100%)}100%{transform:translateX(100%)}}
+.bar i::after{display:none}
 .xprow{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.15em;color:#8fb4de;margin-bottom:5px}
 .stTop{display:flex;gap:14px;align-items:center}
 .rankBox{width:64px;height:64px;flex:none;border:2px solid;display:flex;align-items:center;justify-content:center;
-  font-size:34px;font-weight:900;border-radius:4px;text-shadow:0 0 14px currentColor;animation:pulse 3s ease-in-out infinite}
-@keyframes pulse{0%,100%{filter:brightness(.92)}50%{filter:brightness(1.25)}}
-.stName{font-size:16px;font-weight:700;color:#eaf4ff}
+  font-size:34px;font-weight:900;border-radius:14px;background:rgba(90,182,255,.08)}
+.stName{display:block;min-height:44px;background:none;border:0;padding:8px 0;font-family:inherit;font-size:16px;font-weight:700;color:#eaf4ff;text-align:left}
 .pen{font-size:11px;color:#5f84ad}
 .titleLine{font-size:11px;color:#ffd54d;margin-top:2px;letter-spacing:.08em;text-shadow:0 0 8px rgba(255,213,77,.4)}
 .stLvl{font-size:12px;color:#8fb4de;margin-top:3px;letter-spacing:.05em}
 .statRow{display:flex;align-items:center;gap:10px;padding:7px 0}
-.statName{width:104px;flex:none;font-size:11px;letter-spacing:.12em;color:#9cc2ec}
+.statName{width:118px;flex:none;font-size:10px;line-height:1.25;letter-spacing:.08em;color:#9cc2ec;overflow-wrap:anywhere}
 .statVal{width:34px;flex:none;text-align:right;font-weight:800;color:#dff0ff;font-size:14px}
 .statRow .bar{flex:1}
 .todayRow{display:flex;justify-content:space-between;font-size:13px;padding:6px 0;color:#c9defa}
 .todayRow b{color:#dff0ff}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{border:1px solid rgba(255,213,77,.4);color:#e8d28a;background:rgba(255,213,77,.06);
-  padding:6px 10px;font-size:11px;border-radius:3px;font-family:inherit;letter-spacing:.05em}
+  min-height:44px;padding:6px 10px;font-size:11px;border-radius:8px;font-family:inherit;letter-spacing:.05em;display:inline-flex;align-items:center}
 .chip.on{color:#ffd54d;border-color:#ffd54d;box-shadow:0 0 10px rgba(255,213,77,.35)}
 .chip.cf{border-color:rgba(110,185,255,.4);color:#9cc2ec;background:rgba(90,170,255,.06)}
 .chip.cf.on{color:#8fd0ff;border-color:#8fd0ff;box-shadow:0 0 10px rgba(90,180,255,.4)}
@@ -115,7 +107,7 @@ button.qcheck,button.xdel{min-width:44px;min-height:44px}
 .floor.cleared .fmark{color:#ffd54d}
 .ftitle{flex:1;font-size:13px;color:#c9defa}
 .floor.cleared .ftitle{color:#5f7ba0;text-decoration:line-through}
-.floor.boss .ftitle{color:#ff8f8f;font-weight:700}
+.floor.final .ftitle{color:#8fd0ff;font-weight:700}
 .goldBig{font-size:22px;color:#ffd54d;font-weight:800;margin-bottom:10px}
 .goldBig b{width:22px;height:22px;line-height:22px;font-size:12px}
 .logrow{font-size:12px;color:#9cbbe0;padding:6px 0;border-bottom:1px solid rgba(90,170,255,.08)}
@@ -141,13 +133,6 @@ input[type=text],input[type=number],select,textarea{width:100%;background:rgba(1
 textarea{min-height:110px;resize:vertical}
 .m-btns{display:flex;gap:10px;margin-top:16px}
 .m-btns .btn{flex:1;text-align:center}
-#levelup{position:fixed;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;background:rgba(2,5,12,.87)}
-#levelup.hidden{display:none}
-.lu{text-align:center;animation:luIn .5s ease}
-.lu-t{font-size:34px;font-weight:900;letter-spacing:.25em;color:#7fd0ff;animation:glowText 1.2s ease-in-out infinite}
-@keyframes glowText{0%,100%{text-shadow:0 0 30px #3fa9ff,0 0 60px #3fa9ff}50%{text-shadow:0 0 45px #6fc4ff,0 0 90px #3fa9ff}}
-.lu-l{margin-top:10px;font-size:16px;color:#dff0ff;letter-spacing:.2em}
-@keyframes luIn{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
 @keyframes viewIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -158,36 +143,28 @@ textarea{min-height:110px;resize:vertical}
 <body>
 <div id="app">
   <header>
-    <div class="logo">СИСТЕМА</div>
-    <div class="gold" id="goldTop"><b>G</b> 0</div>
+    <div class="logo">ЛИЧНЫЙ ПЛАН</div>
+    <div class="gold" id="goldTop"><b>Б</b> 0</div>
   </header>
   <main id="view"></main>
 </div>
 
 <nav class="tabbar">
-  <button data-tab="status"><span class="ti">◈</span>Статус</button>
-  <button data-tab="quests"><span class="ti">✦</span>Квесты</button>
-  <button data-tab="gates"><span class="ti">▣</span>Врата</button>
-  <button data-tab="shop"><span class="ti">⬡</span>Лавка</button>
+  <button data-tab="status"><span class="ti">◈</span>Обзор</button>
+  <button data-tab="quests"><span class="ti">✓</span>Задачи</button>
+  <button data-tab="gates"><span class="ti">▣</span>Проекты</button>
+  <button data-tab="shop"><span class="ti">●</span>Магазин</button>
   <button data-tab="more"><span class="ti">≡</span>Ещё</button>
 </nav>
 
 <div class="toast" id="toast">
   <div class="panel" style="margin:0">
-    <div class="sys-head">СИСТЕМА</div>
+    <div class="sys-head">ЛИЧНЫЙ ПЛАН</div>
     <div class="msg" id="toastMsg"></div>
   </div>
 </div>
 
 <div id="overlay" class="overlay hidden"></div>
-
-<div id="levelup" class="hidden">
-  <div class="lu">
-    <div class="lu-t">LEVEL UP</div>
-    <div class="lu-l" id="luLvl"></div>
-    <div class="muted" style="margin-top:16px;letter-spacing:.2em">НАЖМИ, ЧТОБЫ ПРОДОЛЖИТЬ</div>
-  </div>
-</div>
 
 <input type="file" id="fileB" hidden accept=".json,application/json">
 <input type="file" id="fileP" hidden accept=".json,application/json">
@@ -197,103 +174,98 @@ textarea{min-height:110px;resize:vertical}
 "use strict";
 const KEY='soloSystemV1';
 const PREV_KEY='soloSystemBeforeRestoreV1';
-const SCHEMA_VERSION=3;
+const SCHEMA_VERSION=4;
 const $=s=>document.querySelector(s);
-const DIFFS={E:{xp:15,gold:10},D:{xp:30,gold:20},C:{xp:60,gold:40},B:{xp:120,gold:80},A:{xp:250,gold:160},S:{xp:500,gold:320}};
+const DIFFS={
+  E:{xp:15,gold:10,label:'Очень простая'},D:{xp:30,gold:20,label:'Простая'},
+  C:{xp:60,gold:40,label:'Средняя'},B:{xp:120,gold:80,label:'Сложная'},
+  A:{xp:250,gold:160,label:'Большая'},S:{xp:500,gold:320,label:'Долгосрочная'}
+};
 const DIFF_ORDER=['E','D','C','B','A','S'];
-const STATS={str:'СИЛА',int:'ИНТЕЛЛЕКТ',car:'КАРЬЕРА',vit:'ВЫНОСЛИВОСТЬ',cha:'ХАРИЗМА',wil:'ВОЛЯ',fin:'ФИНАНСЫ'};
-const RANKS=[[60,'S'],[45,'A'],[30,'B'],[20,'C'],[10,'D'],[0,'E']];
-
+const STATS={str:'ФИЗИЧЕСКАЯ ФОРМА',int:'ОБУЧЕНИЕ',car:'РАБОТА',vit:'ЗДОРОВЬЕ',cha:'ОТНОШЕНИЯ',wil:'САМООРГАНИЗАЦИЯ',fin:'ФИНАНСЫ'};
 const TITLES=[
-  {id:'awake',name:'Пробуждение',check:s=>s.done.quests>=1},
-  {id:'gate1',name:'Покоритель врат',check:s=>s.done.dungeons>=1},
-  {id:'q25',name:'Атакующий',check:s=>s.done.quests>=25},
-  {id:'q100',name:'Берсерк',check:s=>s.done.quests>=100},
-  {id:'streak7',name:'Неделя без слабостей',check:s=>s.done.bestStreak>=7},
-  {id:'streak30',name:'Машина дисциплины',check:s=>s.done.bestStreak>=30},
-  {id:'lvl10',name:'Охотник D-ранга',check:s=>s.hunter.level>=10},
-  {id:'lvl30',name:'Элита гильдии',check:s=>s.hunter.level>=30},
-  {id:'lvl60',name:'Охотник S-ранга',check:s=>s.hunter.level>=60},
-  {id:'str50',name:'Железное тело',check:s=>s.stats.str>=50},
-  {id:'int50',name:'Мудрец',check:s=>s.stats.int>=50},
-  {id:'vit50',name:'Неутомимый',check:s=>s.stats.vit>=50},
-  {id:'cha50',name:'Дипломат',check:s=>s.stats.cha>=50},
-  {id:'wil50',name:'Железная воля',check:s=>s.stats.wil>=50},
-  {id:'fin50',name:'Магнат',check:s=>s.stats.fin>=50},
-  {id:'car50',name:'Профессионал',check:s=>s.stats.car>=50},
-  {id:'gold1k',name:'Золотой запас',check:s=>s.hunter.gold>=1000},
-  {id:'shadow',name:'Монарх Теней',check:s=>Object.keys(STATS).every(k=>(s.stats[k]||0)>=30)},
-  {id:'boss5',name:'Убийца боссов',check:s=>(s.done.bosses||0)>=5},
-  {id:'hidden10',name:'Видящий скрытое',check:s=>(s.done.hidden||0)>=10}
+  {id:'awake',name:'Первая завершённая задача',check:s=>s.done.quests>=1},
+  {id:'gate1',name:'Первый завершённый проект',check:s=>s.done.dungeons>=1},
+  {id:'lvl10',name:'10 завершённых задач',check:s=>s.done.quests>=10},
+  {id:'q25',name:'25 завершённых задач',check:s=>s.done.quests>=25},
+  {id:'lvl30',name:'Три завершённых проекта',check:s=>s.done.dungeons>=3},
+  {id:'q100',name:'100 завершённых задач',check:s=>s.done.quests>=100},
+  {id:'streak7',name:'Неделя стабильности',check:s=>s.done.bestStreak>=7},
+  {id:'lvl60',name:'Две недели стабильности',check:s=>s.done.bestStreak>=14},
+  {id:'streak30',name:'Месяц стабильности',check:s=>s.done.bestStreak>=30},
+  {id:'str50',name:'Физическая форма',check:s=>s.stats.str>=50},
+  {id:'int50',name:'Постоянное обучение',check:s=>s.stats.int>=50},
+  {id:'vit50',name:'Забота о здоровье',check:s=>s.stats.vit>=50},
+  {id:'cha50',name:'Крепкие отношения',check:s=>s.stats.cha>=50},
+  {id:'wil50',name:'Самоорганизация',check:s=>s.stats.wil>=50},
+  {id:'fin50',name:'Финансовый порядок',check:s=>s.stats.fin>=50},
+  {id:'car50',name:'Профессиональный рост',check:s=>s.stats.car>=50},
+  {id:'gold1k',name:'1000 баллов',check:s=>s.hunter.gold>=1000},
+  {id:'shadow',name:'Баланс направлений',check:s=>Object.keys(STATS).every(k=>(s.stats[k]||0)>=30)},
+  {id:'shop10',name:'10 выбранных наград',check:s=>(s.done.buys||0)>=10},
+  {id:'hidden10',name:'10 дополнительных задач',check:s=>(s.done.hidden||0)>=10}
 ];
 const HIDDEN_POOL=[
-  {title:'20 приседаний прямо сейчас',stat:'str'},
-  {title:'Стакан воды и 10 глубоких вдохов',stat:'vit'},
-  {title:'Прочитай 10 страниц любой книги',stat:'int'},
-  {title:'Напиши человеку, которому давно не писал',stat:'cha'},
-  {title:'30 минут без телефона',stat:'wil'},
-  {title:'Отложи небольшую сумму в накопления',stat:'fin'},
-  {title:'Прогулка 15 минут',stat:'vit'},
-  {title:'Наведи порядок на рабочем столе',stat:'wil'},
-  {title:'Повтори 20 иностранных слов',stat:'int'},
-  {title:'Планка 60 секунд',stat:'str'},
-  {title:'Сделай кому-нибудь искренний комплимент',stat:'cha'},
-  {title:'Проверь баланс и последние траты',stat:'fin'},
-  {title:'Разбери рабочую почту до нуля',stat:'car'},
-  {title:'Запиши 3 рабочих результата за сегодня',stat:'car'}
-];
-const PENALTY_POOL=[
-  '20 минут наведения порядка',
-  '30 отжиманий или 40 приседаний',
-  '30 минут без соцсетей',
-  'Прогулка 20 минут без наушников'
+  {title:'Сделать короткую разминку на 5 минут',stat:'str'},
+  {title:'Выпить стакан воды и проветрить комнату',stat:'vit'},
+  {title:'Прочитать 10 страниц книги или статьи',stat:'int'},
+  {title:'Написать близкому человеку и узнать, как у него дела',stat:'cha'},
+  {title:'Убрать телефон на 30 минут',stat:'wil'},
+  {title:'Проверить последние траты и отметить незапланированные',stat:'fin'},
+  {title:'Пройтись быстрым шагом 15 минут',stat:'vit'},
+  {title:'Разобрать одну поверхность или полку',stat:'wil'},
+  {title:'Повторить материал последнего занятия 15 минут',stat:'int'},
+  {title:'Сделать три подхода простых упражнений',stat:'str'},
+  {title:'Договориться о встрече или звонке с близким человеком',stat:'cha'},
+  {title:'Отложить небольшую сумму в накопления',stat:'fin'},
+  {title:'Разобрать рабочие входящие за 15 минут',stat:'car'},
+  {title:'Записать три рабочих результата за сегодня',stat:'car'}
 ];
 
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function dayHash(str){let h=0;for(let i=0;i<str.length;i++){h=(h*31+str.charCodeAt(i))|0;}return Math.abs(h);}
-function weekKey(){
-  const d=new Date();const off=(d.getDay()+6)%7;
-  const mon=new Date(d);mon.setDate(d.getDate()-off);
-  return mon.getFullYear()+'-'+String(mon.getMonth()+1).padStart(2,'0')+'-'+String(mon.getDate()).padStart(2,'0');
-}
-
 function seed(){
   const d=(t,st)=>({id:uid(),title:t,stat:st,done:false});
   const q=(t,st,df)=>({id:uid(),title:t,stat:st,diff:df,done:false});
   return {
     v:SCHEMA_VERSION,
-    hunter:{name:'Охотник',level:1,xp:0,gold:50},
+    hunter:{name:'Пользователь',level:1,xp:0,gold:50},
     stats:{str:1,int:1,car:1,vit:1,cha:1,wil:1,fin:1},
     dailies:[
-      d('Тренировка 20 минут','str'),
-      d('Учёба 30 минут (курс или книга)','int'),
-      d('Закрыть главную задачу дня','car'),
-      d('8 000 шагов','vit'),
-      d('План на завтра (3 задачи)','wil'),
-      d('Записать траты за день','fin')
+      d('Сделать 20–30 минут физической активности','str'),
+      d('Уделить 25 минут обучению без отвлечений','int'),
+      d('Закрыть одну главную рабочую задачу','car'),
+      d('Пройти не менее 8 000 шагов','vit'),
+      d('Составить план на завтра из трёх приоритетов','wil'),
+      d('Записать все траты за день','fin'),
+      d('Уделить 15 минут общению без телефона','cha')
     ],
     quests:[
-      q('Составить программу тренировок на неделю','str','C'),
-      q('Выбрать курс и записаться на него','int','C'),
-      q('Собрать бэклог рабочих задач','car','C')
+      q('Проверить спортивную форму и подготовить комплект на следующую тренировку','str','D'),
+      q('Составить список из пяти материалов для изучения и выбрать первый','int','D'),
+      q('Записать рабочие результаты за последние три месяца','car','C'),
+      q('Записаться на плановый профилактический осмотр','vit','D'),
+      q('Спланировать совместный ужин или прогулку с близким человеком','cha','D'),
+      q('Отключить ненужные уведомления минимум в пяти приложениях','wil','D'),
+      q('Настроить автоматический перевод в накопления','fin','C')
     ],
     dungeons:[{
-      id:uid(),title:'Врата D-ранга: Спортивный старт',diff:'D',stat:'str',cleared:false,
+      id:uid(),title:'Проект: провести базовую ревизию квартиры',diff:'C',stat:'wil',cleared:false,
       floors:[
-        {title:'3 тренировки за неделю',cleared:false},
-        {title:'Замерить вес и обхваты',cleared:false},
-        {title:'Сон до 23:30 пять дней подряд',cleared:false},
-        {title:'50 000 шагов за неделю',cleared:false},
-        {title:'Месяц без пропусков тренировок',cleared:false}
+        {title:'Осмотреть кухню, ванную, спальню и прихожую',cleared:false},
+        {title:'Записать всё, что требует ремонта или замены',cleared:false},
+        {title:'Выбрать пять небольших дел, которые можно закрыть сразу',cleared:false},
+        {title:'Купить недостающие материалы и выполнить выбранные дела',cleared:false},
+        {title:'Назначить даты для оставшихся работ',cleared:false}
       ]
     }],
     shop:[
-      {id:uid(),title:'Серия любимого сериала',cost:40},
-      {id:uid(),title:'Доставка вкусной еды',cost:120},
-      {id:uid(),title:'День без квестов (без штрафа)',cost:250,kind:'restDay'},
-      {id:uid(),title:'Покупка для себя',cost:600}
+      {id:uid(),title:'Послушать любимый альбом целиком без параллельных дел',cost:40},
+      {id:uid(),title:'Купить свежие фрукты или ягоды',cost:90},
+      {id:uid(),title:'День отдыха без потери серии',cost:250,kind:'restDay'},
+      {id:uid(),title:'Посетить бассейн или сауну',cost:450}
     ],
     log:[],applied:[],lastDay:today(),streak:0,bonusDay:null,restDay:null,
     titles:[],activeTitle:null,history:{},penalty:null,weeklyBoss:null,hiddenDay:null,
@@ -311,6 +283,33 @@ const cleanText=(v,fallback,max)=>{
   const s=typeof v==='string'?v:typeof fallback==='string'?fallback:'';
   return s.replace(/[\u0000-\u001f\u007f]/g,' ').trim().slice(0,max);
 };
+function neutralText(v,fallback,max){
+  let s=cleanText(v,fallback,max);
+  s=s.replace(/^Врата\s+[EDCBAS]-ранга:\s*/i,'');
+  s=s.replace(/Босс недели повержен/gi,'Главная задача недели завершена')
+    .replace(/Главная задача недели повержен/gi,'Главная задача недели завершена')
+    .replace(/Врата закрыты/gi,'Проект завершён').replace(/Проект закрыты/gi,'Проект завершён')
+    .replace(/повержен(?:а|о|ы)?/gi,'завершён')
+    .replace(/Ежедневные квесты/gi,'Ежедневные задачи')
+    .replace(/Ежедневный квест/gi,'Ежедневная задача')
+    .replace(/Скрытый квест/gi,'Дополнительная задача')
+    .replace(/Штрафной квест/gi,'Дополнительная задача')
+    .replace(/Квестов/g,'Задач').replace(/Квесты/g,'Задачи').replace(/Квеста/g,'Задачи').replace(/Квестом/g,'Задачей').replace(/Квест/g,'Задача')
+    .replace(/квестов/g,'задач').replace(/квесты/g,'задачи').replace(/квеста/g,'задачи').replace(/квестом/g,'задачей').replace(/квест/g,'задача')
+    .replace(/Босс недели/gi,'Главная задача недели')
+    .replace(/Боссов/g,'Главных задач').replace(/Босса/g,'Главную задачу').replace(/Босс/g,'Итоговый этап')
+    .replace(/боссов/g,'главных задач').replace(/босса/g,'главную задачу').replace(/босс/g,'итоговый этап')
+    .replace(/Врата/gi,'Проект').replace(/врат/gi,'проектов')
+    .replace(/Этажи/g,'Этапы').replace(/Этажа/g,'Этапа').replace(/Этаж/g,'Этап')
+    .replace(/этажи/g,'этапы').replace(/этажа/g,'этапа').replace(/этаж/g,'этап')
+    .replace(/зачистк(?:а|у|и|ой|е)/gi,'завершение').replace(/зачищен/gi,'завершён').replace(/зачистить/gi,'завершить')
+    .replace(/Охотник/gi,'Пользователь').replace(/охотника/gi,'профиля')
+    .replace(/Ранг повышен[^.]*\.?/gi,'Достигнут новый этап прогресса.').replace(/ранг/gi,'уровень сложности')
+    .replace(/Получен титул/gi,'Открыта веха').replace(/титул/gi,'веха')
+    .replace(/золото/gi,'баллы').replace(/\bXP\b/g,'баллов прогресса').replace(/\bG\b/g,'баллов')
+    .replace(/Зона наказания/gi,'Дополнительная задача').replace(/наказание/gi,'ограничение').replace(/штрафа?/gi,'потери серии');
+  return s.trim().slice(0,max);
+}
 const isDateKey=v=>typeof v==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(v);
 function normalize(saved){
   const base=seed(),src=isObj(saved)?saved:{};
@@ -325,7 +324,7 @@ function normalize(saved){
   const s={
     v:SCHEMA_VERSION,
     hunter:{
-      name:cleanText(hunter.name,base.hunter.name,24)||base.hunter.name,
+      name:(()=>{const n=neutralText(hunter.name,base.hunter.name,24);return n||base.hunter.name;})(),
       level:finite(hunter.level,base.hunter.level,1,10000),
       xp:finite(hunter.xp,base.hunter.xp,0,1e12),
       gold:finite(hunter.gold,base.hunter.gold,0,1e12)
@@ -340,30 +339,30 @@ function normalize(saved){
   };
   Object.keys(STATS).forEach(k=>s.stats[k]=finite(isObj(src.stats)?src.stats[k]:undefined,base.stats[k],0,1e9));
   s.dailies=arr(src.dailies).filter(isObj).map(d=>({
-    id:idOf(d.id),title:cleanText(d.title,'Без названия',240)||'Без названия',
+    id:idOf(d.id),title:neutralText(d.title,'Без названия',240)||'Без названия',
     stat:STATS[d.stat]?d.stat:'wil',done:d.done===true
   }));
   s.quests=arr(src.quests).filter(isObj).map(q=>{
-    const out={id:idOf(q.id),title:cleanText(q.title,'Без названия',240)||'Без названия',
+    const out={id:idOf(q.id),title:neutralText(q.title,'Без названия',240)||'Без названия',
       stat:STATS[q.stat]?q.stat:'wil',diff:DIFFS[q.diff]?q.diff:'D',done:q.done===true};
     if(Number.isFinite(Number(q.doneAt)))out.doneAt=finite(q.doneAt,0,0,Number.MAX_SAFE_INTEGER);
     return out;
   });
   s.dungeons=arr(src.dungeons).filter(isObj).map(dg=>{
     const floors=arr(dg.floors,LIMITS.floors).map(f=>isObj(f)?f:{title:f,cleared:false}).map(f=>({
-      title:cleanText(f.title,'Этаж',240)||'Этаж',cleared:f.cleared===true
+      title:neutralText(f.title,'Этап',240)||'Этап',cleared:f.cleared===true
     }));
-    return {id:idOf(dg.id),title:cleanText(dg.title,'Врата',240)||'Врата',
+    return {id:idOf(dg.id),title:neutralText(dg.title,'Проект',240)||'Проект',
       diff:DIFFS[dg.diff]?dg.diff:'D',stat:STATS[dg.stat]?dg.stat:null,
-      cleared:floors.length>0&&floors.every(f=>f.cleared),floors:floors.length?floors:[{title:'Босс',cleared:false}]};
+      cleared:floors.length>0&&floors.every(f=>f.cleared),floors:floors.length?floors:[{title:'Итоговый этап',cleared:false}]};
   });
   s.shop=arr(src.shop).filter(isObj).map(it=>({
-    id:idOf(it.id),title:cleanText(it.title,'Награда',240)||'Награда',
+    id:idOf(it.id),title:neutralText(it.title,'Награда',240)||'Награда',
     cost:finite(it.cost,50,1,1e9),
-    kind:it.kind==='restDay'||it.title==='День без квестов (без штрафа)'?'restDay':null
+    kind:it.kind==='restDay'||neutralText(it.title,'',240)==='День без задач (без потери серии)'?'restDay':null
   }));
   s.log=arr(src.log,LIMITS.log).filter(isObj).map(l=>({
-    t:finite(l.t,Date.now(),0,Number.MAX_SAFE_INTEGER),m:cleanText(l.m,'Событие',500)||'Событие'
+    t:finite(l.t,Date.now(),0,Number.MAX_SAFE_INTEGER),m:neutralText(l.m,'Событие',500)||'Событие'
   }));
   const applied=new Set();
   arr(src.applied,LIMITS.applied).forEach(v=>{const x=cleanText(v,'',240);if(x)applied.add(x);});
@@ -375,12 +374,16 @@ function normalize(saved){
   s.focus=Array.isArray(src.focus)?focus:base.focus.slice();
   if(isObj(src.history))Object.keys(src.history).filter(isDateKey).sort().slice(-60).forEach(k=>s.history[k]=finite(src.history[k],0,0,100000));
   if(isObj(src.done))Object.keys(s.done).forEach(k=>s.done[k]=finite(src.done[k],0,0,1e9));
-  if(isObj(src.penalty)&&typeof src.penalty.task==='string')s.penalty={
-    date:isDateKey(src.penalty.date)?src.penalty.date:today(),task:cleanText(src.penalty.task,'Штрафной квест',240),done:src.penalty.done===true
-  };
   if(isObj(src.weeklyBoss)&&typeof src.weeklyBoss.title==='string')s.weeklyBoss={
-    title:cleanText(src.weeklyBoss.title,'Босс недели',240),week:isDateKey(src.weeklyBoss.week)?src.weeklyBoss.week:weekKey(),done:src.weeklyBoss.done===true
+    title:neutralText(src.weeklyBoss.title,'Главная задача недели',240),week:isDateKey(src.weeklyBoss.week)?src.weeklyBoss.week:today(),done:src.weeklyBoss.done===true
   };
+  if(s.weeklyBoss&&s.weeklyBoss.title){
+    const legacy={id:idOf('legacy-weekly-'+s.weeklyBoss.week.replace(/[^0-9-]/g,'')),title:s.weeklyBoss.title,
+      stat:'wil',diff:'A',done:s.weeklyBoss.done};
+    if(legacy.done)legacy.doneAt=Date.now();
+    s.quests.unshift(legacy);
+    s.weeklyBoss=null;
+  }
   if(isObj(src.hiddenDay))s.hiddenDay={
     date:isDateKey(src.hiddenDay.date)?src.hiddenDay.date:today(),idx:finite(src.hiddenDay.idx,0,0,HIDDEN_POOL.length-1),done:src.hiddenDay.done===true
   };
@@ -388,15 +391,15 @@ function normalize(saved){
 }
 function validateBackup(obj){
   if(!isObj(obj))return {ok:false,error:'Файл не содержит объект данных'};
-  if(!isObj(obj.hunter)||!isObj(obj.stats))return {ok:false,error:'Повреждены данные охотника или характеристик'};
+  if(!isObj(obj.hunter)||!isObj(obj.stats))return {ok:false,error:'Повреждены данные профиля или категорий'};
   for(const k of ['level','xp','gold'])if(!Number.isFinite(obj.hunter[k]))return {ok:false,error:'Некорректное числовое поле hunter.'+k};
   for(const k of Object.keys(STATS))if(!Number.isFinite(obj.stats[k]))return {ok:false,error:'Некорректная характеристика '+k};
   for(const k of ['dailies','quests','dungeons','shop']){
     if(!Array.isArray(obj[k]))return {ok:false,error:'Раздел '+k+' должен быть массивом'};
     if(obj[k].length>LIMITS.items)return {ok:false,error:'Слишком много записей в разделе '+k};
   }
-  if(obj.dailies.some(x=>!isObj(x)||typeof x.title!=='string')||obj.quests.some(x=>!isObj(x)||typeof x.title!=='string'))return {ok:false,error:'Повреждён список квестов'};
-  if(obj.dungeons.some(x=>!isObj(x)||typeof x.title!=='string'||!Array.isArray(x.floors)||x.floors.length>LIMITS.floors))return {ok:false,error:'Повреждён список врат'};
+  if(obj.dailies.some(x=>!isObj(x)||typeof x.title!=='string')||obj.quests.some(x=>!isObj(x)||typeof x.title!=='string'))return {ok:false,error:'Повреждён список задач'};
+  if(obj.dungeons.some(x=>!isObj(x)||typeof x.title!=='string'||!Array.isArray(x.floors)||x.floors.length>LIMITS.floors))return {ok:false,error:'Повреждён список проектов'};
   if(obj.shop.some(x=>!isObj(x)||typeof x.title!=='string'||!Number.isFinite(x.cost)))return {ok:false,error:'Повреждён список наград'};
   return {ok:true,state:normalize(obj)};
 }
@@ -409,7 +412,7 @@ function load(){
 }
 let S=load();
 const isFocus=k=>Array.isArray(S.focus)&&S.focus.indexOf(k)>=0;
-const ui={showDone:false,showCleared:false};
+const ui={showDone:false,showCleared:false,taskFilter:'all'};
 let tab='status',lastTab=null;
 
 function checkTitles(){
@@ -419,8 +422,8 @@ function checkTitles(){
     if(ok){
       S.titles.push(t.id);
       if(!S.activeTitle)S.activeTitle=t.id;
-      sysMsg('ПОЛУЧЕН ТИТУЛ: «'+t.name+'»');
-      log('Получен титул: '+t.name);
+      sysMsg('НОВАЯ ВЕХА: «'+t.name+'»');
+      log('Открыта веха: '+t.name);
     }
   });
 }
@@ -436,7 +439,6 @@ function bump(){
   const keys=Object.keys(S.history);
   if(keys.length>60){keys.sort();delete S.history[keys[0]];}
 }
-function rankOf(l){for(const r of RANKS){if(l>=r[0])return r[1];}return 'E';}
 function xpNeed(l){return Math.round(80*Math.pow(l,1.35));}
 
 /* ---------- системные сообщения ---------- */
@@ -453,26 +455,12 @@ function pumpMsg(){
   },2600);
 }
 
-/* ---------- опыт и уровни ---------- */
-let luTimer=null;
-function showLevelUp(l){
-  $('#luLvl').textContent='УРОВЕНЬ '+l;
-  $('#levelup').classList.remove('hidden');
-  clearTimeout(luTimer);
-  luTimer=setTimeout(()=>$('#levelup').classList.add('hidden'),2600);
-}
-function rewardXP(n){return S.penalty&&!S.penalty.done?Math.max(1,Math.floor(n/2)):n;}
+/* ---------- совместимость старого прогресса ---------- */
 function addXP(n){
-  n=rewardXP(n);
-  const h=S.hunter;const r0=rankOf(h.level);
+  const h=S.hunter;
   h.xp+=n;let up=false;
   while(h.xp>=xpNeed(h.level)){h.xp-=xpNeed(h.level);h.level++;up=true;}
-  if(up){
-    showLevelUp(h.level);
-    log('Достигнут уровень '+h.level);
-    const r1=rankOf(h.level);
-    if(r1!==r0){sysMsg('РАНГ ПОВЫШЕН: '+r0+' → '+r1);log('Ранг повышен до '+r1);}
-  }
+  if(up)log('Обновлён общий прогресс');
   return n;
 }
 
@@ -491,17 +479,12 @@ function checkDailyReset(){
     const restProtected=S.restDay===prev&&gap===1;
     const missed=!!prev&&(gap>1||(had&&!all));
     if(restProtected){
-      log('Использован день отдыха без штрафа ('+prev+')');
-      sysMsg('ДЕНЬ ОТДЫХА ЗАВЕРШЁН. Серия сохранена, штрафа нет.');
+      log('Использован день отдыха с сохранением серии ('+prev+')');
+      sysMsg('ДЕНЬ ОТДЫХА ЗАВЕРШЁН. Серия сохранена.');
     }else if(missed){
-      if(S.streak>0)sysMsg('ШТРАФ: ежедневные квесты не завершены. Серия сброшена.');
+      if(S.streak>0)sysMsg('Ежедневный план не завершён. Серия начнётся заново.');
       S.streak=0;
       log(gap>1?'Серия прервана: пропущено дней — '+(gap-1):'Серия прервана ('+prev+')');
-      if(!S.penalty||S.penalty.done){
-        S.penalty={date:t,task:PENALTY_POOL[dayHash(t)%PENALTY_POOL.length],done:false};
-        sysMsg('ВЫ ВОШЛИ В ЗОНУ НАКАЗАНИЯ. Опыт ×½ до выполнения штрафного квеста.');
-        log('Открыта зона наказания');
-      }
     }
     S.dailies.forEach(d=>d.done=false);
     S.bonusDay=null;
@@ -511,12 +494,6 @@ function checkDailyReset(){
   }
   if(!S.hiddenDay||S.hiddenDay.date!==t){
     S.hiddenDay={date:t,idx:dayHash(t+'h')%HIDDEN_POOL.length,done:false};
-    changed=true;
-  }
-  const wk=weekKey();
-  if(S.weeklyBoss&&S.weeklyBoss.week!==wk){
-    if(!S.weeklyBoss.done)log('Босс недели ушёл непобеждённым: '+S.weeklyBoss.title);
-    S.weeklyBoss=null;
     changed=true;
   }
   if(changed)save();
@@ -533,9 +510,9 @@ function finishDailySet(){
   S.bonusDay=today();S.streak++;
   if(S.streak>S.done.bestStreak)S.done.bestStreak=S.streak;
   S.hunter.gold+=20;
-  const xp=addXP(40);
-  log('Все ежедневные квесты выполнены. Серия: '+S.streak);
-  return {xp,gold:20};
+  addXP(40);
+  log('Все ежедневные задачи выполнены. Серия: '+S.streak);
+  return {gold:20};
 }
 
 /* ---------- действия ---------- */
@@ -547,13 +524,13 @@ function doDaily(id){
   S.stats[d.stat]=(S.stats[d.stat]||0)+m;
   S.hunter.gold+=5;
   bump();
-  const gained=addXP(10*m);
-  log('Ежедневный квест: '+d.title);
+  addXP(10*m);
+  log('Ежедневная задача: '+d.title);
   const bonus=finishDailySet();
   if(bonus){
-    sysMsg('ВСЕ ЕЖЕДНЕВНЫЕ КВЕСТЫ ВЫПОЛНЕНЫ. За действие +'+gained+' XP, бонус +'+bonus.xp+' XP и +20 G. Серия: '+S.streak+' дн.');
+    sysMsg('ПЛАН ДНЯ ЗАВЕРШЁН. +25 баллов. Серия: '+S.streak+' дн.');
   }else{
-    sysMsg('+'+gained+' XP, +5 G, +'+m+' '+STATS[d.stat]+(m>1?' · ФОКУС ×2':''));
+    sysMsg('+5 баллов, +'+m+' в категории «'+STATS[d.stat]+'»'+(m>1?' · ПРИОРИТЕТ ×2':''));
   }
   save();render();
 }
@@ -567,9 +544,9 @@ function doQuest(id){
   S.hunter.gold+=r.gold;
   S.done.quests++;
   bump();
-  const gained=addXP(r.xp*m);
-  log('Квест выполнен: '+q.title+' ['+q.diff+']');
-  sysMsg('КВЕСТ ВЫПОЛНЕН: +'+gained+' XP, +'+r.gold+' G'+(m>1?' · ФОКУС ×2':''));
+  addXP(r.xp*m);
+  log('Задача выполнена: '+q.title+' · '+r.label);
+  sysMsg('ЗАДАЧА ВЫПОЛНЕНА: +'+r.gold+' баллов · +'+(2*m)+' отметки в категории «'+STATS[q.stat]+'»');
   save();render();
 }
 function doFloor(dgId){
@@ -583,18 +560,18 @@ function doFloor(dgId){
   const fx=Math.max(5,Math.round(r.xp/2))*m;
   if(dg.stat&&STATS[dg.stat])S.stats[dg.stat]=(S.stats[dg.stat]||0)+m;
   bump();
-  const floorXP=addXP(fx);
-  log('Этаж зачищен: '+f.title+' ('+dg.title+')');
+  addXP(fx);
+  log('Этап завершён: '+f.title+' ('+dg.title+')');
   if(dg.floors.every(x=>x.cleared)){
     dg.cleared=true;
     S.done.dungeons++;
     S.hunter.gold+=r.gold*2;
     if(dg.stat&&STATS[dg.stat])S.stats[dg.stat]=(S.stats[dg.stat]||0)+3*m;
-    const clearXP=addXP(r.xp*2*m);
-    sysMsg('ВРАТА ЗАКРЫТЫ: '+dg.title+'. За этаж +'+floorXP+' XP, за зачистку +'+clearXP+' XP, +'+(r.gold*2)+' G');
-    log('Врата закрыты: '+dg.title);
+    addXP(r.xp*2*m);
+    sysMsg('ПРОЕКТ ЗАВЕРШЁН: '+dg.title+'. +'+(r.gold*2)+' баллов');
+    log('Проект завершён: '+dg.title);
   }else{
-    sysMsg('Этаж зачищен: +'+floorXP+' XP');
+    sysMsg('Этап завершён: '+f.title);
   }
   save();render();
 }
@@ -607,41 +584,22 @@ function doHidden(){
   S.hunter.gold+=DIFFS.D.gold*2;
   S.done.hidden=(S.done.hidden||0)+1;
   bump();
-  const gained=addXP(DIFFS.D.xp*2);
-  log('Скрытый квест выполнен: '+tpl.title);
-  sysMsg('СКРЫТЫЙ КВЕСТ ВЫПОЛНЕН: +'+gained+' XP, +'+(DIFFS.D.gold*2)+' G');
-  save();render();
-}
-function doPenalty(){
-  if(!S.penalty||S.penalty.done)return;
-  S.penalty.done=true;
-  log('Штрафной квест выполнен: '+S.penalty.task);
-  sysMsg('НАКАЗАНИЕ СНЯТО. Награды восстановлены.');
-  save();render();
-}
-function doBoss(){
-  const b=S.weeklyBoss;
-  if(!b||b.done)return;
-  b.done=true;
-  S.done.bosses=(S.done.bosses||0)+1;
-  S.hunter.gold+=DIFFS.A.gold*2;
-  bump();
-  const gained=addXP(DIFFS.A.xp*2);
-  log('Босс недели повержен: '+b.title);
-  sysMsg('БОСС ПОВЕРЖЕН: +'+gained+' XP, +'+(DIFFS.A.gold*2)+' G');
+  addXP(DIFFS.D.xp*2);
+  log('Дополнительная задача выполнена: '+tpl.title);
+  sysMsg('ДОПОЛНИТЕЛЬНАЯ ЗАДАЧА ВЫПОЛНЕНА: +'+(DIFFS.D.gold*2)+' баллов');
   save();render();
 }
 function buy(id){
   const it=S.shop.find(x=>x.id===id);
   if(!it)return;
   if(it.kind==='restDay'&&S.restDay===today()){sysMsg('День отдыха уже активирован на сегодня');return;}
-  if(S.hunter.gold<it.cost){sysMsg('Недостаточно золота');return;}
-  ask('Купить «'+it.title+'» за '+it.cost+' G?',()=>{
+  if(S.hunter.gold<it.cost){sysMsg('Недостаточно баллов');return;}
+  ask('Получить «'+it.title+'» за '+it.cost+' баллов?',()=>{
     S.hunter.gold-=it.cost;
     S.done.buys++;
     if(it.kind==='restDay')S.restDay=today();
-    log('Награда куплена: '+it.title+' (-'+it.cost+' G)');
-    sysMsg(it.kind==='restDay'?'ДЕНЬ ОТДЫХА АКТИВИРОВАН. Сегодняшний пропуск не сбросит серию и не создаст штраф.':'НАГРАДА ПОЛУЧЕНА: '+it.title);
+    log('Награда выбрана: '+it.title+' (-'+it.cost+' баллов)');
+    sysMsg(it.kind==='restDay'?'ДЕНЬ ОТДЫХА АКТИВИРОВАН. Сегодня серия сохранится независимо от плана.':'НАГРАДА ПОЛУЧЕНА: '+it.title);
     save();render();
   });
 }
@@ -652,16 +610,8 @@ function delFrom(arr,id,label){
     arr.splice(i,1);
     if(arr===S.dailies){
       const bonus=finishDailySet();
-      if(bonus)sysMsg('ПЛАН ДНЯ ЗАКРЫТ. Бонус +'+bonus.xp+' XP, +20 G. Серия: '+S.streak+' дн.');
+      if(bonus)sysMsg('ПЛАН ДНЯ ЗАВЕРШЁН. Бонус +20 баллов. Серия: '+S.streak+' дн.');
     }
-    save();render();
-  });
-}
-function delBoss(){
-  if(!S.weeklyBoss)return;
-  ask('Отпустить босса «'+S.weeklyBoss.title+'» без боя?',()=>{
-    log('Босс отпущен: '+S.weeklyBoss.title);
-    S.weeklyBoss=null;
     save();render();
   });
 }
@@ -734,16 +684,16 @@ function applyPack(p){
       arr.push(o);if(S.applied.length>=LIMITS.applied)S.applied.shift();S.applied.push(pid);n++;
     });
   };
-  take(S.dailies,p.dailies,it=>{const title=cleanText(it.title,'',240);return title?{id:uid(),title,stat:STATS[it.stat]?it.stat:'wil',done:false}:null;});
-  take(S.quests,p.quests,it=>{const title=cleanText(it.title,'',240);return title?{id:uid(),title,stat:STATS[it.stat]?it.stat:'wil',diff:DIFFS[it.diff]?it.diff:'D',done:false}:null;});
+  take(S.dailies,p.dailies,it=>{const title=neutralText(it.title,'',240);return title?{id:uid(),title,stat:STATS[it.stat]?it.stat:'wil',done:false}:null;});
+  take(S.quests,p.quests,it=>{const title=neutralText(it.title,'',240);return title?{id:uid(),title,stat:STATS[it.stat]?it.stat:'wil',diff:DIFFS[it.diff]?it.diff:'D',done:false}:null;});
   take(S.dungeons,p.dungeons,it=>{
     if(!it||!it.title||!Array.isArray(it.floors)||!it.floors.length)return null;
-    const title=cleanText(it.title,'',240);
-    const floors=it.floors.slice(0,LIMITS.floors).map(f=>cleanText((f&&f.title)||f,'',240)).filter(Boolean);
+    const title=neutralText(it.title,'',240);
+    const floors=it.floors.slice(0,LIMITS.floors).map(f=>neutralText((f&&f.title)||f,'',240)).filter(Boolean);
     return title&&floors.length?{id:uid(),title,diff:DIFFS[it.diff]?it.diff:'D',stat:STATS[it.stat]?it.stat:null,cleared:false,
       floors:floors.map(title=>({title,cleared:false}))}:null;
   });
-  take(S.shop,p.shop,it=>{const title=cleanText(it.title,'',240);return title?{id:uid(),title,cost:finite(it.cost,50,1,1e9),kind:null}:null;});
+  take(S.shop,p.shop,it=>{const title=neutralText(it.title,'',240);return title?{id:uid(),title,cost:finite(it.cost,50,1,1e9),kind:it.kind==='restDay'?'restDay':null}:null;});
   if(n){log('Загружен пакет: +'+n+' записей');save();render();}
   return n;
 }
@@ -781,10 +731,10 @@ function ask(text,cb){
   modal('Подтверждение','<div class="askText">'+esc(text)+'</div>','Подтвердить',()=>{cb();});
 }
 const statOpts=sel=>Object.keys(STATS).map(k=>'<option value="'+k+'"'+(k===sel?' selected':'')+'>'+STATS[k]+'</option>').join('');
-const diffOpts=sel=>{sel=sel||'D';return DIFF_ORDER.map(d=>'<option value="'+d+'"'+(d===sel?' selected':'')+'>'+d+'-ранг · +'+DIFFS[d].xp+' XP · +'+DIFFS[d].gold+' G</option>').join('');};
+const diffOpts=sel=>{sel=sel||'D';return DIFF_ORDER.map(d=>'<option value="'+d+'"'+(d===sel?' selected':'')+'>'+DIFFS[d].label+' · +'+DIFFS[d].gold+' баллов</option>').join('');};
 
 function formName(){
-  modal('Имя охотника',
+  modal('Профиль',
     '<label class="f">Имя</label><input type="text" id="mTitle" value="'+esc(S.hunter.name)+'" maxlength="24">',
     'Сохранить',()=>{
       const t=$('#mTitle').value.trim();if(!t)return false;
@@ -793,20 +743,20 @@ function formName(){
     });
 }
 function formDaily(){
-  modal('Новый ежедневный квест',
-    '<label class="f">Название</label><input type="text" id="mTitle" placeholder="Например: Растяжка 10 минут">'+
-    '<label class="f">Характеристика</label><select id="mStat">'+statOpts()+'</select>',
+  modal('Новая ежедневная задача',
+    '<label class="f">Чёткое действие</label><input type="text" id="mTitle" placeholder="Например: Сделать растяжку 10 минут">'+
+    '<label class="f">Категория</label><select id="mStat">'+statOpts()+'</select>',
     'Создать',()=>{
       const t=$('#mTitle').value.trim();if(!t)return false;
       S.dailies.push({id:uid(),title:t,stat:$('#mStat').value,done:false});
-      save();render();sysMsg('Ежедневный квест добавлен');
+      save();render();sysMsg('Ежедневная задача добавлена');
     });
 }
 function formEditDaily(id){
   const d=S.dailies.find(x=>x.id===id);if(!d)return;
-  modal('Изменить ежедневный квест',
+  modal('Изменить ежедневную задачу',
     '<label class="f">Название</label><input type="text" id="mTitle" value="'+esc(d.title)+'">'+
-    '<label class="f">Характеристика</label><select id="mStat">'+statOpts(d.stat)+'</select>',
+    '<label class="f">Категория</label><select id="mStat">'+statOpts(d.stat)+'</select>',
     'Сохранить',()=>{
       const t=$('#mTitle').value.trim();if(!t)return false;
       d.title=t;d.stat=$('#mStat').value;
@@ -814,21 +764,21 @@ function formEditDaily(id){
     });
 }
 function formQuest(){
-  modal('Новый квест',
-    '<label class="f">Название</label><input type="text" id="mTitle" placeholder="Например: Записаться к врачу">'+
-    '<label class="f">Характеристика</label><select id="mStat">'+statOpts()+'</select>'+
+  modal('Новая задача',
+    '<label class="f">Чёткий результат</label><input type="text" id="mTitle" placeholder="Например: Записаться к стоматологу до пятницы">'+
+    '<label class="f">Категория</label><select id="mStat">'+statOpts()+'</select>'+
     '<label class="f">Сложность</label><select id="mDiff">'+diffOpts()+'</select>',
     'Создать',()=>{
       const t=$('#mTitle').value.trim();if(!t)return false;
       S.quests.push({id:uid(),title:t,stat:$('#mStat').value,diff:$('#mDiff').value,done:false});
-      save();render();sysMsg('Квест добавлен');
+      save();render();sysMsg('Задача добавлена');
     });
 }
 function formEditQuest(id){
   const q=S.quests.find(x=>x.id===id);if(!q)return;
-  modal('Изменить квест',
+  modal('Изменить задачу',
     '<label class="f">Название</label><input type="text" id="mTitle" value="'+esc(q.title)+'">'+
-    '<label class="f">Характеристика</label><select id="mStat">'+statOpts(q.stat)+'</select>'+
+    '<label class="f">Категория</label><select id="mStat">'+statOpts(q.stat)+'</select>'+
     '<label class="f">Сложность</label><select id="mDiff">'+diffOpts(q.diff)+'</select>',
     'Сохранить',()=>{
       const t=$('#mTitle').value.trim();if(!t)return false;
@@ -837,65 +787,59 @@ function formEditQuest(id){
     });
 }
 function formDungeon(){
-  modal('Открыть врата',
-    '<label class="f">Название</label><input type="text" id="mTitle" placeholder="Например: Врата B-ранга: Английский A2">'+
-    '<label class="f">Характеристика</label><select id="mStat">'+statOpts()+'</select>'+
+  modal('Новый проект',
+    '<label class="f">Результат проекта</label><input type="text" id="mTitle" placeholder="Например: Подготовить резюме и портфолио">'+
+    '<label class="f">Категория</label><select id="mStat">'+statOpts()+'</select>'+
     '<label class="f">Сложность</label><select id="mDiff">'+diffOpts()+'</select>'+
-    '<label class="f">Этажи (каждый с новой строки, последний — босс)</label>'+
-    '<textarea id="mFloors" placeholder="Выучить 100 слов\nПройти 5 уроков\nПосмотреть фильм с субтитрами\nРазговор 30 минут"></textarea>',
-    'Открыть',()=>{
+    '<label class="f">Этапы (каждый с новой строки)</label>'+
+    '<textarea id="mFloors" placeholder="Собрать последние результаты\nОбновить текст резюме\nВыбрать примеры работ\nПроверить и отправить"></textarea>',
+    'Создать',()=>{
       const t=$('#mTitle').value.trim();
       const fl=$('#mFloors').value.split('\n').map(s=>s.trim()).filter(Boolean);
       if(!t||!fl.length)return false;
       S.dungeons.push({id:uid(),title:t,diff:$('#mDiff').value,stat:$('#mStat').value,cleared:false,
         floors:fl.map(f=>({title:f,cleared:false}))});
-      save();render();sysMsg('Врата открыты: '+t);
+      save();render();sysMsg('Проект создан: '+t);
     });
 }
 function formEditDungeon(id){
   const dg=S.dungeons.find(x=>x.id===id);if(!dg)return;
-  modal('Изменить врата',
+  modal('Изменить проект',
     '<label class="f">Название</label><input type="text" id="mTitle" value="'+esc(dg.title)+'">'+
-    '<label class="f">Характеристика</label><select id="mStat">'+statOpts(dg.stat)+'</select>'+
-    '<label class="f">Сложность</label><select id="mDiff">'+diffOpts(dg.diff)+'</select>',
+    '<label class="f">Категория</label><select id="mStat">'+statOpts(dg.stat)+'</select>'+
+    '<label class="f">Сложность</label><select id="mDiff">'+diffOpts(dg.diff)+'</select>'+
+    '<label class="f">Этапы (каждый с новой строки)</label><textarea id="mFloors">'+esc(dg.floors.map(f=>f.title).join('\n'))+'</textarea>',
     'Сохранить',()=>{
       const t=$('#mTitle').value.trim();if(!t)return false;
+      const fl=$('#mFloors').value.split('\n').map(s=>s.trim()).filter(Boolean);if(!fl.length)return false;
       dg.title=t;dg.stat=$('#mStat').value;dg.diff=$('#mDiff').value;
+      const nextFloors=fl.map((title,i)=>({title,cleared:!!(dg.floors[i]&&dg.floors[i].cleared)}));
+      if(nextFloors.every(f=>f.cleared))nextFloors[nextFloors.length-1].cleared=false;
+      dg.floors=nextFloors;dg.cleared=false;
       save();render();
     });
 }
 function formShop(){
   modal('Новая награда',
-    '<label class="f">Название</label><input type="text" id="mTitle" placeholder="Например: Вечер игр без чувства вины">'+
-    '<label class="f">Цена (золото)</label><input type="number" id="mCost" value="100" min="1">',
+    '<label class="f">Название</label><input type="text" id="mTitle" placeholder="Например: Два часа на любимое хобби">'+
+    '<label class="f">Цена (баллы)</label><input type="number" id="mCost" value="100" min="1">',
     'Добавить',()=>{
       const t=$('#mTitle').value.trim();if(!t)return false;
       S.shop.push({id:uid(),title:t,cost:Math.max(1,parseInt($('#mCost').value)||100)});
-      save();render();sysMsg('Награда добавлена в лавку');
+      save();render();sysMsg('Награда добавлена в магазин');
     });
 }
 function formEditShop(id){
   const it=S.shop.find(x=>x.id===id);if(!it)return;
   modal('Изменить награду',
     '<label class="f">Название</label><input type="text" id="mTitle" value="'+esc(it.title)+'">'+
-    '<label class="f">Цена (золото)</label><input type="number" id="mCost" value="'+it.cost+'" min="1">',
+    '<label class="f">Цена (баллы)</label><input type="number" id="mCost" value="'+it.cost+'" min="1">',
     'Сохранить',()=>{
       const t=$('#mTitle').value.trim();if(!t)return false;
       it.title=t;it.cost=Math.max(1,parseInt($('#mCost').value)||it.cost);
       save();render();
     });
 }
-function formBoss(){
-  modal('Босс недели',
-    '<label class="f">Главная задача недели</label><input type="text" id="mTitle" placeholder="Например: Сдать проект клиенту">'+
-    '<div class="muted sec-note">Награда сейчас: +'+rewardXP(DIFFS.A.xp*2)+' XP, +'+(DIFFS.A.gold*2)+' G. Босс живёт до понедельника.</div>',
-    'Назначить',()=>{
-      const t=$('#mTitle').value.trim();if(!t)return false;
-      S.weeklyBoss={title:t,week:weekKey(),done:false};
-      save();render();sysMsg('БОСС НЕДЕЛИ НАЗНАЧЕН: '+t);
-    });
-}
-
 /* ---------- отрисовка вкладок ---------- */
 function activityChart(){
   const names=['вс','пн','вт','ср','чт','пт','сб'];
@@ -909,120 +853,93 @@ function activityChart(){
   return '<div class="panel"><h2>Активность · 7 дней</h2><div class="chart">'+
     days.map(x=>'<div class="col"><div class="colbar"><i style="height:'+Math.round(x.v/max*66)+'px"></i></div>'+
       '<span>'+x.label+'</span><b>'+(x.v||'')+'</b></div>').join('')+
-    '</div><div class="muted sec-note">Каждое выполненное дело — засечка. Держи график живым.</div></div>';
+    '</div><div class="muted sec-note">Каждое выполненное дело добавляет отметку. График помогает видеть ритм недели.</div></div>';
 }
 function renderStatus(){
-  const h=S.hunter,r=rankOf(h.level),need=xpNeed(h.level);
-  const pct=Math.min(100,Math.round(h.xp/need*100));
+  const h=S.hunter;
   const doneD=S.dailies.filter(d=>d.done).length;
   const activeQ=S.quests.filter(q=>!q.done).length;
   const activeDg=S.dungeons.filter(d=>!d.cleared).length;
   const maxStat=Math.max(10,...Object.keys(STATS).map(k=>S.stats[k]||0));
-  const at=S.activeTitle?TITLES.find(t=>t.id===S.activeTitle):null;
-  const b=S.weeklyBoss;
-  return '<div class="panel"><h2>Статус</h2>'+
-    '<div class="stTop"><div class="rankBox r'+r+'">'+r+'</div>'+
+  return '<div class="panel"><h2>Обзор</h2>'+
+    '<div class="stTop"><div class="rankBox rC">✓</div>'+
     '<div style="flex:1;min-width:0">'+
-    '<div class="stName" data-act="name">'+esc(h.name)+' <span class="pen">✎</span></div>'+
-    (at?'<div class="titleLine">«'+at.name+'»</div>':'')+
-    '<div class="stLvl">УРОВЕНЬ '+h.level+' · РАНГ '+r+'</div>'+
-    '<div class="stLvl">Серия: '+S.streak+' дн. · Рекорд: '+S.done.bestStreak+' дн.</div>'+
-    '</div></div>'+
-    '<div style="margin-top:14px"><div class="xprow"><span>ОПЫТ</span><span>'+h.xp+' / '+need+'</span></div>'+
-    '<div class="bar"><i style="width:'+pct+'%"></i></div></div></div>'+
-    '<div class="panel"><h2>Характеристики</h2>'+
+    '<button class="stName" data-act="name">'+esc(h.name)+' <span class="pen">✎</span></button>'+
+    '<div class="stLvl">Доступно баллов: '+h.gold+'</div>'+
+    '<div class="stLvl">Текущая серия: '+S.streak+' дн. · Лучшая: '+S.done.bestStreak+' дн.</div>'+
+    '</div></div></div>'+
+    '<div class="panel"><h2>Категории</h2>'+
     Object.keys(STATS).map(k=>{
       const v=S.stats[k]||0;const w=Math.round(v/maxStat*100);
       return '<div class="statRow"><span class="statName">'+(isFocus(k)?'<i class="fs">★</i>':'')+STATS[k]+'</span>'+
         '<div class="bar"><i style="width:'+w+'%"></i></div>'+
         '<span class="statVal">'+v+'</span></div>';
     }).join('')+'</div>'+
-    '<div class="panel"><h2>Фокус охотника</h2><div class="chips">'+
+    '<div class="panel"><h2>Приоритетные категории</h2><div class="chips">'+
     Object.keys(STATS).map(k=>'<button class="chip cf'+(isFocus(k)?' on':'')+'" data-act="setfocus" data-id="'+k+'">'+STATS[k]+'</button>').join('')+
-    '</div><div class="muted sec-note">До трёх приоритетных направлений: их задачи дают ×2 опыта и очков характеристик.</div></div>'+
+    '</div><div class="muted sec-note">Можно выбрать до трёх категорий. Выполненные дела в них дают вдвое больше отметок категории.</div></div>'+
     activityChart()+
-    '<div class="panel"><h2>Титулы · '+S.titles.length+'/'+TITLES.length+'</h2>'+
+    '<div class="panel"><h2>Вехи · '+S.titles.length+'/'+TITLES.length+'</h2>'+
     (S.titles.length
       ?'<div class="chips">'+S.titles.map(id=>{
           const t=TITLES.find(x=>x.id===id);if(!t)return '';
-          return '<button class="chip'+(S.activeTitle===id?' on':'')+'" data-act="settitle" data-id="'+id+'">'+t.name+'</button>';
-        }).join('')+'</div>'+
-        '<div class="muted sec-note">Нажми на титул, чтобы носить его. Остальные скрыты — открой их делами.</div>'
-      :'<div class="empty">Титулы открываются за достижения. Первый — за первый выполненный квест.</div>')+
+          return '<span class="chip on">'+t.name+'</span>';
+        }).join('')+'</div><div class="muted sec-note">Вехи открываются автоматически по мере выполнения планов.</div>'
+      :'<div class="empty">Первая веха откроется после завершения первой задачи.</div>')+
     '</div>'+
     '<div class="panel"><h2>Сегодня</h2>'+
-    '<div class="todayRow"><span>Ежедневные квесты</span><b>'+doneD+' / '+S.dailies.length+'</b></div>'+
-    '<div class="todayRow"><span>Скрытый квест</span><b>'+(S.hiddenDay&&S.hiddenDay.done?'выполнен':'ожидает')+'</b></div>'+
-    '<div class="todayRow"><span>Босс недели</span><b>'+(!b?'не назначен':(b.done?'повержен':'жив'))+'</b></div>'+
-    '<div class="todayRow"><span>Активные квесты</span><b>'+activeQ+'</b></div>'+
-    '<div class="todayRow"><span>Открытые врата</span><b>'+activeDg+'</b></div>'+
+    '<div class="todayRow"><span>Ежедневные задачи</span><b>'+doneD+' / '+S.dailies.length+'</b></div>'+
+    '<div class="todayRow"><span>Дополнительная задача</span><b>'+(S.hiddenDay&&S.hiddenDay.done?'выполнена':'доступна')+'</b></div>'+
+    '<div class="todayRow"><span>Активные задачи</span><b>'+activeQ+'</b></div>'+
+    '<div class="todayRow"><span>Проекты в работе</span><b>'+activeDg+'</b></div>'+
     (S.restDay===today()?'<div class="todayRow" style="color:#8fd0ff"><span>День отдыха</span><b style="color:#8fd0ff">активирован</b></div>':'')+
-    (S.penalty&&!S.penalty.done?'<div class="todayRow" style="color:#ff9d9d"><span>Зона наказания</span><b style="color:#ff9d9d">опыт ×½</b></div>':'')+
-    '<div class="muted sec-note">Выполняй квесты — получай опыт, золото и очки характеристик. Невыполненные ежедневные квесты в полночь сбрасывают серию.</div>'+
+    '<div class="muted sec-note">За выполненные задачи начисляются баллы для магазина наград. Если ежедневный план не закрыт до полуночи, серия начинается заново.</div>'+
     '</div>';
 }
 function questRow(q,done){
   const r=DIFFS[q.diff]||DIFFS.E;
   return '<div class="qitem">'+
-    '<button class="qcheck '+(done?'on':'')+'" aria-label="'+(done?'Квест выполнен':'Выполнить квест')+'" '+(done?'disabled':'')+' data-act="quest" data-id="'+q.id+'">'+(done?'◆':'◇')+'</button>'+
+    '<button class="qcheck '+(done?'on':'')+'" aria-label="'+(done?'Задача выполнена':'Выполнить задачу')+'" '+(done?'disabled':'')+' data-act="quest" data-id="'+q.id+'">'+(done?'◆':'◇')+'</button>'+
     '<div class="qbody"'+(done?'':' data-act="editq" data-id="'+q.id+'"')+'><div class="qtitle '+(done?'done':'')+'">'+esc(q.title)+'</div>'+
-    '<div class="qmeta"><span class="badge r'+q.diff+'">'+q.diff+'</span><span>'+(STATS[q.stat]||'')+'</span>'+
-    '<span>+'+rewardXP(r.xp*(isFocus(q.stat)?2:1))+' XP · +'+r.gold+' G</span>'+
-    (isFocus(q.stat)?'<span class="badge rS">×2</span>':'')+'</div></div>'+
-    '<button class="xdel" aria-label="Удалить квест" data-act="delq" data-id="'+q.id+'">✕</button></div>';
+    '<div class="qmeta"><span class="badge r'+q.diff+'">'+r.label+'</span><span>'+(STATS[q.stat]||'')+'</span>'+
+    '<span>+'+r.gold+' баллов</span>'+
+    (isFocus(q.stat)?'<span class="badge rS">ПРИОРИТЕТ</span>':'')+'</div></div>'+
+    '<button class="xdel" aria-label="Удалить задачу" data-act="delq" data-id="'+q.id+'">✕</button></div>';
 }
 function renderQuests(){
-  const act=S.quests.filter(q=>!q.done),fin=S.quests.filter(q=>q.done);
+  const allAct=S.quests.filter(q=>!q.done),allFin=S.quests.filter(q=>q.done);
+  const matches=q=>ui.taskFilter==='all'||q.stat===ui.taskFilter;
+  const act=allAct.filter(matches),fin=allFin.filter(matches);
   const doneD=S.dailies.filter(d=>d.done).length;
   let html='';
-  if(S.penalty&&!S.penalty.done){
-    html+='<div class="panel danger"><h2>Зона наказания</h2>'+
-      '<div class="qitem"><button class="qcheck" aria-label="Выполнить штрафной квест" data-act="penalty">◇</button>'+
-      '<div class="qbody"><div class="qtitle">'+esc(S.penalty.task)+'</div>'+
-      '<div class="qmeta"><span style="color:#ff8f8f">Пока не выполнено — весь опыт ×½</span></div></div></div></div>';
-  }
-  const b=S.weeklyBoss;
-  html+='<div class="panel boss"><h2>Босс недели</h2>';
-  if(!b){
-    html+='<div class="empty">Назначь одну главную задачу недели — награда двойного A-ранга.</div>'+
-      '<button class="btn block" data-act="setBoss">+ Назначить босса</button>';
-  }else if(b.done){
-    html+='<div class="qitem"><span class="qcheck on">◆</span>'+
-      '<div class="qbody"><div class="qtitle done">'+esc(b.title)+'</div>'+
-      '<div class="qmeta"><span style="color:#ffd54d">Повержен. Новый босс — в понедельник.</span></div></div></div>';
-  }else{
-    html+='<div class="qitem"><button class="qcheck" aria-label="Победить босса недели" data-act="boss">◇</button>'+
-      '<div class="qbody"><div class="qtitle">'+esc(b.title)+'</div>'+
-      '<div class="qmeta"><span class="badge rA">БОСС</span><span>+'+rewardXP(DIFFS.A.xp*2)+' XP · +'+(DIFFS.A.gold*2)+' G</span></div></div>'+
-      '<button class="xdel" aria-label="Удалить босса недели" data-act="delboss">✕</button></div>';
-  }
-  html+='</div>';
   const hd=S.hiddenDay;
   if(hd){
     const tpl=HIDDEN_POOL[hd.idx];
-    html+='<div class="panel hiddenq"><h2>Скрытый квест дня</h2>'+
+    html+='<div class="panel hiddenq"><h2>Дополнительная задача дня</h2>'+
       (hd.done
         ?'<div class="qitem"><span class="qcheck on">◆</span>'+
          '<div class="qbody"><div class="qtitle done">'+esc(tpl.title)+'</div>'+
          '<div class="qmeta"><span>Выполнено. Новый появится завтра.</span></div></div></div>'
-        :'<div class="qitem"><button class="qcheck" aria-label="Выполнить скрытый квест" data-act="hiddenq">◇</button>'+
+        :'<div class="qitem"><button class="qcheck" aria-label="Выполнить дополнительную задачу" data-act="hiddenq">◇</button>'+
          '<div class="qbody"><div class="qtitle">'+esc(tpl.title)+'</div>'+
-         '<div class="qmeta"><span class="badge rS">×2</span><span>'+STATS[tpl.stat]+'</span>'+
-         '<span>+'+rewardXP(DIFFS.D.xp*2)+' XP · +'+(DIFFS.D.gold*2)+' G</span></div></div></div>')+
+         '<div class="qmeta"><span>'+STATS[tpl.stat]+'</span><span>+'+(DIFFS.D.gold*2)+' баллов</span></div></div></div>')+
       '</div>';
   }
-  html+='<div class="panel"><h2>Ежедневные квесты · '+doneD+'/'+S.dailies.length+'</h2>'+
+  html+='<div class="panel"><h2>Ежедневные задачи · '+doneD+'/'+S.dailies.length+'</h2>'+
     (S.dailies.map(d=>'<div class="qitem">'+
-      '<button class="qcheck '+(d.done?'on':'')+'" aria-label="'+(d.done?'Ежедневный квест выполнен':'Выполнить ежедневный квест')+'" data-act="daily" data-id="'+d.id+'">'+(d.done?'◆':'◇')+'</button>'+
+      '<button class="qcheck '+(d.done?'on':'')+'" aria-label="'+(d.done?'Ежедневная задача выполнена':'Выполнить ежедневную задачу')+'" data-act="daily" data-id="'+d.id+'">'+(d.done?'◆':'◇')+'</button>'+
       '<div class="qbody"'+(d.done?'':' data-act="editdaily" data-id="'+d.id+'"')+'><div class="qtitle '+(d.done?'done':'')+'">'+esc(d.title)+'</div>'+
-      '<div class="qmeta"><span>'+(STATS[d.stat]||'')+'</span><span>+'+rewardXP(isFocus(d.stat)?20:10)+' XP · +5 G</span>'+
-      (isFocus(d.stat)?'<span class="badge rS">×2</span>':'')+'</div></div>'+
-      '<button class="xdel" aria-label="Удалить ежедневный квест" data-act="deldaily" data-id="'+d.id+'">✕</button></div>').join('')||'<div class="empty">Нет ежедневных квестов</div>')+
-    '<button class="btn block" data-act="addDaily">+ Ежедневный квест</button>'+
-    '<div class="muted sec-note">Сброс в полночь. Выполнишь все — бонус +'+rewardXP(40)+' XP, +20 G и рост серии. Нажми на текст задачи, чтобы изменить её.</div></div>';
-  html+='<div class="panel"><h2>Квесты</h2>'+
-    (act.map(q=>questRow(q,false)).join('')||'<div class="empty">Нет активных квестов</div>')+
-    '<button class="btn block" data-act="addQuest">+ Новый квест</button>'+
+      '<div class="qmeta"><span>'+(STATS[d.stat]||'')+'</span><span>+5 баллов</span>'+
+      (isFocus(d.stat)?'<span class="badge rS">ПРИОРИТЕТ</span>':'')+'</div></div>'+
+      '<button class="xdel" aria-label="Удалить ежедневную задачу" data-act="deldaily" data-id="'+d.id+'">✕</button></div>').join('')||'<div class="empty">Ежедневных задач пока нет</div>')+
+    '<button class="btn block" data-act="addDaily">+ Ежедневная задача</button>'+
+    '<div class="muted sec-note">Список обновляется в полночь. За весь план дня начисляется ещё 20 баллов и продолжается серия.</div></div>';
+  html+='<div class="panel"><h2>Задачи · '+act.length+(ui.taskFilter==='all'?'':' из '+allAct.length)+'</h2>'+
+    '<div class="chips" role="group" aria-label="Фильтр задач по категории">'+
+    '<button class="chip'+(ui.taskFilter==='all'?' on':'')+'" aria-pressed="'+(ui.taskFilter==='all')+'" data-act="taskfilter" data-id="all">ВСЕ</button>'+
+    Object.keys(STATS).map(k=>'<button class="chip'+(ui.taskFilter===k?' on':'')+'" aria-pressed="'+(ui.taskFilter===k)+'" data-act="taskfilter" data-id="'+k+'">'+STATS[k]+'</button>').join('')+'</div>'+
+    (act.map(q=>questRow(q,false)).join('')||'<div class="empty">В этой категории активных задач нет</div>')+
+    '<button class="btn block" data-act="addQuest">+ Новая задача</button>'+
     (fin.length?'<button class="fold" data-act="foldDone">'+(ui.showDone?'▾':'▸')+' Выполненные ('+fin.length+')</button>'+
       (ui.showDone?fin.map(q=>questRow(q,true)).join(''):''):'')+
     '</div>';
@@ -1033,73 +950,71 @@ function dungeonCard(dg){
   const r=DIFFS[dg.diff]||DIFFS.E;
   const curIdx=dg.floors.findIndex(f=>!f.cleared);
   return '<div class="panel"><div class="dgHead"><h2 data-act="editdun" data-id="'+dg.id+'">'+esc(dg.title)+'</h2>'+
-    '<span class="badge r'+dg.diff+'">'+dg.diff+'</span>'+
-    '<button class="xdel" aria-label="Удалить врата" data-act="deldun" data-id="'+dg.id+'">✕</button></div>'+
-    '<div class="xprow" style="margin-top:10px"><span>ЭТАЖИ</span><span>'+cl+' / '+total+'</span></div>'+
+    '<span class="badge r'+dg.diff+'">'+r.label+'</span>'+
+    '<button class="xdel" aria-label="Удалить проект" data-act="deldun" data-id="'+dg.id+'">✕</button></div>'+
+    '<div class="xprow" style="margin-top:10px"><span>ЭТАПЫ</span><span>'+cl+' / '+total+'</span></div>'+
     '<div class="bar"><i style="width:'+Math.round(cl/total*100)+'%"></i></div>'+
     '<div style="margin-top:8px">'+
     dg.floors.map((f,i)=>{
-      const boss=i===dg.floors.length-1;
       const isCur=!f.cleared&&i===curIdx;
-      return '<div class="floor '+(f.cleared?'cleared':'')+' '+(boss?'boss':'')+'">'+
+      return '<div class="floor '+(f.cleared?'cleared':'')+'">'+
         '<span class="fmark">'+(f.cleared?'◆':'◇')+'</span>'+
-        '<span class="ftitle">'+(boss?'БОСС: ':'')+esc(f.title)+'</span>'+
-        (isCur?'<button class="btn small" data-act="floor" data-id="'+dg.id+'">Зачистить</button>':'')+
+        '<span class="ftitle">'+esc(f.title)+'</span>'+
+        (isCur?'<button class="btn small" data-act="floor" data-id="'+dg.id+'">Завершить</button>':'')+
         '</div>';
     }).join('')+'</div>'+
-    '<div class="muted sec-note">'+(dg.stat&&STATS[dg.stat]?STATS[dg.stat]+(isFocus(dg.stat)?' · ФОКУС ×2':'')+' · ':'')+
-    'Награда за зачистку: +'+rewardXP(r.xp*2*(dg.stat&&isFocus(dg.stat)?2:1))+' XP, +'+(r.gold*2)+' G</div></div>';
+    '<div class="muted sec-note">'+(dg.stat&&STATS[dg.stat]?STATS[dg.stat]+' · ':'')+
+    'За завершение проекта: +'+(r.gold*2)+' баллов</div></div>';
 }
 function renderGates(){
   const act=S.dungeons.filter(d=>!d.cleared),fin=S.dungeons.filter(d=>d.cleared);
-  return (act.map(dungeonCard).join('')||'<div class="panel"><div class="empty">Открытых врат нет. Врата — это большой проект, разбитый на этажи.</div></div>')+
-    '<div class="panel"><button class="btn block" data-act="addDungeon">+ Открыть врата</button>'+
-    (fin.length?'<button class="fold" data-act="foldCleared">'+(ui.showCleared?'▾':'▸')+' Закрытые врата ('+fin.length+')</button>'+
+  return (act.map(dungeonCard).join('')||'<div class="panel"><div class="empty">Проектов в работе нет. Создай проект для результата, который требует нескольких последовательных этапов.</div></div>')+
+    '<div class="panel"><button class="btn block" data-act="addDungeon">+ Новый проект</button>'+
+    (fin.length?'<button class="fold" data-act="foldCleared">'+(ui.showCleared?'▾':'▸')+' Завершённые проекты ('+fin.length+')</button>'+
       (ui.showCleared?fin.map(d=>'<div class="qitem"><span class="qcheck on">◆</span>'+
         '<div class="qbody"><div class="qtitle done">'+esc(d.title)+'</div></div>'+
-        '<button class="xdel" aria-label="Удалить закрытые врата" data-act="deldun" data-id="'+d.id+'">✕</button></div>').join(''):''):'')+
-    '<div class="muted sec-note">Этажи зачищаются по порядку, последний этаж — босс. За полную зачистку — крупная награда.</div></div>';
+        '<button class="xdel" aria-label="Удалить завершённый проект" data-act="deldun" data-id="'+d.id+'">✕</button></div>').join(''):''):'')+
+    '<div class="muted sec-note">Этапы выполняются по порядку. За завершение всего проекта начисляются дополнительные баллы.</div></div>';
 }
 function renderShop(){
-  return '<div class="panel"><h2>Лавка наград</h2>'+
-    '<div class="goldBig"><b>G</b> '+S.hunter.gold+'</div>'+
+  return '<div class="panel"><h2>Магазин наград</h2>'+
+    '<div class="goldBig"><b>Б</b> '+S.hunter.gold+' баллов</div>'+
     (S.shop.map(it=>{const restActive=it.kind==='restDay'&&S.restDay===today();return '<div class="qitem">'+
       '<div class="qbody" data-act="editshop" data-id="'+it.id+'"><div class="qtitle">'+esc(it.title)+'</div>'+
-      '<div class="qmeta"><span style="color:#ffd54d">'+it.cost+' G</span>'+(it.kind==='restDay'?'<span>Защищает серию сегодня</span>':'')+'</div></div>'+
-      '<button class="btn small" data-act="buy" data-id="'+it.id+'" '+(S.hunter.gold<it.cost||restActive?'disabled':'')+'>'+(restActive?'Активно':'Купить')+'</button>'+
-      '<button class="xdel" aria-label="Удалить награду" data-act="delshop" data-id="'+it.id+'">✕</button></div>';}).join('')||'<div class="empty">Добавь награды, ради которых стоит копить золото</div>')+
+      '<div class="qmeta"><span style="color:#ffd54d">'+it.cost+' баллов</span>'+(it.kind==='restDay'?'<span>Сохраняет серию сегодня</span>':'')+'</div></div>'+
+      '<button class="btn small" data-act="buy" data-id="'+it.id+'" '+(S.hunter.gold<it.cost||restActive?'disabled':'')+'>'+(restActive?'Активно':'Получить')+'</button>'+
+      '<button class="xdel" aria-label="Удалить награду" data-act="delshop" data-id="'+it.id+'">✕</button></div>';}).join('')||'<div class="empty">Добавь награды, ради которых стоит копить баллы</div>')+
     '<button class="btn block" data-act="addShop">+ Новая награда</button>'+
-    '<div class="muted sec-note">Золото начисляется за квесты. Покупай реальные удовольствия — так награды остаются честными.</div></div>';
+    '<div class="muted sec-note">Баллы начисляются за завершённые задачи. Выбирай реальные небольшие награды, которые поддерживают привычки и не мешают целям.</div></div>';
 }
 function renderMore(){
-  return '<div class="panel"><h2>Достижения</h2>'+
-    '<div class="todayRow"><span>Квестов выполнено</span><b>'+S.done.quests+'</b></div>'+
-    '<div class="todayRow"><span>Врат закрыто</span><b>'+S.done.dungeons+'</b></div>'+
-    '<div class="todayRow"><span>Боссов повержено</span><b>'+(S.done.bosses||0)+'</b></div>'+
-    '<div class="todayRow"><span>Скрытых квестов</span><b>'+(S.done.hidden||0)+'</b></div>'+
-    '<div class="todayRow"><span>Наград куплено</span><b>'+S.done.buys+'</b></div>'+
+  return '<div class="panel"><h2>Статистика</h2>'+
+    '<div class="todayRow"><span>Задач выполнено</span><b>'+S.done.quests+'</b></div>'+
+    '<div class="todayRow"><span>Проектов завершено</span><b>'+S.done.dungeons+'</b></div>'+
+    '<div class="todayRow"><span>Дополнительных задач</span><b>'+(S.done.hidden||0)+'</b></div>'+
+    '<div class="todayRow"><span>Наград получено</span><b>'+S.done.buys+'</b></div>'+
     '<div class="todayRow"><span>Лучшая серия</span><b>'+S.done.bestStreak+' дн.</b></div>'+
-    '<div class="todayRow"><span>Титулов открыто</span><b>'+S.titles.length+' / '+TITLES.length+'</b></div></div>'+
+    '<div class="todayRow"><span>Вех открыто</span><b>'+S.titles.length+' / '+TITLES.length+'</b></div></div>'+
     '<div class="panel"><h2>Данные · Синхронизация</h2>'+
     '<button class="btn block" data-act="export">⇩ Экспорт бэкапа (JSON)</button>'+
     '<button class="btn block" data-act="importP">⇪ Импорт пакета задач с ПК</button>'+
     '<button class="btn block" data-act="importB">⟲ Восстановить из бэкапа</button>'+
     (hasRecoveryPoint()?'<button class="btn block" data-act="rollback">↶ Откатить последнее восстановление</button>':'')+
     '<button class="btn block" data-act="sync">⟳ Обновить контент (content.json)</button>'+
-    '<div class="muted sec-note">Пакет задач — JSON-файл с новыми квестами, вратами и наградами, подготовленный на компьютере. При запуске приложение само подтягивает content.json с сервера, если есть сеть. Всё остальное работает офлайн.</div></div>'+
+    '<div class="muted sec-note">Пакет задач — JSON-файл с новыми задачами, проектами и наградами, подготовленный на компьютере. При запуске приложение само подтягивает content.json с сервера, если есть сеть. Всё остальное работает офлайн.</div></div>'+
     '<div class="panel"><h2>Журнал</h2>'+
     (S.log.slice(0,30).map(l=>{
       const d=new Date(l.t);
       const p=n=>String(n).padStart(2,'0');
       return '<div class="logrow"><time>'+p(d.getDate())+'.'+p(d.getMonth()+1)+' '+p(d.getHours())+':'+p(d.getMinutes())+'</time>'+esc(l.m)+'</div>';
     }).join('')||'<div class="empty">Журнал пуст</div>')+'</div>'+
-    '<div class="panel"><h2>Опасная зона</h2>'+
+    '<div class="panel"><h2>Сброс данных</h2>'+
     '<button class="btn block" data-act="reset" style="border-color:rgba(255,110,110,.5);color:#ff9d9d">Полный сброс</button></div>';
 }
 
 const TABS={status:renderStatus,quests:renderQuests,gates:renderGates,shop:renderShop,more:renderMore};
 function render(){
-  $('#goldTop').innerHTML='<b>G</b> '+S.hunter.gold;
+  $('#goldTop').innerHTML='<b>Б</b> '+S.hunter.gold;
   const view=$('#view');
   view.innerHTML=TABS[tab]();
   if(lastTab!==tab){
@@ -1125,14 +1040,10 @@ $('#view').addEventListener('click',e=>{
     case 'quest':doQuest(id);break;
     case 'floor':doFloor(id);break;
     case 'hiddenq':doHidden();break;
-    case 'penalty':doPenalty();break;
-    case 'boss':doBoss();break;
-    case 'setBoss':formBoss();break;
-    case 'delboss':delBoss();break;
     case 'buy':buy(id);break;
-    case 'delq':delFrom(S.quests,id,'квест');break;
-    case 'deldaily':delFrom(S.dailies,id,'ежедневный квест');break;
-    case 'deldun':delFrom(S.dungeons,id,'врата');break;
+    case 'delq':delFrom(S.quests,id,'задачу');break;
+    case 'deldaily':delFrom(S.dailies,id,'ежедневную задачу');break;
+    case 'deldun':delFrom(S.dungeons,id,'проект');break;
     case 'delshop':delFrom(S.shop,id,'награду');break;
     case 'addDaily':formDaily();break;
     case 'addQuest':formQuest();break;
@@ -1142,7 +1053,7 @@ $('#view').addEventListener('click',e=>{
     case 'editdaily':formEditDaily(id);break;
     case 'editdun':formEditDungeon(id);break;
     case 'editshop':formEditShop(id);break;
-    case 'settitle':S.activeTitle=id;save();render();break;
+    case 'taskfilter':ui.taskFilter=id==='all'||STATS[id]?id:'all';render();break;
     case 'setfocus':{
       const i=S.focus.indexOf(id);
       if(i>=0)S.focus.splice(i,1);
@@ -1167,13 +1078,13 @@ $('#fileP').addEventListener('change',e=>readFile(e,obj=>{
   const n=applyPack(obj);
   sysMsg(n?('Загружено новых записей: '+n):'Новых записей нет');
 }));
-$('#levelup').addEventListener('click',()=>$('#levelup').classList.add('hidden'));
 document.addEventListener('visibilitychange',()=>{
   if(!document.hidden){checkDailyReset();scheduleRollover();render();}
 });
 
 /* ---------- запуск ---------- */
 checkDailyReset();
+save();
 render();
 scheduleRollover();
 contentSync(false);
