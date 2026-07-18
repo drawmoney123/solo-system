@@ -44,11 +44,11 @@ h2{font-size:12px;letter-spacing:.16em;color:#9dceff;margin:0 0 12px;font-weight
 .sec-note{margin-top:10px}
 .empty{color:#5c7699;font-size:12px;padding:8px 0}
 .btn{display:inline-block;background:rgba(40,90,160,.15);border:1px solid rgba(110,185,255,.5);color:#9fd0ff;
-  padding:10px 14px;font-size:12px;letter-spacing:.15em;text-transform:uppercase;border-radius:3px;font-weight:700;font-family:inherit}
+  min-height:44px;padding:10px 14px;font-size:12px;line-height:1.2;letter-spacing:.15em;text-transform:uppercase;border-radius:3px;font-weight:700;font-family:inherit}
 .btn:active{background:rgba(80,150,255,.28)}
 .btn.primary{background:rgba(60,130,255,.25);color:#dff0ff;box-shadow:0 0 12px rgba(60,140,255,.3)}
 .btn.block{display:block;width:100%;text-align:center;margin-top:12px}
-.btn.small{padding:6px 10px;font-size:11px;letter-spacing:.08em;min-height:40px}
+.btn.small{padding:6px 10px;font-size:11px;letter-spacing:.08em;min-height:44px}
 .btn:disabled{opacity:.35}
 .bar{height:10px;background:rgba(90,170,255,.12);border:1px solid rgba(90,170,255,.25);border-radius:2px;overflow:hidden}
 .bar i{display:block;height:100%;background:linear-gradient(90deg,#2f7fe0,#54d7ff);box-shadow:0 0 10px rgba(84,215,255,.7);position:relative;overflow:hidden}
@@ -69,7 +69,7 @@ h2{font-size:12px;letter-spacing:.16em;color:#9dceff;margin:0 0 12px;font-weight
 .todayRow b{color:#dff0ff}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{border:1px solid rgba(255,213,77,.4);color:#e8d28a;background:rgba(255,213,77,.06);
-  min-height:44px;padding:6px 10px;font-size:11px;border-radius:8px;font-family:inherit;letter-spacing:.05em;display:inline-flex;align-items:center}
+  min-width:44px;min-height:44px;padding:6px 10px;font-size:11px;border-radius:8px;font-family:inherit;letter-spacing:.05em;display:inline-flex;align-items:center;justify-content:center}
 .chip.on{color:#ffd54d;border-color:#ffd54d;box-shadow:0 0 10px rgba(255,213,77,.35)}
 .chip.cf{border-color:rgba(110,185,255,.4);color:#9cc2ec;background:rgba(90,170,255,.06)}
 .chip.cf.on{color:#8fd0ff;border-color:#8fd0ff;box-shadow:0 0 10px rgba(90,180,255,.4)}
@@ -115,7 +115,7 @@ button.qcheck,button.xdel{min-width:44px;min-height:44px}
 .train-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .train-kpi{padding:10px 8px;border:1px solid rgba(90,170,255,.2);border-radius:9px;background:rgba(30,65,110,.12);text-align:center}
 .train-kpi b{display:block;font-size:20px;color:#e6f1ff;margin-bottom:3px}
-.train-kpi span{font-size:9px;line-height:1.25;letter-spacing:.08em;color:#7d9cc4;text-transform:uppercase}
+.train-kpi span{font-size:10px;line-height:1.25;letter-spacing:.08em;color:#7d9cc4;text-transform:uppercase}
 .train-kpi .bar{margin-top:8px;height:6px}
 .train-days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
 .train-day{padding:7px 2px;border:1px solid rgba(90,170,255,.16);border-radius:7px;text-align:center;background:rgba(30,65,110,.08)}
@@ -138,7 +138,7 @@ button.qcheck,button.xdel{min-width:44px;min-height:44px}
 .train-session-title{font-size:14px;color:#e6f1ff}
 .train-session-meta{font-size:11px;color:#7d9cc4;margin-top:4px;line-height:1.45}
 .train-session details{margin-top:7px;color:#9cbbe0;font-size:11px}
-.train-session summary{min-height:36px;display:flex;align-items:center;color:#8fd0ff;cursor:pointer}
+.train-session summary{min-height:44px;display:flex;align-items:center;color:#8fd0ff;cursor:pointer}
 .train-result{padding:5px 0;border-bottom:1px dashed rgba(90,170,255,.12);line-height:1.45}
 .train-result:last-child{border-bottom:0}
 .train-note{font-size:11px;color:#9cbbe0;line-height:1.5;margin-top:7px;white-space:pre-wrap}
@@ -148,11 +148,35 @@ button.qcheck,button.xdel{min-width:44px;min-height:44px}
 .train-form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
 .train-form-grid label.f{margin-top:8px;letter-spacing:.08em}
 .train-form-grid input{padding:9px 7px}
-.source-links a{color:#8fd0ff;text-decoration:none}
+.source-links a{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0 5px;color:#8fd0ff;text-decoration:none}
+.train-nav{display:flex;gap:7px;overflow-x:auto;scrollbar-width:thin;scrollbar-color:#777 #111;margin:14px 0 -2px;padding:2px 1px 8px;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}
+.train-nav::-webkit-scrollbar{display:block;height:4px}.train-nav::-webkit-scrollbar-track{background:#111}.train-nav::-webkit-scrollbar-thumb{background:#777;border-radius:4px}
+.train-nav .chip{flex:0 0 auto;white-space:nowrap;min-height:44px}
+.train-today{padding:16px;border:1px solid #555;border-radius:12px;background:linear-gradient(180deg,#151515,#080808)}
+.train-today-kicker{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#aaa;margin-bottom:7px}
+.train-today-title{font-size:21px;line-height:1.2;color:#fff;font-weight:800}
+.train-today-text{font-size:12px;line-height:1.55;color:#aaa;margin-top:7px}
+.train-status{display:inline-flex;align-items:center;min-height:28px;border:1px solid #666;border-radius:999px;padding:4px 9px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;margin-top:10px;color:#ddd}
+.train-status.done{background:#fff;color:#000;border-color:#fff}
+.week-list{display:grid;gap:7px}
+.week-row{display:grid;grid-template-columns:42px minmax(0,1fr) auto;gap:9px;align-items:center;min-height:56px;padding:8px 9px;border:1px solid #292929;border-radius:9px;background:#0b0b0b}
+.week-row.today{border-color:#888}
+.week-row.done{background:#151515}
+.week-date b{display:block;color:#eee;font-size:12px}.week-date span{display:block;color:#888;font-size:10px;margin-top:2px}
+.week-main{min-width:0}.week-main b{display:block;color:#eee;font-size:12px;line-height:1.35}.week-main span{display:block;color:#777;font-size:10px;margin-top:3px}
+.week-mark{font-size:10px;line-height:1.25;color:#999;text-align:right;max-width:78px;text-transform:uppercase;letter-spacing:.05em}
+.week-row.done .week-mark{color:#fff}
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.profile-cell{padding:10px;border:1px solid #292929;border-radius:8px;background:#0a0a0a}
+.profile-cell span{display:block;color:#888;font-size:10px;text-transform:uppercase;letter-spacing:.08em}.profile-cell b{display:block;color:#eee;font-size:12px;line-height:1.35;margin-top:4px}
+.train-quick{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}
+.train-quick .btn{padding:9px 5px;letter-spacing:.04em;min-height:44px}
+.train-section-note{font-size:12px;line-height:1.6;color:#aaa;margin:2px 2px 12px}
+.preferred{color:#fff!important;font-size:11px!important}
 .tabbar{position:fixed;bottom:0;left:0;right:0;z-index:30;display:flex;max-width:520px;margin:0 auto;
   background:rgba(6,10,20,.95);border-top:1px solid rgba(90,170,255,.25);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   padding:6px 4px calc(8px + env(safe-area-inset-bottom))}
-.tabbar button{flex:1;background:none;border:none;color:#5f7fa8;font-size:9px;letter-spacing:.05em;padding:6px 2px;font-family:inherit;overflow-wrap:anywhere}
+.tabbar button{flex:1;background:none;border:none;color:#5f7fa8;font-size:10px;letter-spacing:.04em;padding:6px 2px;font-family:inherit;overflow-wrap:anywhere}
 .tabbar button .ti{display:block;font-size:18px;margin-bottom:3px}
 .tabbar button.on{color:#8fd0ff;text-shadow:0 0 10px rgba(90,180,255,.7)}
 .toast{position:fixed;top:calc(12px + env(safe-area-inset-top));left:50%;transform:translate(-50%,-20px);opacity:0;z-index:60;
@@ -166,9 +190,9 @@ button.qcheck,button.xdel{min-width:44px;min-height:44px}
 .askText{font-size:14px;line-height:1.5;color:#c9defa}
 label.f{display:block;font-size:10px;letter-spacing:.2em;color:#7fa6d4;margin:12px 0 5px;text-transform:uppercase}
 input[type=text],input[type=number],input[type=date],select,textarea{width:100%;background:rgba(10,18,34,.9);border:1px solid rgba(90,170,255,.4);
-  color:#e8f3ff;padding:10px;font-size:16px;border-radius:3px;font-family:inherit}
+  min-height:44px;color:#e8f3ff;padding:10px;font-size:16px;border-radius:3px;font-family:inherit}
 textarea{min-height:110px;resize:vertical}
-.m-btns{display:flex;gap:10px;margin-top:16px}
+.m-btns{position:sticky;bottom:-1px;z-index:2;display:flex;gap:10px;margin-top:16px;padding:10px 0 2px;background:linear-gradient(180deg,rgba(9,9,9,0),#090909 28%)}
 .m-btns .btn{flex:1;text-align:center}
 
 /* ---------- монохромная тема ---------- */
@@ -227,6 +251,8 @@ input::placeholder,textarea::placeholder{color:#666}
 }
 @media (max-width:350px){
   .train-summary{grid-template-columns:1fr}.train-days{grid-template-columns:repeat(4,1fr)}
+  .train-quick{grid-template-columns:1fr}.profile-grid{grid-template-columns:1fr}
+  .week-row{grid-template-columns:38px minmax(0,1fr)}.week-mark{grid-column:2;text-align:left;max-width:none}
 }
 .hidden{display:none}
 </style>
@@ -265,7 +291,7 @@ input::placeholder,textarea::placeholder{color:#666}
 "use strict";
 const KEY='soloSystemV1';
 const PREV_KEY='soloSystemBeforeRestoreV1';
-const SCHEMA_VERSION=5;
+const SCHEMA_VERSION=6;
 const $=s=>document.querySelector(s);
 const DIFFS={
   E:{xp:15,gold:10,label:'Очень простая'},D:{xp:30,gold:20,label:'Простая'},
@@ -278,19 +304,103 @@ const TRAINING_TYPES={strength:'Силовая',run:'Бег',walk:'Ходьба'
 const EFFORTS={easy:'Легко',moderate:'Умеренно',hard:'Тяжело'};
 const STRENGTH_PLANS={
   A:{title:'Full Body A',exercises:[
-    {id:'a-squat',title:'Присед',target:'2×8–12',sets:2,reps:8,max:12,options:['Присед к стулу','Гоблет-присед','Присед со штангой']},
-    {id:'a-push',title:'Горизонтальный жим',target:'2×8–12',sets:2,reps:8,max:12,options:['Отжимание от высокой опоры','Отжимание от пола','Жим гантелей лёжа','Жим штанги лёжа']},
-    {id:'a-row',title:'Горизонтальная тяга',target:'2×8–12',sets:2,reps:8,max:12,options:['Тяга резинки к поясу','Тяга гантели к поясу','Тяга горизонтального блока']},
-    {id:'a-hinge',title:'Наклон / тяга',target:'2×8–12',sets:2,reps:8,max:12,options:['Наклон с резинкой','Румынская тяга с гантелями','Румынская тяга со штангой']},
-    {id:'a-core',title:'Корпус',target:'2×6–10 на сторону',sets:2,reps:6,options:['Dead bug','Bird dog']}
+    {id:'a-squat',title:'Присед',target:'8–12',sets:2,reps:8,max:12},
+    {id:'a-push',title:'Горизонтальный жим',target:'8–12',sets:2,reps:8,max:12},
+    {id:'a-row',title:'Горизонтальная тяга',target:'8–12',sets:2,reps:8,max:12},
+    {id:'a-hinge',title:'Наклон / тяга',target:'8–12',sets:2,reps:8,max:12},
+    {id:'a-core',title:'Корпус',target:'6–10 на сторону',sets:2,reps:6,max:10}
   ]},
   B:{title:'Full Body B',exercises:[
-    {id:'b-leg',title:'Одноногий присед',target:'2×8–12 на сторону',sets:2,reps:8,max:12,options:['Подъём на ступень','Сплит-присед с опорой','Обратный выпад']},
-    {id:'b-glute',title:'Ягодицы',target:'2×10–15',sets:2,reps:10,max:15,options:['Ягодичный мост','Ягодичный мост с весом','Хип-траст']},
-    {id:'b-push',title:'Вертикальный жим',target:'2×8–12',sets:2,reps:8,max:12,options:['Жим гантелей сидя','Жим гантелей стоя','Жим в тренажёре','Отжимание уголком от высокой опоры']},
-    {id:'b-pull',title:'Вертикальная тяга',target:'2×8–12',sets:2,reps:8,max:12,options:['Тяга резинки сверху','Тяга верхнего блока','Подтягивание с поддержкой']},
-    {id:'b-core',title:'Корпус / перенос веса',target:'2 подхода',sets:2,reps:20,options:['Боковая планка, секунд на сторону','Перенос веса, секунд','Bird dog, повторов на сторону']}
+    {id:'b-leg',title:'Одноногий присед',target:'8–12 на сторону',sets:2,reps:8,max:12},
+    {id:'b-glute',title:'Ягодицы',target:'10–15',sets:2,reps:10,max:15},
+    {id:'b-push',title:'Вертикальный жим',target:'8–12',sets:2,reps:8,max:12},
+    {id:'b-pull',title:'Вертикальная тяга',target:'8–12',sets:2,reps:8,max:12},
+    {id:'b-core',title:'Корпус / перенос веса',target:'20–30 секунд',sets:2,reps:20,max:30}
   ]}
+};
+const EXERCISE_LIBRARY={
+  'a-squat':{
+    bodyweight:['Присед к устойчивому стулу','Присед без веса'],
+    compact:['Гоблет-присед','Присед с резинкой'],
+    gym:['Жим ногами','Гоблет-присед']
+  },
+  'a-push':{
+    bodyweight:['Отжимание от стены','Отжимание от устойчивой высокой опоры','Отжимание от пола'],
+    compact:['Жим гантелей лёжа на полу','Отжимание от высокой устойчивой опоры'],
+    gym:['Жим от груди в тренажёре','Жим гантелей лёжа']
+  },
+  'a-row':{
+    bodyweight:['W-подъёмы рук лёжа на животе','Обратные снежные ангелы лёжа'],
+    compact:['Тяга гантели одной рукой с опорой','Тяга резинки к поясу'],
+    gym:['Тяга горизонтального блока','Тяга гантели одной рукой с опорой']
+  },
+  'a-hinge':{
+    bodyweight:['Наклон «good morning» без веса'],
+    compact:['Румынская тяга с гантелями','Наклон с резинкой'],
+    gym:['Румынская тяга с гантелями','Гиперэкстензия без дополнительного веса']
+  },
+  'a-core':{
+    bodyweight:['Dead bug','Bird dog'],
+    compact:['Dead bug','Pallof press с резинкой'],
+    gym:['Pallof press на блоке','Dead bug']
+  },
+  'b-leg':{
+    bodyweight:['Сплит-присед с опорой рукой','Подъём на низкую ступень'],
+    compact:['Обратный выпад с гантелями','Сплит-присед с опорой рукой'],
+    gym:['Сплит-присед с опорой рукой','Подъём на низкую платформу']
+  },
+  'b-glute':{
+    bodyweight:['Ягодичный мост'],
+    compact:['Ягодичный мост с гантелью','Ягодичный мост'],
+    gym:['Хип-траст в тренажёре','Ягодичный мост с гантелью']
+  },
+  'b-push':{
+    bodyweight:['Отжимание уголком от высокой устойчивой опоры'],
+    compact:['Жим гантелей сидя','Жим гантелей стоя'],
+    gym:['Жим плеч в тренажёре','Жим гантелей сидя']
+  },
+  'b-pull':{
+    bodyweight:['Подтягивание локтей лёжа на животе','Сведение лопаток лёжа'],
+    compact:['Тяга резинки сверху (штатное крепление)','Тяга резинки к поясу'],
+    gym:['Тяга верхнего блока нейтральным хватом','Подтягивание с поддержкой']
+  },
+  'b-core':{
+    bodyweight:['Боковая планка с колен','Удержание dead bug, секунд'],
+    compact:['Перенос гантелей','Боковая планка'],
+    gym:['Перенос гантелей','Боковая планка']
+  }
+};
+const TRAINING_SETUPS={
+  bodyweight:{label:'Без оборудования',short:'Свой вес',hint:'Устойчивая опора, пол и низкая ступень. Полноценную тягу без снаряда временно заменяют лёгкие упражнения для верхней части спины.'},
+  compact:{label:'Гантели и резинки',short:'Гантели / резинки',hint:'Домашний набор с гантелями и резинкой. Резинку крепи только способом, который разрешён производителем.'},
+  gym:{label:'Тренажёрный зал',short:'Зал',hint:'Простые тренажёры, блоки и гантели. Штанга не используется как вариант по умолчанию.'}
+};
+const TRAINING_EXPERIENCE={beginner:'Начинаю или возвращаюсь',regular:'Тренируюсь регулярно'};
+const TRAINING_SECTIONS={today:'Сегодня',week:'Неделя',strength:'Силовые',run:'Бег',walk:'Ходьба',journal:'Журнал',settings:'Настройки'};
+const SCHEDULE_TYPES={
+  rest:{label:'Отдых',short:'Отдых'},
+  strength:{label:'Силовая Full Body по очереди',short:'Full Body'},
+  run:{label:'Бег / бег с ходьбой',short:'Бег'},
+  walkRecovery:{label:'Восстановительная прогулка',short:'Восст. ходьба'},
+  walkBrisk:{label:'Быстрая ходьба',short:'Быстрая ходьба'},
+  walkLong:{label:'Длинная прогулка',short:'Длинная прогулка'}
+};
+const WEEK_DAYS=[
+  {key:1,short:'Пн',name:'Понедельник'},{key:2,short:'Вт',name:'Вторник'},
+  {key:3,short:'Ср',name:'Среда'},{key:4,short:'Чт',name:'Четверг'},
+  {key:5,short:'Пт',name:'Пятница'},{key:6,short:'Сб',name:'Суббота'},
+  {key:0,short:'Вс',name:'Воскресенье'}
+];
+const defaultTrainingSchedule=()=>({1:'strength',2:'run',3:'walkRecovery',4:'strength',5:'walkRecovery',6:'run',0:'walkBrisk'});
+const exerciseOptions=(slot,setup)=>{
+  const entry=EXERCISE_LIBRARY[slot]||{};
+  const names=entry[TRAINING_SETUPS[setup]?setup:'bodyweight'];
+  return Array.isArray(names)&&names.length?names.slice():['Упражнение'];
+};
+const defaultPreferences=(setup='bodyweight')=>{
+  const out={};
+  Object.values(STRENGTH_PLANS).forEach(plan=>plan.exercises.forEach(ex=>out[ex.id]=exerciseOptions(ex.id,setup)[0]));
+  return out;
 };
 const RUN_LEVELS=[
   {title:'R1 · Начало',duration:30,text:'5 мин ходьбы → 8× (1 мин лёгкого бега + 1:30 ходьбы) → 5 мин ходьбы'},
@@ -305,7 +415,11 @@ const WALK_TYPES={
   brisk:{title:'Быстрая ходьба',duration:30,text:'5 минут спокойно → 20 минут быстрее → 5 минут спокойно'},
   long:{title:'Длинная прогулка',duration:45,text:'45–60 минут в устойчивом комфортном темпе'}
 };
-const trainingSeed=()=>({nextStrength:'A',runLevel:1,goals:{strength:2,run:2,walk:3},sessions:[]});
+const trainingSeed=()=>({
+  nextStrength:'A',runLevel:1,goals:{strength:2,run:2,walk:3},
+  profile:{experience:'beginner',setup:'bodyweight'},
+  preferences:defaultPreferences('bodyweight'),schedule:defaultTrainingSchedule(),sessions:[]
+});
 const TITLES=[
   {id:'awake',name:'Первая завершённая задача',check:s=>s.done.quests>=1},
   {id:'gate1',name:'Первый завершённый проект',check:s=>s.done.dungeons>=1},
@@ -529,6 +643,26 @@ function normalize(saved){
     run:finite(goals.run,2,0,5),
     walk:finite(goals.walk,3,0,7)
   };
+  const profile=isObj(tr.profile)?tr.profile:{};
+  const setup=TRAINING_SETUPS[profile.setup]?profile.setup:'bodyweight';
+  s.training.profile={
+    experience:TRAINING_EXPERIENCE[profile.experience]?profile.experience:'beginner',
+    setup
+  };
+  const rawPreferences=isObj(tr.preferences)?tr.preferences:{};
+  s.training.preferences={};
+  Object.values(STRENGTH_PLANS).forEach(plan=>plan.exercises.forEach(ex=>{
+    const options=exerciseOptions(ex.id,setup);
+    const preferred=cleanText(rawPreferences[ex.id],'',120);
+    s.training.preferences[ex.id]=options.includes(preferred)?preferred:options[0];
+  }));
+  const rawSchedule=isObj(tr.schedule)?tr.schedule:{};
+  const fallbackSchedule=defaultTrainingSchedule();
+  s.training.schedule={};
+  WEEK_DAYS.forEach(day=>{
+    const value=rawSchedule[day.key];
+    s.training.schedule[day.key]=SCHEDULE_TYPES[value]?value:fallbackSchedule[day.key];
+  });
   s.training.sessions=arr(tr.sessions,LIMITS.trainingSessions).filter(isObj).map(item=>{
     const type=TRAINING_TYPES[item.type]?item.type:null;if(!type)return null;
     const runLevel=finite(item.runLevel,s.training.runLevel,1,RUN_LEVELS.length);
@@ -575,7 +709,7 @@ function load(){
 }
 let S=load();
 const isFocus=k=>Array.isArray(S.focus)&&S.focus.indexOf(k)>=0;
-const ui={showDone:false,showCleared:false,taskFilter:'all',trainingFilter:'all'};
+const ui={showDone:false,showCleared:false,taskFilter:'all',trainingFilter:'all',trainingSection:'today',trainingVisible:30};
 let tab='status',lastTab=null;
 
 function checkTitles(){
@@ -1026,6 +1160,49 @@ function trainingWeekStats(){
     walkKm:decimal(items.filter(x=>x.type==='walk').reduce((n,x)=>n+x.distance,0),0,0,10000,2)
   };
 }
+function strengthSets(definition){
+  return S.training.profile.experience==='regular'?Math.max(3,definition.sets):definition.sets;
+}
+function strengthTarget(definition){return strengthSets(definition)+'×'+definition.target;}
+function strengthDefinition(slot){
+  for(const plan of Object.values(STRENGTH_PLANS)){
+    const found=plan.exercises.find(ex=>ex.id===slot);if(found)return found;
+  }
+  return null;
+}
+function preferredExercise(definition){
+  const options=exerciseOptions(definition.id,S.training.profile.setup);
+  const preferred=S.training.preferences[definition.id];
+  return options.includes(preferred)?preferred:options[0];
+}
+function scheduleGoals(schedule=S.training.schedule){
+  const values=WEEK_DAYS.map(day=>schedule[day.key]);
+  return {
+    strength:values.filter(x=>x==='strength').length,
+    run:values.filter(x=>x==='run').length,
+    walk:values.filter(x=>x==='walkRecovery'||x==='walkBrisk'||x==='walkLong').length
+  };
+}
+function weekPlanRows(){
+  const start=new Date();start.setHours(12,0,0,0);start.setDate(start.getDate()-((start.getDay()+6)%7));
+  return WEEK_DAYS.map((day,index)=>{
+    const date=new Date(start);date.setDate(start.getDate()+index);
+    return {day,date:dateKey(date),dayOfMonth:date.getDate(),code:S.training.schedule[day.key]};
+  });
+}
+function scheduledCompletion(date,code){
+  const sessions=S.training.sessions.filter(x=>x.date===date);
+  if(code==='strength')return sessions.some(x=>x.type==='strength');
+  if(code==='run')return sessions.some(x=>x.type==='run');
+  if(code==='walkRecovery')return sessions.some(x=>x.type==='walk'&&x.walkType==='recovery');
+  if(code==='walkBrisk')return sessions.some(x=>x.type==='walk'&&x.walkType==='brisk');
+  if(code==='walkLong')return sessions.some(x=>x.type==='walk'&&x.walkType==='long');
+  return false;
+}
+function recalculateNextStrength(){
+  const last=trainingSessions().find(x=>x.type==='strength');
+  S.training.nextStrength=last?(last.variant==='A'?'B':'A'):'A';
+}
 function dateLabel(key){
   if(!isDateKey(key))return key;
   const p=key.split('-');return p[2]+'.'+p[1]+'.'+p[0];
@@ -1051,25 +1228,73 @@ function strengthProgressHint(variant,definition){
     if(results.length===2)break;
   }
   if(results.length<2||results[0].name!==results[1].name||results[0].load!==results[1].load)return '';
-  if(results.every(x=>x.sets>=definition.sets&&x.reps>=definition.max))return 'Два раза достигнута верхняя граница — можно немного увеличить вес или сложность варианта.';
+  if(results.every(x=>x.sets>=strengthSets(definition)&&x.reps>=definition.max))return 'Два раза достигнута верхняя граница — можно немного увеличить вес или сложность варианта.';
   return '';
 }
 function effortOpts(selected){
   return Object.keys(EFFORTS).map(k=>'<option value="'+k+'"'+(k===selected?' selected':'')+'>'+EFFORTS[k]+'</option>').join('');
 }
 function formTrainingSettings(){
-  const g=S.training.goals;
-  modal('План тренировочной недели',
-    '<label class="f">Силовых Full Body в неделю</label><input type="number" id="mStrengthGoal" value="'+g.strength+'" min="0" max="5">'+
-    '<label class="f">Беговых занятий в неделю</label><input type="number" id="mRunGoal" value="'+g.run+'" min="0" max="5">'+
-    '<label class="f">Прогулок в неделю</label><input type="number" id="mWalkGoal" value="'+g.walk+'" min="0" max="7">',
+  const options=selected=>Object.keys(SCHEDULE_TYPES).map(key=>
+    '<option value="'+key+'"'+(key===selected?' selected':'')+'>'+SCHEDULE_TYPES[key].label+'</option>').join('');
+  let fields='<div class="askText">Выбери основную активность на каждый день. Это ориентир без штрафов — дни можно менять в любой момент.</div>';
+  WEEK_DAYS.forEach(day=>{
+    fields+='<label class="f" for="mSchedule'+day.key+'">'+day.name+'</label><select id="mSchedule'+day.key+'">'+options(S.training.schedule[day.key])+'</select>';
+  });
+  modal('Расписание недели',fields,
     'Сохранить',()=>{
-      S.training.goals={
-        strength:finite($('#mStrengthGoal').value,g.strength,0,5),
-        run:finite($('#mRunGoal').value,g.run,0,5),
-        walk:finite($('#mWalkGoal').value,g.walk,0,7)
-      };
+      WEEK_DAYS.forEach(day=>{
+        const value=$('#mSchedule'+day.key).value;
+        S.training.schedule[day.key]=SCHEDULE_TYPES[value]?value:'rest';
+      });
+      S.training.goals=scheduleGoals();
       save();render();
+    });
+}
+function formTrainingProfile(){
+  const profile=S.training.profile;
+  modal('Профиль тренировок',
+    '<label class="f" for="mTrainingExperience">Опыт</label><select id="mTrainingExperience">'+
+      Object.keys(TRAINING_EXPERIENCE).map(key=>'<option value="'+key+'"'+(key===profile.experience?' selected':'')+'>'+TRAINING_EXPERIENCE[key]+'</option>').join('')+'</select>'+
+    '<label class="f" for="mTrainingSetup">Где и с чем тренируешься</label><select id="mTrainingSetup">'+
+      Object.keys(TRAINING_SETUPS).map(key=>'<option value="'+key+'"'+(key===profile.setup?' selected':'')+'>'+TRAINING_SETUPS[key].label+'</option>').join('')+'</select>'+
+    '<div class="muted sec-note">Для начинающего программа предлагает 2 рабочих подхода, для регулярно тренирующегося — 3. При смене оборудования будущие упражнения заменятся безопасным набором; старые записи останутся без изменений.</div>',
+    'Сохранить',()=>{
+      const experience=TRAINING_EXPERIENCE[$('#mTrainingExperience').value]?$('#mTrainingExperience').value:'beginner';
+      const setup=TRAINING_SETUPS[$('#mTrainingSetup').value]?$('#mTrainingSetup').value:'bodyweight';
+      if(setup!==profile.setup)S.training.preferences=defaultPreferences(setup);
+      S.training.profile={experience,setup};
+      save();render();
+    });
+}
+function formExercisePreferences(){
+  const setup=S.training.profile.setup;
+  let fields='<div class="askText">Эти упражнения будут подставляться в новые Full Body. В журнале уже выполненных тренировок ничего не изменится.</div>';
+  Object.keys(STRENGTH_PLANS).forEach(variant=>{
+    fields+='<div class="train-form-block"><strong>'+STRENGTH_PLANS[variant].title+'</strong></div>';
+    STRENGTH_PLANS[variant].exercises.forEach(def=>{
+      const names=exerciseOptions(def.id,setup),selected=preferredExercise(def);
+      fields+='<label class="f" for="mPref'+def.id+'">'+esc(def.title)+'</label><select id="mPref'+def.id+'">'+
+        names.map(name=>'<option value="'+esc(name)+'"'+(name===selected?' selected':'')+'>'+esc(name)+'</option>').join('')+'</select>';
+    });
+  });
+  modal('Выбранные упражнения',fields,'Сохранить',()=>{
+    Object.values(STRENGTH_PLANS).forEach(plan=>plan.exercises.forEach(def=>{
+      const options=exerciseOptions(def.id,setup),value=$('#mPref'+def.id).value;
+      S.training.preferences[def.id]=options.includes(value)?value:options[0];
+    }));
+    save();render();
+  });
+}
+function formExercisePreference(slot){
+  const def=strengthDefinition(slot);if(!def)return;
+  const setup=S.training.profile.setup,names=exerciseOptions(slot,setup),selected=preferredExercise(def);
+  modal('Заменить: '+def.title,
+    '<div class="askText">Выбор применяется только к будущим тренировкам.</div><label class="f" for="mSinglePreference">Упражнение</label><select id="mSinglePreference">'+
+      names.map(name=>'<option value="'+esc(name)+'"'+(name===selected?' selected':'')+'>'+esc(name)+'</option>').join('')+'</select>',
+    'Сохранить',()=>{
+      const value=$('#mSinglePreference').value;
+      S.training.preferences[slot]=names.includes(value)?value:names[0];save();render();
     });
 }
 function formStrength(variant,id){
@@ -1082,13 +1307,15 @@ function formStrength(variant,id){
     '<label class="f">Самочувствие по итогам</label><select id="mTrainEffort">'+effortOpts(existing?existing.effort:'moderate')+'</select>';
   plan.exercises.forEach((def,i)=>{
     const saved=existing&&existing.exercises.find(x=>x.slot===def.id);
-    const previous=saved||latestStrengthResult(variant,def.id);
-    const names=def.options.slice();if(previous&&!names.includes(previous.name))names.unshift(previous.name);
-    fields+='<div class="train-form-block"><strong>'+esc(def.title)+' · '+esc(def.target)+'</strong>'+
-      '<div class="muted">'+(previous?'Последняя запись: '+previous.sets+'×'+previous.reps+(previous.load?' · '+previous.load+' кг':''):'Результатов пока нет')+'</div>'+
-      '<select id="mExName'+i+'">'+names.map(name=>'<option value="'+esc(name)+'"'+(previous&&name===previous.name?' selected':'')+'>'+esc(name)+'</option>').join('')+'</select>'+
+    const latest=latestStrengthResult(variant,def.id),preferred=preferredExercise(def);
+    const previous=saved||(latest&&latest.name===preferred?latest:null);
+    const selected=saved?saved.name:preferred;
+    const names=exerciseOptions(def.id,S.training.profile.setup);if(saved&&!names.includes(saved.name))names.unshift(saved.name);
+    fields+='<div class="train-form-block"><strong>'+esc(def.title)+' · '+esc(strengthTarget(def))+'</strong>'+
+      '<div class="muted">'+(previous?'Последняя запись: '+previous.sets+'×'+previous.reps+(previous.load?' · '+previous.load+' кг':''):'Результатов для выбранного упражнения пока нет')+'</div>'+
+      '<select id="mExName'+i+'">'+names.map(name=>'<option value="'+esc(name)+'"'+(name===selected?' selected':'')+'>'+esc(name)+'</option>').join('')+'</select>'+
       '<div class="train-form-grid">'+
-      '<div><label class="f">Подходы</label><input type="number" id="mExSets'+i+'" value="'+(previous?previous.sets:def.sets)+'" min="1" max="20"></div>'+
+      '<div><label class="f">Подходы</label><input type="number" id="mExSets'+i+'" value="'+(saved?saved.sets:strengthSets(def))+'" min="1" max="20"></div>'+
       '<div><label class="f">Повт./сек</label><input type="number" id="mExReps'+i+'" value="'+(previous?previous.reps:def.reps)+'" min="1" max="300"></div>'+
       '<div><label class="f">Вес, кг</label><input type="number" id="mExLoad'+i+'" value="'+(previous&&previous.load?previous.load:'')+'" min="0" max="1000" step="0.5" placeholder="0"></div>'+
       '</div></div>';
@@ -1097,19 +1324,21 @@ function formStrength(variant,id){
   modal((existing?'Изменить ':'Записать ')+plan.title,fields,existing?'Сохранить':'Завершить',()=>{
     const date=$('#mTrainDate').value,duration=finite($('#mTrainDuration').value,0,0,240);
     if(!isDateKey(date)||duration<1)return false;
-    const exercises=plan.exercises.map((def,i)=>({
-      slot:def.id,name:cleanText($('#mExName'+i).value,def.options[0],120)||def.options[0],
-      sets:finite($('#mExSets'+i).value,def.sets,1,20),reps:finite($('#mExReps'+i).value,def.reps,1,300),
-      load:decimal($('#mExLoad'+i).value,0,0,1000,2)
-    }));
+    const exercises=plan.exercises.map((def,i)=>{
+      const saved=existing&&existing.exercises.find(x=>x.slot===def.id);
+      const allowed=exerciseOptions(def.id,S.training.profile.setup),fallback=preferredExercise(def);
+      const value=cleanText($('#mExName'+i).value,fallback,120);
+      return {slot:def.id,name:allowed.includes(value)||(saved&&saved.name===value)?value:fallback,
+        sets:finite($('#mExSets'+i).value,strengthSets(def),1,20),reps:finite($('#mExReps'+i).value,def.reps,1,300),
+        load:decimal($('#mExLoad'+i).value,0,0,1000,2)};
+    });
     const record={type:'strength',date,at:existing?existing.at:Date.now(),duration,distance:0,steps:0,
       effort:EFFORTS[$('#mTrainEffort').value]?$('#mTrainEffort').value:'moderate',note:cleanText($('#mTrainNote').value,'',500),
       variant,runLevel:S.training.runLevel,walkType:'recovery',planText:'',exercises};
     if(existing)Object.assign(existing,record);
-    else{
-      record.id=uid();S.training.sessions.unshift(record);S.training.nextStrength=variant==='A'?'B':'A';
-      log('Записана силовая тренировка: '+plan.title);sysMsg(plan.title+' СОХРАНЕНА. Следующая — Full Body '+S.training.nextStrength+'.');
-    }
+    else{record.id=uid();S.training.sessions.unshift(record);log('Записана силовая тренировка: '+plan.title);}
+    recalculateNextStrength();
+    if(!existing)sysMsg(plan.title+' СОХРАНЕНА. Следующая — Full Body '+S.training.nextStrength+'.');
     save();render();
   });
 }
@@ -1148,7 +1377,7 @@ function deleteTraining(id){
   const i=S.training.sessions.findIndex(x=>x.id===id);if(i<0)return;
   const item=S.training.sessions[i];
   ask('Удалить запись «'+TRAINING_TYPES[item.type]+'» за '+dateLabel(item.date)+'?',()=>{
-    S.training.sessions.splice(i,1);save();render();
+    S.training.sessions.splice(i,1);if(item.type==='strength')recalculateNextStrength();save();render();
   });
 }
 /* ---------- отрисовка вкладок ---------- */
@@ -1174,11 +1403,13 @@ function renderStrengthPlan(variant){
   const plan=STRENGTH_PLANS[variant],isNext=S.training.nextStrength===variant;
   return '<div class="train-plan'+(isNext?' next':'')+'"><div class="train-plan-head"><strong>'+plan.title+'</strong>'+
     (isNext?'<span class="badge rS">СЛЕДУЮЩАЯ</span>':'')+'</div>'+plan.exercises.map(ex=>{
-      const last=latestStrengthResult(variant,ex.id);
-      const hint=strengthProgressHint(variant,ex);
-      return '<div class="train-exercise"><b>'+esc(ex.title)+' · '+esc(ex.target)+'</b><span>'+esc(ex.options.join(' / '))+
+      const chosen=preferredExercise(ex),latest=latestStrengthResult(variant,ex.id);
+      const last=latest&&latest.name===chosen?latest:null;
+      const hint=last?strengthProgressHint(variant,ex):'';
+      return '<div class="train-exercise"><b>'+esc(ex.title)+' · '+esc(strengthTarget(ex))+'</b><span class="preferred">'+esc(chosen)+'</span><span>'+
         (last?'<br>Последнее: '+last.sets+'×'+last.reps+(last.load?' · '+last.load+' кг':''):'')+
-        (hint?'<br><span style="color:#fff">'+esc(hint)+'</span>':'')+'</span></div>';
+        (hint?'<br><span style="color:#fff">'+esc(hint)+'</span>':'')+'</span>'+
+        '<button class="btn small" style="margin-top:7px" data-act="changeexercise" data-id="'+ex.id+'">Заменить</button></div>';
     }).join('')+'<button class="btn block" data-act="addstrength" data-id="'+variant+'">Записать '+plan.title+'</button></div>';
 }
 function renderTrainingSession(item){
@@ -1198,41 +1429,122 @@ function renderTrainingSession(item){
     (item.type!=='strength'&&item.planText?'<div class="train-note">План: '+esc(item.planText)+'</div>':'')+
     (item.note?'<div class="train-note">'+esc(item.note)+'</div>':'')+'</div>';
 }
-function renderTraining(){
-  const w=trainingWeekStats(),g=S.training.goals,run=RUN_LEVELS[S.training.runLevel-1];
-  const levelRuns=S.training.sessions.filter(x=>x.type==='run'&&x.runLevel===S.training.runLevel).length;
-  const filtered=trainingSessions().filter(x=>ui.trainingFilter==='all'||x.type===ui.trainingFilter);
-  const visible=filtered.slice(0,50);
-  return '<div class="panel"><div class="dgHead"><h2>Тренировочная неделя</h2><button class="btn small" data-act="trainsettings">Настроить</button></div>'+
+function renderTrainingNav(){
+  return '<div class="train-nav" role="tablist" aria-label="Разделы тренировок">'+Object.keys(TRAINING_SECTIONS).map(key=>
+    '<button class="chip'+(ui.trainingSection===key?' on':'')+'" role="tab" aria-selected="'+(ui.trainingSection===key)+'" data-act="trainsection" data-id="'+key+'">'+TRAINING_SECTIONS[key]+'</button>'
+  ).join('')+'</div>';
+}
+function renderTrainingSummary(){
+  const w=trainingWeekStats(),g=S.training.goals;
+  return '<div class="panel"><div class="dgHead"><h2>Эта неделя</h2><button class="btn small" data-act="trainsettings">Расписание</button></div>'+
     '<div class="train-summary">'+trainingMetric('Full Body',w.strength,g.strength)+trainingMetric('Бег',w.run,g.run)+trainingMetric('Ходьба',w.walk,g.walk)+'</div>'+
     '<div class="todayRow" style="margin-top:9px"><span>Всего движения</span><b>'+w.minutes+' мин</b></div>'+
     '<div class="todayRow"><span>Дистанция</span><b>бег '+w.runKm+' км · ходьба '+w.walkKm+' км</b></div>'+
-    '<div class="muted sec-note">Это ориентиры без штрафов. Отдых и повторение комфортного уровня — часть плана.</div></div>'+
-    '<div class="panel"><h2>Пример распределения</h2><div class="train-days">'+
-      [['Пн','Full Body A'],['Вт','Бег / ходьба'],['Ср','Прогулка / отдых'],['Чт','Full Body B'],['Пт','Прогулка / отдых'],['Сб','Бег / ходьба'],['Вс','Быстрая ходьба']]
-        .map(x=>'<div class="train-day"><b>'+x[0]+'</b><span>'+x[1]+'</span></div>').join('')+'</div>'+
-      '<div class="muted sec-note">Оставляй небеговой день между пробежками и хотя бы один день между силовыми. Дни можно переставлять под свой график.</div></div>'+
-    '<div class="panel"><h2>Силовые · Full Body A/B</h2>'+renderStrengthPlan('A')+renderStrengthPlan('B')+
-      '<div class="muted sec-note">Перед занятием — 5–10 минут лёгкой разминки. Последние повторы должны требовать усилий, но техника сохраняется и остаётся примерно 2 повтора в запасе. Если верхняя граница повторов выполнена чисто на двух одинаковых занятиях подряд, увеличь только один параметр: минимально вес или сложность варианта.</div></div>'+
-    '<div class="panel"><h2>Бег / ходьба · уровень '+S.training.runLevel+'/'+RUN_LEVELS.length+'</h2>'+
-      '<div class="train-plan next"><div class="train-plan-head"><strong>'+esc(run.title)+'</strong><span class="badge rC">'+levelRuns+' записано</span></div>'+
-      '<div class="askText">'+esc(run.text)+'</div><div class="train-actions">'+
-      '<button class="btn small" data-act="runlevel" data-id="prev" '+(S.training.runLevel<=1?'disabled':'')+'>← Проще</button>'+
-      '<button class="btn primary" data-act="addrun">Записать бег</button>'+
-      '<button class="btn small" data-act="runlevel" data-id="next" '+(S.training.runLevel>=RUN_LEVELS.length?'disabled':'')+'>Дальше →</button></div></div>'+
-      '<div class="muted sec-note">Повтори уровень 2–3 раза. Переходи дальше только при контролируемом темпе; если тяжело — повтори или вернись назад. Во время лёгкого бега должна сохраняться возможность говорить короткими фразами.</div></div>'+
-    '<div class="panel"><h2>Ходьба</h2>'+Object.keys(WALK_TYPES).map(k=>{
-      const item=WALK_TYPES[k];return '<div class="train-plan"><div class="train-plan-head"><strong>'+esc(item.title)+'</strong></div>'+
-        '<div class="askText">'+esc(item.text)+'</div><button class="btn block" data-act="addwalk" data-id="'+k+'">Записать прогулку</button></div>';
-    }).join('')+'<div class="muted sec-note">Для умеренной быстрой ходьбы подходит простой ориентир: говорить можно, петь уже трудно. Восстановительную прогулку делай в удобном темпе.</div></div>'+
-    '<div class="panel"><h2>Журнал тренировок · '+S.training.sessions.length+'</h2>'+
+    '<div class="muted sec-note">Ориентиры без штрафов. Отдых и повторение комфортного уровня — часть плана.</div></div>';
+}
+function renderWeekPlan(){
+  const current=today();
+  return '<div class="week-list">'+weekPlanRows().map(row=>{
+    const done=scheduledCompletion(row.date,row.code),isToday=row.date===current,isPast=row.date<current;
+    let label=SCHEDULE_TYPES[row.code].label;
+    if(row.code==='strength'&&isToday){
+      const completed=S.training.sessions.find(x=>x.date===row.date&&x.type==='strength');
+      label='Full Body '+(completed?completed.variant:S.training.nextStrength);
+    }
+    const detail=row.code==='rest'?'Восстановление и обычная активность':done?'Запись есть в журнале':isToday?'План на сегодня':isPast?'Можно оставить как есть':'Запланировано';
+    const mark=row.code==='rest'?(isToday?'Сегодня · отдых':'Отдых'):done?'Выполнено':isToday?'Сегодня':isPast?'Не записано':'Впереди';
+    return '<div class="week-row'+(isToday?' today':'')+(done?' done':'')+'"><div class="week-date"><b>'+row.day.short+'</b><span>'+String(row.dayOfMonth).padStart(2,'0')+'</span></div>'+
+      '<div class="week-main"><b>'+esc(label)+'</b><span>'+esc(detail)+'</span></div><div class="week-mark">'+mark+'</div></div>';
+  }).join('')+'</div>';
+}
+function todayPlanInfo(){
+  const code=S.training.schedule[new Date().getDay()]||'rest',date=today(),done=scheduledCompletion(date,code);
+  const sessions=S.training.sessions.filter(x=>x.date===date);
+  if(code==='strength'){
+    const completed=sessions.find(x=>x.type==='strength'),shownVariant=completed?completed.variant:S.training.nextStrength;
+    const actionVariant=completed?S.training.nextStrength:shownVariant;
+    return {code,done,title:'Full Body '+shownVariant,text:'5 движений на всё тело · '+(S.training.profile.experience==='regular'?'3':'2')+' рабочих подхода',act:'addstrength',id:actionVariant,button:(done?'Записать ещё: ':'Записать ')+'Full Body '+actionVariant};
+  }
+  if(code==='run'){
+    const completed=sessions.find(x=>x.type==='run'),level=completed?completed.runLevel:S.training.runLevel,run=RUN_LEVELS[level-1];
+    return {code,done,title:run.title,text:run.text,act:'addrun',id:'',button:done?'Записать ещё одну пробежку':'Начать запись бега'};
+  }
+  const walkMap={walkRecovery:'recovery',walkBrisk:'brisk',walkLong:'long'};
+  if(walkMap[code]){
+    const kind=walkMap[code],walk=WALK_TYPES[kind];
+    return {code,done,title:walk.title,text:walk.text,act:'addwalk',id:kind,button:done?'Записать ещё одну прогулку':'Начать запись прогулки'};
+  }
+  return {code:'rest',done:false,title:'День отдыха',text:'Спокойное восстановление, сон и обычная повседневная активность. Ничего закрывать не нужно.',act:'trainsettings',id:'',button:'Изменить план недели'};
+}
+function renderTodaySection(){
+  const plan=todayPlanInfo();
+  return '<div class="panel"><h2>План на сегодня</h2><div class="train-today"><div class="train-today-kicker">'+dateLabel(today())+'</div>'+
+    '<div class="train-today-title">'+esc(plan.title)+'</div><div class="train-today-text">'+esc(plan.text)+'</div>'+
+    '<div class="train-status'+(plan.done?' done':'')+'">'+(plan.done?'Выполнено':'Запланировано')+'</div>'+
+    '<button class="btn primary block" data-act="'+plan.act+'"'+(plan.id?' data-id="'+plan.id+'"':'')+'>'+esc(plan.button)+'</button></div>'+
+    '<div class="muted sec-note">Поменять день или тип активности можно в разделе «Неделя».</div></div>'+
+    renderTrainingSummary()+
+    '<div class="panel"><h2>Неделя одним взглядом</h2>'+renderWeekPlan()+'<button class="btn block" data-act="trainsection" data-id="week">Открыть план недели</button></div>'+
+    '<div class="panel"><h2>Записать другую активность</h2><div class="train-quick">'+
+      '<button class="btn" data-act="addstrength" data-id="'+S.training.nextStrength+'">Full Body '+S.training.nextStrength+'</button>'+
+      '<button class="btn" data-act="addrun">Бег</button><button class="btn" data-act="addwalk" data-id="recovery">Ходьба</button></div></div>'+
+    '<div class="panel"><h2>Безопасность</h2><div class="muted">Остановись при боли или недомогании. При травме, симптомах, недавней операции, хроническом состоянии, беременности или сомнениях сначала обсуди нагрузку с медицинским специалистом.</div></div>';
+}
+function renderWeekSection(){
+  return '<div class="train-section-note">Основная активность на каждый день. Пропуск не создаёт штраф и не влияет на серию задач.</div>'+
+    '<div class="panel"><div class="dgHead"><h2>План недели</h2><button class="btn small" data-act="trainsettings">Изменить</button></div>'+renderWeekPlan()+'<button class="btn block" data-act="trainweekreset">Вернуть рекомендуемую неделю</button></div>'+
+    renderTrainingSummary()+
+    '<div class="panel"><h2>Как переставлять дни</h2><div class="muted">Оставляй хотя бы один день между силовыми и небеговой день между пробежками. Если восстановление не успевает — замени занятие прогулкой или отдыхом.</div></div>';
+}
+function renderStrengthSection(){
+  const profile=S.training.profile,setup=TRAINING_SETUPS[profile.setup];
+  return '<div class="panel"><div class="dgHead"><h2>Профиль Full Body</h2><button class="btn small" data-act="trainprofile">Изменить</button></div>'+
+    '<div class="profile-grid"><div class="profile-cell"><span>Опыт</span><b>'+TRAINING_EXPERIENCE[profile.experience]+'</b></div><div class="profile-cell"><span>Оборудование</span><b>'+setup.label+'</b></div></div>'+
+    '<div class="muted sec-note">'+esc(setup.hint)+'</div><button class="btn block" data-act="trainexercises">Выбрать все упражнения</button></div>'+
+    '<div class="panel"><h2>Программа Full Body A/B</h2>'+renderStrengthPlan('A')+renderStrengthPlan('B')+
+    '<div class="muted sec-note">Разминка: 5–10 минут лёгкого движения и по одному простому разминочному подходу. Рабочие подходы выполняй без отказа — примерно 2 повтора должны оставаться в запасе. Когда верхняя граница повторов дважды выполнена чисто, немного увеличь только вес или сложность.</div></div>';
+}
+function renderRunSection(){
+  const run=RUN_LEVELS[S.training.runLevel-1];
+  const levelRuns=S.training.sessions.filter(x=>x.type==='run'&&x.runLevel===S.training.runLevel).length;
+  const recent=trainingSessions().filter(x=>x.type==='run').slice(0,3);
+  return '<div class="panel"><h2>Бег · уровень '+S.training.runLevel+'/'+RUN_LEVELS.length+'</h2><div class="train-plan next"><div class="train-plan-head"><strong>'+esc(run.title)+'</strong><span class="badge rC">'+levelRuns+' записано</span></div>'+
+    '<div class="askText">'+esc(run.text)+'</div><div class="train-actions"><button class="btn small" data-act="runlevel" data-id="prev" '+(S.training.runLevel<=1?'disabled':'')+'>← Проще</button>'+
+    '<button class="btn primary" data-act="addrun">Записать</button><button class="btn small" data-act="runlevel" data-id="next" '+(S.training.runLevel>=RUN_LEVELS.length?'disabled':'')+'>Дальше →</button></div></div>'+
+    '<div class="muted sec-note">Повтори уровень 2–3 раза. Переходи дальше, только если темп контролируется и можно говорить короткими фразами. Если тяжело — повтори или вернись на шаг назад.</div></div>'+
+    '<div class="panel"><h2>Последние пробежки</h2>'+(recent.map(renderTrainingSession).join('')||'<div class="empty">Пробежек пока нет</div>')+'</div>';
+}
+function renderWalkSection(){
+  const bounds=weekBounds(),weekWalks=S.training.sessions.filter(x=>x.type==='walk'&&x.date>=bounds.start&&x.date<=bounds.end);
+  const steps=weekWalks.reduce((sum,x)=>sum+x.steps,0),recent=trainingSessions().filter(x=>x.type==='walk').slice(0,3);
+  return '<div class="panel"><h2>Ходьба</h2><div class="todayRow"><span>За эту неделю</span><b>'+weekWalks.reduce((sum,x)=>sum+x.duration,0)+' мин</b></div><div class="todayRow"><span>Записано шагов</span><b>'+steps.toLocaleString('ru-RU')+'</b></div>'+Object.keys(WALK_TYPES).map(key=>{
+    const item=WALK_TYPES[key];return '<div class="train-plan"><div class="train-plan-head"><strong>'+esc(item.title)+'</strong></div><div class="askText">'+esc(item.text)+'</div><button class="btn block" data-act="addwalk" data-id="'+key+'">Записать прогулку</button></div>';
+  }).join('')+'<div class="muted sec-note">Восстановительную прогулку делай в удобном темпе. Для быстрой ходьбы ориентир простой: говорить можно, петь уже трудно.</div></div>'+
+    '<div class="panel"><h2>Последние прогулки</h2>'+(recent.map(renderTrainingSession).join('')||'<div class="empty">Прогулок пока нет</div>')+'</div>';
+}
+function renderJournalSection(){
+  const filtered=trainingSessions().filter(x=>ui.trainingFilter==='all'||x.type===ui.trainingFilter);
+  const visible=filtered.slice(0,ui.trainingVisible);
+  return '<div class="panel"><h2>Журнал тренировок · '+S.training.sessions.length+'</h2>'+
       '<div class="chips" role="group" aria-label="Фильтр журнала тренировок">'+
       '<button class="chip'+(ui.trainingFilter==='all'?' on':'')+'" aria-pressed="'+(ui.trainingFilter==='all')+'" data-act="trainfilter" data-id="all">ВСЕ</button>'+
       Object.keys(TRAINING_TYPES).map(k=>'<button class="chip'+(ui.trainingFilter===k?' on':'')+'" aria-pressed="'+(ui.trainingFilter===k)+'" data-act="trainfilter" data-id="'+k+'">'+TRAINING_TYPES[k]+'</button>').join('')+'</div>'+
       (visible.map(renderTrainingSession).join('')||'<div class="empty">В этом разделе записей пока нет</div>')+
-      (filtered.length>visible.length?'<div class="muted sec-note">Показаны последние 50 записей из '+filtered.length+'. Остальные сохраняются в бэкапе и попадут в сводную статистику.</div>':'')+'</div>'+
-    '<div class="panel"><h2>Безопасность</h2><div class="muted">План рассчитан как общий ориентир для условно здорового взрослого. Если есть травма, симптомы, недавняя операция, хроническое состояние, беременность или сомнения — сначала обсуди нагрузку с медицинским специалистом. Остановись при боли или недомогании; если симптомы не проходят, обратись за медицинской помощью.</div>'+
-      '<div class="muted sec-note source-links">Основа: <a href="https://acsm.org/effective-resistance-training-program-infographic/" target="_blank" rel="noopener">ACSM</a>, <a href="https://www.cdc.gov/physical-activity-basics/measuring/index.html" target="_blank" rel="noopener">CDC</a>, <a href="https://www.nhs.uk/better-health/get-active/get-running-with-couch-to-5k/couch-to-5k-running-plan/" target="_blank" rel="noopener">NHS</a>.</div></div>';
+      (filtered.length>visible.length?'<button class="btn block" data-act="trainmore">Показать ещё</button>':'')+'</div>';
+}
+function renderTrainingSettingsSection(){
+  const profile=S.training.profile,setup=TRAINING_SETUPS[profile.setup];
+  return '<div class="panel"><h2>Профиль</h2><div class="profile-grid"><div class="profile-cell"><span>Опыт</span><b>'+TRAINING_EXPERIENCE[profile.experience]+'</b></div><div class="profile-cell"><span>Оборудование</span><b>'+setup.label+'</b></div></div>'+
+    '<button class="btn block" data-act="trainprofile">Изменить профиль</button><button class="btn block" data-act="trainexercises">Выбрать упражнения</button></div>'+
+    '<div class="panel"><h2>Планирование</h2><div class="todayRow"><span>Силовые</span><b>'+S.training.goals.strength+' в неделю</b></div><div class="todayRow"><span>Бег</span><b>'+S.training.goals.run+' в неделю</b></div><div class="todayRow"><span>Ходьба</span><b>'+S.training.goals.walk+' в неделю</b></div>'+
+    '<button class="btn block" data-act="trainsettings">Изменить расписание</button><button class="btn block" data-act="trainweekreset">Рекомендуемая неделя</button></div>'+
+    '<div class="panel"><h2>Принципы программы</h2><div class="muted">Full Body A и B чередуются по фактически сохранённым занятиям. Изменение профиля не переписывает журнал. Расписание — ориентир: оно не создаёт задачи, не начисляет баллы и не наказывает за пропуск.</div>'+
+    '<div class="muted sec-note source-links">Справочные материалы: <a href="https://acsm.org/education-resources/trending-topics-resources/physical-activity-guidelines/" target="_blank" rel="noopener">ACSM</a>, <a href="https://www.cdc.gov/physical-activity/php/about/index.html" target="_blank" rel="noopener">CDC</a>, <a href="https://www.nhs.uk/better-health/get-active/get-running-with-couch-to-5k/" target="_blank" rel="noopener">NHS</a>.</div></div>';
+}
+function renderTraining(){
+  if(!TRAINING_SECTIONS[ui.trainingSection])ui.trainingSection='today';
+  const sections={today:renderTodaySection,week:renderWeekSection,strength:renderStrengthSection,run:renderRunSection,walk:renderWalkSection,journal:renderJournalSection,settings:renderTrainingSettingsSection};
+  return renderTrainingNav()+sections[ui.trainingSection]();
 }
 function renderStatus(){
   const h=S.hunter;
@@ -1404,6 +1716,10 @@ function render(){
   $('#goldTop').innerHTML='<b>Б</b> '+S.hunter.gold;
   const view=$('#view');
   view.innerHTML=TABS[tab]();
+  if(tab==='training'){
+    const nav=view.querySelector('.train-nav'),selected=nav&&nav.querySelector('[aria-selected="true"]');
+    if(nav&&selected)nav.scrollLeft=Math.max(0,selected.offsetLeft-(nav.clientWidth-selected.offsetWidth)/2);
+  }
   if(lastTab!==tab){
     view.style.animation='none';
     void view.offsetWidth;
@@ -1439,10 +1755,21 @@ $('#view').addEventListener('click',e=>{
     }
     case 'deltraining':deleteTraining(id);break;
     case 'trainsettings':formTrainingSettings();break;
+    case 'trainprofile':formTrainingProfile();break;
+    case 'trainexercises':formExercisePreferences();break;
+    case 'changeexercise':formExercisePreference(id);break;
+    case 'trainsection':
+      ui.trainingSection=TRAINING_SECTIONS[id]?id:'today';render();break;
+    case 'trainweekreset':
+      ask('Вернуть рекомендуемую неделю? Записи тренировок останутся без изменений.',()=>{
+        S.training.schedule=defaultTrainingSchedule();S.training.goals=scheduleGoals();save();render();
+      });
+      break;
     case 'runlevel':
       S.training.runLevel=finite(S.training.runLevel+(id==='prev'?-1:id==='next'?1:0),S.training.runLevel,1,RUN_LEVELS.length);
       save();render();break;
-    case 'trainfilter':ui.trainingFilter=id==='all'||TRAINING_TYPES[id]?id:'all';render();break;
+    case 'trainfilter':ui.trainingFilter=id==='all'||TRAINING_TYPES[id]?id:'all';ui.trainingVisible=30;render();break;
+    case 'trainmore':ui.trainingVisible+=30;render();break;
     case 'openshop':tab='shop';render();break;
     case 'openmore':tab='more';render();break;
     case 'delq':delFrom(S.quests,id,'задачу');break;
