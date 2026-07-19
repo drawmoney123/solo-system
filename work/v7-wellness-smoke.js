@@ -35,7 +35,7 @@ const { chromium } = playwright;
 const APP_ROOT = path.resolve('C:/Users/draw/клод/solo-system');
 const CHROME = 'C:/Program Files/Google/Chrome/Application/chrome.exe';
 const STATE_KEY = 'soloSystemV1';
-const EXPECTED_CACHE = 'solo-system-v12';
+const EXPECTED_CACHE = 'solo-system-v13';
 const PRACTICES = {
   yoga: new Set(['yoga-reset-5', 'yoga-mobility-10', 'yoga-beginner-15']),
   meditation: new Set(['med-breath-3', 'med-body-5', 'med-count-10']),
