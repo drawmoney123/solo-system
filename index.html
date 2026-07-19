@@ -831,6 +831,8 @@ function load(){
 }
 let S=load();
 const isFocus=k=>Array.isArray(S.focus)&&S.focus.indexOf(k)>=0;
+const isArchiveMode=()=>!!(S.personalization&&S.personalization.mode==='archive');
+const strictDailies=()=>isArchiveMode()&&isObj(S.archive)&&Array.isArray(S.archive.dailies)?S.archive.dailies:S.dailies;
 const ui={showDone:false,showCleared:false,taskFilter:'all',trainingFilter:'all',trainingSection:'today',trainingVisible:30};
 let tab='status',lastTab=null;
 
@@ -893,8 +895,9 @@ function checkDailyReset(){
   const t=today();let changed=false;
   if(S.lastDay!==t){
     const prev=S.lastDay,gap=calendarGap(prev,t);
-    const had=S.dailies.length>0;
-    const all=had&&S.dailies.every(d=>d.done);
+    const dailySet=strictDailies();
+    const had=dailySet.length>0;
+    const all=had&&dailySet.every(d=>d.done);
     const restProtected=S.restDay===prev&&gap===1;
     const missed=!!prev&&(gap>1||(had&&!all));
     if(restProtected){
@@ -905,7 +908,7 @@ function checkDailyReset(){
       S.streak=0;
       log(gap>1?'Серия прервана: пропущено дней — '+(gap-1):'Серия прервана ('+prev+')');
     }
-    S.dailies.forEach(d=>d.done=false);
+    dailySet.forEach(d=>d.done=false);
     S.bonusDay=null;
     S.restDay=null;
     S.lastDay=t;
@@ -925,7 +928,8 @@ function scheduleRollover(){
   rolloverTimer=setTimeout(()=>{checkDailyReset();render();scheduleRollover();},Math.max(1000,next-now));
 }
 function finishDailySet(){
-  if(!S.dailies.length||!S.dailies.every(x=>x.done)||S.bonusDay===today())return null;
+  const dailySet=strictDailies();
+  if(!dailySet.length||!dailySet.every(x=>x.done)||S.bonusDay===today())return null;
   S.bonusDay=today();S.streak++;
   if(S.streak>S.done.bestStreak)S.done.bestStreak=S.streak;
   S.hunter.gold+=20;
@@ -936,7 +940,7 @@ function finishDailySet(){
 
 /* ---------- действия ---------- */
 function completeDailyRecord(d,notify=true){
-  if(!d||d.done)return null;
+  if(!d||d.done||strictDailies().indexOf(d)<0)return null;
   const m=isFocus(d.stat)?2:1;
   d.done=true;
   S.stats[d.stat]=(S.stats[d.stat]||0)+m;
@@ -953,9 +957,10 @@ function completeDailyRecord(d,notify=true){
   return {bonus,m};
 }
 function completeDailyByKind(kind){
-  return completeDailyRecord(S.dailies.find(d=>d.kind===kind),false);
+  return completeDailyRecord(strictDailies().find(d=>d.kind===kind),false);
 }
 function doDaily(id){
+  if(isArchiveMode()){sysMsg('Архив доступен только для просмотра');return;}
   const d=S.dailies.find(x=>x.id===id);
   if(!d||d.done)return;
   if(d.kind==='meditation'){
@@ -1060,14 +1065,14 @@ function catalogSize(catalog){
 function swapCatalogArchive(){
   if(!S.personalization||catalogSize(S.archive)===0){sysMsg('Архив прежнего каталога пуст');return;}
   const toArchive=S.personalization.mode==='personal';
-  ask(toArchive?'Открыть прежний каталог? Персональные задачи Артёма останутся в архиве и их можно будет вернуть.':'Вернуть персональный каталог Артёма? Текущее состояние прежнего каталога сохранится.',()=>{
+  ask(toArchive?'Открыть прежний каталог в режиме просмотра? Персональные задачи Артёма продолжат хранить строгую серию и их можно будет вернуть.':'Вернуть персональный каталог Артёма? Прежний каталог снова сохранится в архиве.',()=>{
     if(!saveRecoveryPoint())return;
     const active={dailies:S.dailies,quests:S.quests,dungeons:S.dungeons,shop:S.shop};
     S.dailies=S.archive.dailies;S.quests=S.archive.quests;S.dungeons=S.archive.dungeons;S.shop=S.archive.shop;
     S.archive=active;
     S.personalization.mode=toArchive?'archive':'personal';
     log(toArchive?'Открыт прежний каталог':'Возвращён персональный каталог Артёма');
-    save();render();sysMsg(toArchive?'ОТКРЫТ ПРЕЖНИЙ КАТАЛОГ':'ПЕРСОНАЛЬНЫЙ КАТАЛОГ АРТЁМА ВОЗВРАЩЁН');
+    save();render();sysMsg(toArchive?'ОТКРЫТ АРХИВ · ТОЛЬКО ПРОСМОТР':'ПЕРСОНАЛЬНЫЙ КАТАЛОГ АРТЁМА ВОЗВРАЩЁН');
   });
 }
 
@@ -1119,6 +1124,7 @@ function rollbackRestore(){
   });
 }
 function applyPack(p){
+  if(isArchiveMode()){sysMsg('Сначала верни персональный каталог Артёма');return 0;}
   if(!p||typeof p!=='object')return 0;
   let n=0;
   const take=(arr,src,norm)=>{
@@ -1903,7 +1909,7 @@ function renderQuests(){
   const matches=q=>ui.taskFilter==='all'||q.stat===ui.taskFilter;
   const act=allAct.filter(matches),fin=allFin.filter(matches);
   const doneD=S.dailies.filter(d=>d.done).length;
-  let html='';
+  let html=isArchiveMode()?'<div class="panel"><h2>Архив · только просмотр</h2><div class="muted">Верни каталог Артёма в разделе «Ещё», чтобы снова выполнять задачи и получать баллы.</div></div>':'';
   const hd=S.hiddenDay;
   if(hd){
     const tpl=HIDDEN_POOL[hd.idx];
@@ -1960,7 +1966,7 @@ function dungeonCard(dg){
 }
 function renderGates(){
   const act=S.dungeons.filter(d=>!d.cleared),fin=S.dungeons.filter(d=>d.cleared);
-  return (act.map(dungeonCard).join('')||'<div class="panel"><div class="empty">Проектов в работе нет. Создай проект для результата, который требует нескольких последовательных этапов.</div></div>')+
+  return (isArchiveMode()?'<div class="panel"><h2>Архив · только просмотр</h2><div class="muted">Прежние проекты сохранены без возможности повторного начисления баллов.</div></div>':'')+(act.map(dungeonCard).join('')||'<div class="panel"><div class="empty">Проектов в работе нет. Создай проект для результата, который требует нескольких последовательных этапов.</div></div>')+
     '<div class="panel"><button class="btn block" data-act="addDungeon">+ Новый проект</button>'+
     (fin.length?'<button class="fold" data-act="foldCleared">'+(ui.showCleared?'▾':'▸')+' Завершённые проекты ('+fin.length+')</button>'+
       (ui.showCleared?fin.map(d=>'<div class="qitem"><span class="qcheck on">◆</span>'+
@@ -1970,6 +1976,7 @@ function renderGates(){
 }
 function renderShop(){
   return '<div class="panel"><button class="btn block" data-act="openmore">← Назад в раздел «Ещё»</button></div>'+
+    (isArchiveMode()?'<div class="panel"><h2>Архив · только просмотр</h2><div class="muted">Прежние награды сохранены, но получить их повторно нельзя.</div></div>':'')+
     '<div class="panel"><h2>Магазин наград</h2>'+
     '<div class="goldBig"><b>Б</b> '+S.hunter.gold+' баллов</div>'+
     ([...S.shop].sort((a,b)=>a.cost-b.cost).map(it=>{const restActive=it.kind==='restDay'&&S.restDay===today();return '<div class="qitem">'+
@@ -1994,10 +2001,10 @@ function renderMore(){
     '<div class="todayRow"><span>Доступно</span><b>'+S.hunter.gold+' баллов</b></div>'+
     '<div class="todayRow"><span>Наград в магазине</span><b>'+S.shop.length+'</b></div>'+
     '<button class="btn block" data-act="openshop">Открыть магазин</button></div>'+
-    '<div class="panel"><h2>Персональный план Артёма</h2><div class="todayRow"><span>Сейчас открыт</span><b>'+(personalMode?'Персональный каталог':'Прежний каталог')+'</b></div>'+
+    '<div class="panel"><h2>Персональный план Артёма</h2><div class="todayRow"><span>Сейчас открыт</span><b>'+(personalMode?'Персональный каталог':'Архив · только просмотр')+'</b></div>'+
     '<div class="todayRow"><span>Записей в архиве</span><b>'+archived+'</b></div>'+
-    '<button class="btn block" data-act="swaparchive" '+(archived?'':'disabled')+'>'+(personalMode?'Открыть прежний каталог':'Вернуть каталог Артёма')+'</button>'+
-    '<div class="muted sec-note">Баллы, серия, статистика, история и журнал тренировок общие. Переключаются только ежедневные задачи, разовые задачи, проекты и награды.</div></div>'+
+    '<button class="btn block" data-act="swaparchive" '+(archived?'':'disabled')+'>'+(personalMode?'Открыть архив прежнего каталога':'Вернуть каталог Артёма')+'</button>'+
+    '<div class="muted sec-note">Архив нужен для просмотра прежних записей и не начисляет баллы. Строгая серия всегда считается только по семи персональным задачам Артёма; тренировки и медитация продолжают отмечать именно их.</div></div>'+
     '<div class="panel"><h2>Учебный ритм</h2><div class="todayRow"><span>Пн / Чт</span><b>Слаботочные системы</b></div><div class="todayRow"><span>Вт / Пт</span><b>Системное администрирование</b></div><div class="todayRow"><span>Ср / Сб</span><b>Электрика: теория и симулятор</b></div><div class="todayRow"><span>Вс</span><b>Повторение и ошибки</b></div>'+
     '<div class="muted sec-note">Электрика — только безопасная теория, симуляторы и обесточенные учебные макеты. Не разбирай щит, не касайся проводки и не выполняй самостоятельные работы под напряжением.</div>'+
     '<div class="muted sec-note source-links"><a href="https://learn.microsoft.com/en-us/training/paths/windows-server-deployment-configuration-administration/" target="_blank" rel="noopener">Microsoft Learn</a> · <a href="https://documentation.ubuntu.com/server/" target="_blank" rel="noopener">Ubuntu Server</a> · <a href="https://www.osha.gov/sites/default/files/publications/OSHA4472.pdf" target="_blank" rel="noopener">Электробезопасность</a></div></div>'+
@@ -2037,6 +2044,7 @@ function render(){
 }
 
 /* ---------- события ---------- */
+const ARCHIVE_BLOCKED_ACTIONS=new Set(['daily','quest','floor','buy','delq','deldaily','deldun','delshop','addDaily','addQuest','addDungeon','addShop','editq','editdaily','editdun','editshop']);
 document.querySelectorAll('.tabbar button').forEach(b=>{
   b.addEventListener('click',()=>{checkDailyReset();scheduleRollover();tab=b.dataset.tab;render();});
 });
@@ -2045,6 +2053,7 @@ $('#view').addEventListener('click',e=>{
   if(!t)return;
   checkDailyReset();scheduleRollover();
   const act=t.dataset.act,id=t.dataset.id;
+  if(isArchiveMode()&&ARCHIVE_BLOCKED_ACTIONS.has(act)){sysMsg('Архив доступен только для просмотра');return;}
   switch(act){
     case 'daily':doDaily(id);break;
     case 'quest':doQuest(id);break;

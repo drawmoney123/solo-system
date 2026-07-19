@@ -145,6 +145,12 @@ function legacyCatalog(doneFlags) {
       diff: 'C',
       done: true,
       doneAt: 1700000000000,
+    }, {
+      id: 'legacy-quest-action',
+      title: 'Старая невыполненная задача',
+      stat: 'int',
+      diff: 'D',
+      done: false,
     }],
     dungeons: [{
       id: 'legacy-project-proof',
@@ -250,6 +256,22 @@ function assertLegacyArchive(state, sourceCatalog) {
   assert.equal(state.archive.shop[0].title, 'Старая награда');
   assert.equal(state.archive.shop[0].cost, 321);
   assert.equal(state.archive.shop[0].kind, 'restDay');
+}
+
+function progressSnapshot(state) {
+  return {
+    hunter: clone(state.hunter),
+    stats: clone(state.stats),
+    done: clone(state.done),
+    streak: state.streak,
+    bonusDay: state.bonusDay,
+    restDay: state.restDay,
+    history: clone(state.history),
+    log: clone(state.log),
+    sessions: clone(state.training.sessions),
+    catalog: catalogSnapshot(state),
+    archive: clone(state.archive),
+  };
 }
 
 async function withPage(browser, baseUrl, task) {
@@ -435,6 +457,111 @@ async function testArchiveSwapTwice(browser, baseUrl) {
   });
 }
 
+async function testArchiveReadOnlyAndStrictDailyRouting(browser, baseUrl) {
+  contentPayload = makeContentPack('wrong-profile', 'wrong-archive-routing', 'Не добавлять');
+  await withPage(browser, baseUrl, async page => {
+    const today = await browserDateKey(page, 0);
+    await installLegacyV6(page, {
+      lastDay: today,
+      doneFlags: [false, false],
+      streak: 6,
+    });
+    await reload(page);
+    await confirmCatalogSwap(page);
+    await page.waitForFunction(
+      key => JSON.parse(localStorage.getItem(key)).personalization.mode === 'archive',
+      STATE_KEY,
+    );
+
+    let state = await readState(page);
+    assert.equal(state.personalization.mode, 'archive');
+    const beforeBlockedActions = progressSnapshot(state);
+
+    // The legacy daily, quest, project stage and reward remain visible but
+    // every mutating action must be rejected before it reaches its handler.
+    await page.locator('.tabbar [data-tab="quests"]').click();
+    await page.locator('[data-act="daily"][data-id="legacy-daily-0"]').click();
+    await page.locator('[data-act="quest"][data-id="legacy-quest-action"]').click();
+
+    await page.locator('.tabbar [data-tab="gates"]').click();
+    await page.locator('[data-act="floor"][data-id="legacy-project-proof"]').click();
+
+    await page.locator('.tabbar [data-tab="more"]').click();
+    await page.locator('[data-act="openshop"]').click();
+    await page.locator('[data-act="buy"][data-id="legacy-reward-proof"]').click();
+    assert.equal(
+      await page.locator('#overlay:not(.hidden)').count(),
+      0,
+      'archive reward opened a purchase confirmation',
+    );
+
+    state = await readState(page);
+    assert.deepEqual(
+      progressSnapshot(state),
+      beforeBlockedActions,
+      'a read-only archive action changed economy or progress',
+    );
+
+    // Keep the archive open across midnight. The personal seven dailies are
+    // stored in S.archive in this mode and are the only strict daily set.
+    const yesterday = await browserDateKey(page, 1);
+    await page.evaluate(({ key, yesterday }) => {
+      const current = JSON.parse(localStorage.getItem(key));
+      if (current.personalization.mode !== 'archive') throw new Error('archive mode expected');
+      current.lastDay = yesterday;
+      current.streak = 6;
+      current.bonusDay = yesterday;
+      current.restDay = null;
+      current.archive.dailies.forEach(item => { item.done = true; });
+      current.dailies.forEach((item, index) => { item.done = index === 1; });
+      localStorage.setItem(key, JSON.stringify(current));
+    }, { key: STATE_KEY, yesterday });
+    await reload(page);
+
+    state = await readState(page);
+    assert.equal(state.personalization.mode, 'archive');
+    assert.equal(state.lastDay, today);
+    assert.equal(state.streak, 6, 'legacy incomplete dailies incorrectly broke the personal streak');
+    assert.equal(state.bonusDay, null);
+    assert(
+      state.archive.dailies.every(item => item.done === false),
+      'personal dailies in S.archive were not reset',
+    );
+    assert.deepEqual(
+      state.dailies.map(item => item.done),
+      [false, true],
+      'read-only legacy dailies were reset instead of the personal set',
+    );
+
+    // Training remains usable in archive mode. Its linked daily rewards must
+    // update the personal set in S.archive and never the visible legacy set.
+    const legacyBeforeActivities = clone(state.dailies);
+    const goldBeforeActivities = state.hunter.gold;
+    const sessionsBeforeActivities = state.training.sessions.length;
+
+    await page.locator('.tabbar [data-tab="training"]').click();
+    await page.locator('.train-nav [data-id="walk"]').click();
+    await page.locator('[data-act="addwalk"][data-id="recovery"]').click();
+    await page.locator('#mTrainDuration').fill('15');
+    await page.locator('[data-m="ok"]').click();
+
+    await page.locator('.train-nav [data-id="meditation"]').click();
+    await page.locator('[data-act="addpractice"][data-id="med-breath-3"]').click();
+    await page.locator('#mPracticeDuration').fill('5');
+    await page.locator('[data-m="ok"]').click();
+
+    state = await readState(page);
+    const movement = state.archive.dailies.find(item => item.kind === 'movement');
+    const meditation = state.archive.dailies.find(item => item.kind === 'meditation');
+    assert(movement && movement.done, 'training did not complete personal movement in S.archive');
+    assert(meditation && meditation.done, 'meditation did not complete personal meditation in S.archive');
+    assert.deepEqual(state.dailies, legacyBeforeActivities, 'linked activities mutated legacy dailies');
+    assert.equal(state.hunter.gold, goldBeforeActivities + 10);
+    assert.equal(state.training.sessions.length, sessionsBeforeActivities + 2);
+    assert.equal(state.personalization.mode, 'archive');
+  });
+}
+
 async function testContentProfile(browser, baseUrl) {
   const contentPath = path.join(APP_ROOT, 'content.json');
   assert(fs.existsSync(contentPath), 'content.json is missing');
@@ -515,6 +642,7 @@ async function testContentProfile(browser, baseUrl) {
     });
     await testSeedAndReset(browser, baseUrl);
     await testArchiveSwapTwice(browser, baseUrl);
+    await testArchiveReadOnlyAndStrictDailyRouting(browser, baseUrl);
     await testContentProfile(browser, baseUrl);
 
     console.log(JSON.stringify({
@@ -529,6 +657,9 @@ async function testContentProfile(browser, baseUrl) {
       },
       seedAndReset: true,
       archiveSwapTwice: true,
+      archiveReadOnly: true,
+      strictDailiesInArchive: true,
+      linkedActivitiesInArchive: true,
       contentProfileGuard: true,
     }, null, 2));
   } finally {
