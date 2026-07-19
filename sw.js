@@ -1,5 +1,5 @@
 const CACHE_PREFIX = 'solo-system-';
-const CACHE_NAME = `${CACHE_PREFIX}v11`;
+const CACHE_NAME = `${CACHE_PREFIX}v12`;
 const SCOPE_URL = new URL(self.registration.scope);
 const INDEX_URL = new URL('./index.html', SCOPE_URL).href;
 

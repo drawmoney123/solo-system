@@ -112,7 +112,7 @@ button.qcheck,button.xdel{min-width:44px;min-height:44px}
 .goldBig b{width:22px;height:22px;line-height:22px;font-size:12px}
 .logrow{font-size:12px;color:#9cbbe0;padding:6px 0;border-bottom:1px solid rgba(90,170,255,.08)}
 .logrow time{color:#5f7ba0;margin-right:8px;font-size:11px}
-.train-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.train-summary{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 .train-kpi{padding:10px 8px;border:1px solid rgba(90,170,255,.2);border-radius:9px;background:rgba(30,65,110,.12);text-align:center}
 .train-kpi b{display:block;font-size:20px;color:#e6f1ff;margin-bottom:3px}
 .train-kpi span{font-size:10px;line-height:1.25;letter-spacing:.08em;color:#7d9cc4;text-transform:uppercase}
@@ -173,6 +173,12 @@ button.qcheck,button.xdel{min-width:44px;min-height:44px}
 .train-quick .btn{padding:9px 5px;letter-spacing:.04em;min-height:44px}
 .train-section-note{font-size:12px;line-height:1.6;color:#aaa;margin:2px 2px 12px}
 .preferred{color:#fff!important;font-size:11px!important}
+.practice-timer{text-align:center;padding:18px 12px;border:1px solid #444;border-radius:12px;background:#080808;margin-top:10px}
+.practice-timer-name{font-size:12px;color:#aaa;line-height:1.45}
+.practice-timer-value{font-size:44px;line-height:1;font-weight:800;letter-spacing:.05em;font-variant-numeric:tabular-nums;color:#fff;margin:12px 0}
+.practice-timer-state{font-size:10px;color:#999;text-transform:uppercase;letter-spacing:.12em}
+.practice-timer-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
+.practice-timer-actions .btn{padding-left:7px;padding-right:7px;letter-spacing:.06em}
 .tabbar{position:fixed;bottom:0;left:0;right:0;z-index:30;display:flex;max-width:520px;margin:0 auto;
   background:rgba(6,10,20,.95);border-top:1px solid rgba(90,170,255,.25);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   padding:6px 4px calc(8px + env(safe-area-inset-bottom))}
@@ -291,7 +297,8 @@ input::placeholder,textarea::placeholder{color:#666}
 "use strict";
 const KEY='soloSystemV1';
 const PREV_KEY='soloSystemBeforeRestoreV1';
-const SCHEMA_VERSION=6;
+const SCHEMA_VERSION=7;
+const PERSONALIZATION_ID='artem-v1';
 const $=s=>document.querySelector(s);
 const DIFFS={
   E:{xp:15,gold:10,label:'Очень простая'},D:{xp:30,gold:20,label:'Простая'},
@@ -300,7 +307,7 @@ const DIFFS={
 };
 const DIFF_ORDER=['E','D','C','B','A','S'];
 const STATS={str:'ФИЗИЧЕСКАЯ ФОРМА',int:'ОБУЧЕНИЕ',car:'РАБОТА',vit:'ЗДОРОВЬЕ',cha:'ОТНОШЕНИЯ',wil:'САМООРГАНИЗАЦИЯ',fin:'ФИНАНСЫ'};
-const TRAINING_TYPES={strength:'Силовая',run:'Бег',walk:'Ходьба'};
+const TRAINING_TYPES={strength:'Силовая',run:'Бег',walk:'Ходьба',yoga:'Йога',meditation:'Медитация'};
 const EFFORTS={easy:'Легко',moderate:'Умеренно',hard:'Тяжело'};
 const STRENGTH_PLANS={
   A:{title:'Full Body A',exercises:[
@@ -314,14 +321,14 @@ const STRENGTH_PLANS={
     {id:'b-leg',title:'Одноногий присед',target:'8–12 на сторону',sets:2,reps:8,max:12},
     {id:'b-glute',title:'Ягодицы',target:'10–15',sets:2,reps:10,max:15},
     {id:'b-push',title:'Вертикальный жим',target:'8–12',sets:2,reps:8,max:12},
-    {id:'b-pull',title:'Вертикальная тяга',target:'8–12',sets:2,reps:8,max:12},
+    {id:'b-pull',title:'Тяга / пуловер',target:'8–12',sets:2,reps:8,max:12},
     {id:'b-core',title:'Корпус / перенос веса',target:'20–30 секунд',sets:2,reps:20,max:30}
   ]}
 };
 const EXERCISE_LIBRARY={
   'a-squat':{
     bodyweight:['Присед к устойчивому стулу','Присед без веса'],
-    compact:['Гоблет-присед','Присед с резинкой'],
+    compact:['Гоблет-присед','Присед без веса'],
     gym:['Жим ногами','Гоблет-присед']
   },
   'a-push':{
@@ -331,17 +338,17 @@ const EXERCISE_LIBRARY={
   },
   'a-row':{
     bodyweight:['W-подъёмы рук лёжа на животе','Обратные снежные ангелы лёжа'],
-    compact:['Тяга гантели одной рукой с опорой','Тяга резинки к поясу'],
+    compact:['Тяга гантели одной рукой с опорой','Обратные снежные ангелы лёжа'],
     gym:['Тяга горизонтального блока','Тяга гантели одной рукой с опорой']
   },
   'a-hinge':{
     bodyweight:['Наклон «good morning» без веса'],
-    compact:['Румынская тяга с гантелями','Наклон с резинкой'],
+    compact:['Румынская тяга с гантелями','Наклон «good morning» без веса'],
     gym:['Румынская тяга с гантелями','Гиперэкстензия без дополнительного веса']
   },
   'a-core':{
     bodyweight:['Dead bug','Bird dog'],
-    compact:['Dead bug','Pallof press с резинкой'],
+    compact:['Dead bug','Марш на месте с одной гантелью у корпуса'],
     gym:['Pallof press на блоке','Dead bug']
   },
   'b-leg':{
@@ -361,7 +368,7 @@ const EXERCISE_LIBRARY={
   },
   'b-pull':{
     bodyweight:['Подтягивание локтей лёжа на животе','Сведение лопаток лёжа'],
-    compact:['Тяга резинки сверху (штатное крепление)','Тяга резинки к поясу'],
+    compact:['Пуловер с одной гантелью лёжа на полу','Тяга гантели одной рукой с опорой'],
     gym:['Тяга верхнего блока нейтральным хватом','Подтягивание с поддержкой']
   },
   'b-core':{
@@ -372,15 +379,16 @@ const EXERCISE_LIBRARY={
 };
 const TRAINING_SETUPS={
   bodyweight:{label:'Без оборудования',short:'Свой вес',hint:'Устойчивая опора, пол и низкая ступень. Полноценную тягу без снаряда временно заменяют лёгкие упражнения для верхней части спины.'},
-  compact:{label:'Гантели и резинки',short:'Гантели / резинки',hint:'Домашний набор с гантелями и резинкой. Резинку крепи только способом, который разрешён производителем.'},
+  compact:{label:'Гантели дома',short:'Гантели',hint:'Домашняя программа только с гантелями, собственным весом, устойчивым стулом и полом. Скамья и резинки не нужны.'},
   gym:{label:'Тренажёрный зал',short:'Зал',hint:'Простые тренажёры, блоки и гантели. Штанга не используется как вариант по умолчанию.'}
 };
 const TRAINING_EXPERIENCE={beginner:'Начинаю или возвращаюсь',regular:'Тренируюсь регулярно'};
-const TRAINING_SECTIONS={today:'Сегодня',week:'Неделя',strength:'Силовые',run:'Бег',walk:'Ходьба',journal:'Журнал',settings:'Настройки'};
+const TRAINING_SECTIONS={today:'Сегодня',week:'Неделя',strength:'Силовые',run:'Бег',walk:'Ходьба',yoga:'Йога',meditation:'Медитация',journal:'Журнал',settings:'Настройки'};
 const SCHEDULE_TYPES={
   rest:{label:'Отдых',short:'Отдых'},
   strength:{label:'Силовая Full Body по очереди',short:'Full Body'},
   run:{label:'Бег / бег с ходьбой',short:'Бег'},
+  yoga:{label:'Мягкая йога для начинающих',short:'Йога'},
   walkRecovery:{label:'Восстановительная прогулка',short:'Восст. ходьба'},
   walkBrisk:{label:'Быстрая ходьба',short:'Быстрая ходьба'},
   walkLong:{label:'Длинная прогулка',short:'Длинная прогулка'}
@@ -391,7 +399,7 @@ const WEEK_DAYS=[
   {key:5,short:'Пт',name:'Пятница'},{key:6,short:'Сб',name:'Суббота'},
   {key:0,short:'Вс',name:'Воскресенье'}
 ];
-const defaultTrainingSchedule=()=>({1:'strength',2:'run',3:'walkRecovery',4:'strength',5:'walkRecovery',6:'run',0:'walkBrisk'});
+const defaultTrainingSchedule=()=>({1:'strength',2:'run',3:'yoga',4:'strength',5:'walkBrisk',6:'run',0:'yoga'});
 const exerciseOptions=(slot,setup)=>{
   const entry=EXERCISE_LIBRARY[slot]||{};
   const names=entry[TRAINING_SETUPS[setup]?setup:'bodyweight'];
@@ -403,7 +411,7 @@ const defaultPreferences=(setup='bodyweight')=>{
   return out;
 };
 const RUN_LEVELS=[
-  {title:'R1 · Начало',duration:30,text:'5 мин ходьбы → 8× (1 мин лёгкого бега + 1:30 ходьбы) → 5 мин ходьбы'},
+  {title:'R1 · Начало',duration:28,text:'5 мин ходьбы → 6× (1 мин лёгкого бега + 2 мин ходьбы) → 5 мин ходьбы'},
   {title:'R2 · Короткие интервалы',duration:31,text:'5 мин ходьбы → 6× (1:30 бега + 2 мин ходьбы) → 5 мин ходьбы'},
   {title:'R3 · Трёхминутные отрезки',duration:30,text:'5 мин ходьбы → 4× (3 мин бега + 2 мин ходьбы) → 5 мин ходьбы'},
   {title:'R4 · Пятиминутные отрезки',duration:31,text:'5 мин ходьбы → 3× (5 мин бега + 2 мин ходьбы) → 5 мин ходьбы'},
@@ -415,10 +423,31 @@ const WALK_TYPES={
   brisk:{title:'Быстрая ходьба',duration:30,text:'5 минут спокойно → 20 минут быстрее → 5 минут спокойно'},
   long:{title:'Длинная прогулка',duration:45,text:'45–60 минут в устойчивом комфортном темпе'}
 };
+const PRACTICE_TEMPLATES={
+  'yoga-reset-5':{type:'yoga',title:'Мягкое начало · 5 минут',duration:5,
+    text:'1 мин спокойного дыхания → 3 мин мягких движений плеч, спины и таза в комфортном диапазоне → 1 мин отдыха'},
+  'yoga-mobility-10':{type:'yoga',title:'Мобильность всего тела · 10 минут',duration:10,
+    text:'2 мин спокойного дыхания → 6 мин плавных движений позвоночника, плеч и бёдер без боли → 2 мин расслабления'},
+  'yoga-beginner-15':{type:'yoga',title:'Йога для начинающих · 15 минут',duration:15,
+    text:'2 мин дыхания → 3 мин кошка-корова и движения плеч → 4 мин мягкие наклоны и выпады с опорой → 4 мин движения бёдер и спины → 2 мин отдыха'},
+  'med-breath-3':{type:'meditation',title:'Дыхание · 3 минуты',duration:3,
+    text:'Сядь удобно, поставь таймер и наблюдай естественное дыхание. При отвлечении спокойно возвращай внимание.'},
+  'med-body-5':{type:'meditation',title:'Сканирование тела · 5 минут',duration:5,
+    text:'Последовательно отмечай ощущения от стоп до головы, ничего не меняя. При отвлечении вернись к последней области.'},
+  'med-count-10':{type:'meditation',title:'Счёт дыхания · 10 минут',duration:10,
+    text:'Считай выдохи от одного до десяти и начинай заново. Если потерял счёт, спокойно вернись к одному без оценки.'}
+};
+const defaultWellness=()=>({
+  schedule:{
+    yoga:{days:[0,3],practiceId:'yoga-mobility-10'},
+    meditation:{days:[0,1,2,3,4,5,6],practiceId:'med-body-5'}
+  },
+  timer:null
+});
 const trainingSeed=()=>({
-  nextStrength:'A',runLevel:1,goals:{strength:2,run:2,walk:3},
-  profile:{experience:'beginner',setup:'bodyweight'},
-  preferences:defaultPreferences('bodyweight'),schedule:defaultTrainingSchedule(),sessions:[]
+  nextStrength:'A',runLevel:1,goals:{strength:2,run:2,walk:1,yoga:2},
+  profile:{experience:'beginner',setup:'compact'},
+  preferences:defaultPreferences('compact'),schedule:defaultTrainingSchedule(),wellness:defaultWellness(),sessions:[]
 });
 const TITLES=[
   {id:'awake',name:'Первая завершённая задача',check:s=>s.done.quests>=1},
@@ -443,23 +472,70 @@ const TITLES=[
   {id:'hidden10',name:'10 дополнительных задач',check:s=>(s.done.hidden||0)>=10}
 ];
 const HIDDEN_POOL=[
-  {title:'Сделать короткую разминку на 5 минут',stat:'str'},
-  {title:'Выпить стакан воды и проветрить комнату',stat:'vit'},
-  {title:'Прочитать 10 страниц книги или статьи',stat:'int'},
-  {title:'Написать близкому человеку и узнать, как у него дела',stat:'cha'},
-  {title:'Убрать телефон на 30 минут',stat:'wil'},
-  {title:'Проверить последние траты и отметить незапланированные',stat:'fin'},
-  {title:'Пройтись быстрым шагом 15 минут',stat:'vit'},
-  {title:'Разобрать одну поверхность или полку',stat:'wil'},
-  {title:'Повторить материал последнего занятия 15 минут',stat:'int'},
-  {title:'Сделать три подхода простых упражнений',stat:'str'},
-  {title:'Договориться о встрече или звонке с близким человеком',stat:'cha'},
-  {title:'Отложить небольшую сумму в накопления',stat:'fin'},
-  {title:'Разобрать рабочие входящие за 15 минут',stat:'car'},
-  {title:'Записать три рабочих результата за сегодня',stat:'car'},
-  {title:'Сделать 10 минут спокойной йоги или мягкой растяжки',stat:'vit'},
-  {title:'Медитировать 5 минут с таймером',stat:'wil'}
+  {title:'Сделать 5 минут суставной разминки',stat:'str'},
+  {title:'Пройти восстановительную прогулку 15 минут',stat:'vit'},
+  {title:'Повторить 10 терминов по сетям или слаботочным системам',stat:'int'},
+  {title:'Посмотреть один урок по системному администрированию и записать 3 мысли',stat:'int'},
+  {title:'Нарисовать от руки простую схему домашней сети',stat:'int'},
+  {title:'Повторить закон Ома только на учебных примерах без работы под напряжением',stat:'int'},
+  {title:'Сделать 10 минут мягкой йоги без боли',stat:'vit'},
+  {title:'Медитировать 5 минут с таймером',stat:'vit'},
+  {title:'Убрать одну поверхность дома за 10 минут',stat:'wil'},
+  {title:'Подготовить одежду и гантели к следующей тренировке',stat:'str'},
+  {title:'Записать один конкретный способ увеличить доход',stat:'car'},
+  {title:'Обновить один пункт резюме или списка профессиональных навыков',stat:'car'},
+  {title:'Провести 20 минут с семьёй без телефона',stat:'cha'},
+  {title:'Проветрить спальню и убрать экран за 30 минут до сна',stat:'vit'},
+  {title:'Записать расходы за последние 3 дня',stat:'fin'},
+  {title:'Разобрать учебные заметки за 15 минут',stat:'wil'}
 ];
+
+const ARTEM_DAILIES=[
+  {id:'artem-v1-daily-movement',title:'Выполнить движение по плану: тренировка, бег/ходьба или йога',stat:'str',kind:'movement'},
+  {id:'artem-v1-daily-meditation',title:'Медитировать 5 минут с таймером',stat:'vit',kind:'meditation'},
+  {id:'artem-v1-daily-study',title:'Учиться 30 минут: слаботочные системы, системное администрирование или электрика',stat:'int',kind:'study'},
+  {id:'artem-v1-daily-sleep',title:'Начать подготовку ко сну в выбранное время с допуском 30 минут',stat:'vit',kind:'sleep'},
+  {id:'artem-v1-daily-home',title:'Навести порядок дома в течение 15 минут',stat:'wil',kind:'home'},
+  {id:'artem-v1-daily-family',title:'Провести 20 минут с семьёй без телефона',stat:'cha',kind:'family'},
+  {id:'artem-v1-daily-income',title:'Сделать один шаг для роста дохода за 20 минут',stat:'car',kind:'income'}
+];
+const ARTEM_STARTER_QUESTS=[
+  {id:'artem-v1-starter-dumbbells',title:'Записать доступные веса гантелей и подготовить безопасное место для занятий',stat:'str',diff:'E'},
+  {id:'artem-v1-starter-first-workout',title:'Выполнить первую Full Body и записать вес, подходы и повторы каждого упражнения',stat:'str',diff:'D'},
+  {id:'artem-v1-starter-sleep-window',title:'Выбрать постоянное окно отхода ко сну и подъёма с допуском 30 минут',stat:'vit',diff:'D'},
+  {id:'artem-v1-starter-study-folders',title:'Создать три раздела заметок: слаботочные системы, системное администрирование и электрика',stat:'int',diff:'E'},
+  {id:'artem-v1-starter-study-sources',title:'Выбрать по одному основному учебному источнику для сетей, серверов и электротехники',stat:'int',diff:'C'},
+  {id:'artem-v1-starter-income-map',title:'Записать текущий источник дохода и три реалистичных направления его увеличения',stat:'car',diff:'C'},
+  {id:'artem-v1-starter-family-plan',title:'Запланировать одно совместное семейное занятие с конкретной датой',stat:'cha',diff:'D'}
+];
+const ARTEM_STARTER_PROJECTS=[
+  {id:'artem-v1-project-first-month',title:'Проект: первые четыре недели сильного режима',diff:'B',stat:'str',floors:[
+    'Этап 1: настроить профиль гантелей и выполнить первую Full Body A',
+    'Этап 2: выполнить Full Body B и две прогулки или беговые тренировки R1',
+    'Этап 3: провести вторую неделю без увеличения нагрузки ценой техники',
+    'Этап 4: сравнить рабочие веса, повторы, сон и самочувствие',
+    'Этап 5: завершить четыре недели и выбрать одно безопасное улучшение программы'
+  ]},
+  {id:'artem-v1-project-regime',title:'Проект: закрепить режим на 14 дней',diff:'B',stat:'vit',floors:[
+    'Этап 1: выбрать реалистичное время подготовки ко сну и подъёма',
+    'Этап 2: подготовить вечерний порядок из трёх простых действий',
+    'Этап 3: соблюдать выбранное окно первые 4 дня',
+    'Этап 4: соблюдать окно ещё 5 дней и убрать главный вечерний отвлекающий фактор',
+    'Этап 5: завершить 14 дней и записать рабочий вариант режима'
+  ]}
+];
+const ARTEM_STARTER_REWARDS=[
+  {id:'artem-v1-reward-hobby-30',title:'30 минут любимого хобби без чувства вины',cost:60},
+  {id:'artem-v1-reward-family-film',title:'Семейный фильм или совместный вечер по выбору',cost:120},
+  {id:'artem-v1-reward-rest-day',title:'День отдыха без потери серии',cost:300,kind:'restDay'},
+  {id:'artem-v1-reward-useful-small',title:'Небольшая запланированная покупка для тренировок или учёбы',cost:500}
+];
+const freshDailies=()=>ARTEM_DAILIES.map(x=>({...x,done:false}));
+const freshQuests=()=>ARTEM_STARTER_QUESTS.map(x=>({...x,done:false}));
+const freshProjects=()=>ARTEM_STARTER_PROJECTS.map(x=>({...x,cleared:false,floors:x.floors.map(title=>({title,cleared:false}))}));
+const freshRewards=()=>ARTEM_STARTER_REWARDS.map(x=>({...x,kind:x.kind==='restDay'?'restDay':null}));
+const DAILY_KINDS={movement:true,meditation:true,study:true,sleep:true,home:true,family:true,income:true};
+const BUILTIN_CONTENT_IDS=[...ARTEM_DAILIES,...ARTEM_STARTER_QUESTS,...ARTEM_STARTER_PROJECTS,...ARTEM_STARTER_REWARDS].map(x=>x.id);
 
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const dateKey=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
@@ -467,50 +543,17 @@ const today=()=>dateKey(new Date());
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function dayHash(str){let h=0;for(let i=0;i<str.length;i++){h=(h*31+str.charCodeAt(i))|0;}return Math.abs(h);}
 function seed(){
-  const d=(t,st)=>({id:uid(),title:t,stat:st,done:false});
-  const q=(t,st,df)=>({id:uid(),title:t,stat:st,diff:df,done:false});
   return {
     v:SCHEMA_VERSION,
-    hunter:{name:'Пользователь',level:1,xp:0,gold:50},
+    hunter:{name:'Артём',level:1,xp:0,gold:50},
     stats:{str:1,int:1,car:1,vit:1,cha:1,wil:1,fin:1},
-    dailies:[
-      d('Сделать 20–30 минут физической активности','str'),
-      d('Уделить 25 минут обучению без отвлечений','int'),
-      d('Закрыть одну главную рабочую задачу','car'),
-      d('Пройти не менее 8 000 шагов','vit'),
-      d('Составить план на завтра из трёх приоритетов','wil'),
-      d('Записать все траты за день','fin'),
-      d('Уделить 15 минут общению без телефона','cha')
-    ],
-    quests:[
-      q('Проверить спортивную форму и подготовить комплект на следующую тренировку','str','D'),
-      q('Составить список из пяти материалов для изучения и выбрать первый','int','D'),
-      q('Записать рабочие результаты за последние три месяца','car','C'),
-      q('Записаться на плановый профилактический осмотр','vit','D'),
-      q('Спланировать совместный ужин или прогулку с близким человеком','cha','D'),
-      q('Отключить ненужные уведомления минимум в пяти приложениях','wil','D'),
-      q('Настроить автоматический перевод в накопления','fin','C')
-    ],
-    dungeons:[{
-      id:uid(),title:'Проект: провести базовую ревизию квартиры',diff:'C',stat:'wil',cleared:false,
-      floors:[
-        {title:'Осмотреть кухню, ванную, спальню и прихожую',cleared:false},
-        {title:'Записать всё, что требует ремонта или замены',cleared:false},
-        {title:'Выбрать пять небольших дел, которые можно закрыть сразу',cleared:false},
-        {title:'Купить недостающие материалы и выполнить выбранные дела',cleared:false},
-        {title:'Назначить даты для оставшихся работ',cleared:false}
-      ]
-    }],
-    shop:[
-      {id:uid(),title:'Послушать любимый альбом целиком без параллельных дел',cost:40},
-      {id:uid(),title:'Купить свежие фрукты или ягоды',cost:90},
-      {id:uid(),title:'День отдыха без потери серии',cost:250,kind:'restDay'},
-      {id:uid(),title:'Посетить бассейн или сауну',cost:450}
-    ],
-    log:[],applied:[],lastDay:today(),streak:0,bonusDay:null,restDay:null,
+    dailies:freshDailies(),quests:freshQuests(),dungeons:freshProjects(),shop:freshRewards(),
+    log:[],applied:BUILTIN_CONTENT_IDS.slice(),lastDay:today(),streak:0,bonusDay:null,restDay:null,
     titles:[],activeTitle:null,history:{},penalty:null,weeklyBoss:null,hiddenDay:null,
     training:trainingSeed(),
-    focus:['str','int','car'],
+    personalization:{id:PERSONALIZATION_ID,mode:'personal',appliedAt:Date.now()},
+    archive:{dailies:[],quests:[],dungeons:[],shop:[]},
+    focus:['str','vit','int'],
     done:{quests:0,dungeons:0,buys:0,bestStreak:0,bosses:0,hidden:0}
   };
 }
@@ -567,6 +610,30 @@ function normalize(saved){
     seen.add(id);return id;
   };
   const arr=(v,max=LIMITS.items)=>Array.isArray(v)?v.slice(0,max):[];
+  const normDaily=d=>({
+    id:idOf(d.id),title:neutralText(d.title,'Без названия',240)||'Без названия',
+    stat:STATS[d.stat]?d.stat:'wil',done:d.done===true,
+    kind:DAILY_KINDS[d.kind]?d.kind:null
+  });
+  const normQuest=q=>{
+    const out={id:idOf(q.id),title:neutralText(q.title,'Без названия',240)||'Без названия',
+      stat:STATS[q.stat]?q.stat:'wil',diff:DIFFS[q.diff]?q.diff:'D',done:q.done===true};
+    if(Number.isFinite(Number(q.doneAt)))out.doneAt=finite(q.doneAt,0,0,Number.MAX_SAFE_INTEGER);
+    return out;
+  };
+  const normDungeon=dg=>{
+    const floors=arr(dg.floors,LIMITS.floors).map(f=>isObj(f)?f:{title:f,cleared:false}).map(f=>({
+      title:neutralText(f.title,'Этап',240)||'Этап',cleared:f.cleared===true
+    }));
+    return {id:idOf(dg.id),title:neutralText(dg.title,'Проект',240)||'Проект',
+      diff:DIFFS[dg.diff]?dg.diff:'D',stat:STATS[dg.stat]?dg.stat:null,
+      cleared:floors.length>0&&floors.every(f=>f.cleared),floors:floors.length?floors:[{title:'Итоговый этап',cleared:false}]};
+  };
+  const normShop=it=>({
+    id:idOf(it.id),title:neutralText(it.title,'Награда',240)||'Награда',
+    cost:finite(it.cost,50,1,1e9),
+    kind:it.kind==='restDay'||neutralText(it.title,'',240)==='День без задач (без потери серии)'?'restDay':null
+  });
   const hunter=isObj(src.hunter)?src.hunter:{};
   const s={
     v:SCHEMA_VERSION,
@@ -577,6 +644,7 @@ function normalize(saved){
       gold:finite(hunter.gold,base.hunter.gold,0,1e12)
     },
     stats:{},dailies:[],quests:[],dungeons:[],shop:[],log:[],applied:[],training:trainingSeed(),
+    personalization:null,archive:{dailies:[],quests:[],dungeons:[],shop:[]},
     lastDay:isDateKey(src.lastDay)?src.lastDay:today(),
     streak:finite(src.streak,0,0,100000),
     bonusDay:isDateKey(src.bonusDay)?src.bonusDay:null,
@@ -585,35 +653,28 @@ function normalize(saved){
     focus:[],done:{quests:0,dungeons:0,buys:0,bestStreak:0,bosses:0,hidden:0}
   };
   Object.keys(STATS).forEach(k=>s.stats[k]=finite(isObj(src.stats)?src.stats[k]:undefined,base.stats[k],0,1e9));
-  s.dailies=arr(src.dailies).filter(isObj).map(d=>({
-    id:idOf(d.id),title:neutralText(d.title,'Без названия',240)||'Без названия',
-    stat:STATS[d.stat]?d.stat:'wil',done:d.done===true
-  }));
-  s.quests=arr(src.quests).filter(isObj).map(q=>{
-    const out={id:idOf(q.id),title:neutralText(q.title,'Без названия',240)||'Без названия',
-      stat:STATS[q.stat]?q.stat:'wil',diff:DIFFS[q.diff]?q.diff:'D',done:q.done===true};
-    if(Number.isFinite(Number(q.doneAt)))out.doneAt=finite(q.doneAt,0,0,Number.MAX_SAFE_INTEGER);
-    return out;
-  });
-  s.dungeons=arr(src.dungeons).filter(isObj).map(dg=>{
-    const floors=arr(dg.floors,LIMITS.floors).map(f=>isObj(f)?f:{title:f,cleared:false}).map(f=>({
-      title:neutralText(f.title,'Этап',240)||'Этап',cleared:f.cleared===true
-    }));
-    return {id:idOf(dg.id),title:neutralText(dg.title,'Проект',240)||'Проект',
-      diff:DIFFS[dg.diff]?dg.diff:'D',stat:STATS[dg.stat]?dg.stat:null,
-      cleared:floors.length>0&&floors.every(f=>f.cleared),floors:floors.length?floors:[{title:'Итоговый этап',cleared:false}]};
-  });
-  s.shop=arr(src.shop).filter(isObj).map(it=>({
-    id:idOf(it.id),title:neutralText(it.title,'Награда',240)||'Награда',
-    cost:finite(it.cost,50,1,1e9),
-    kind:it.kind==='restDay'||neutralText(it.title,'',240)==='День без задач (без потери серии)'?'restDay':null
-  }));
+  s.dailies=arr(src.dailies).filter(isObj).map(normDaily);
+  s.quests=arr(src.quests).filter(isObj).map(normQuest);
+  s.dungeons=arr(src.dungeons).filter(isObj).map(normDungeon);
+  s.shop=arr(src.shop).filter(isObj).map(normShop);
   s.log=arr(src.log,LIMITS.log).filter(isObj).map(l=>({
     t:finite(l.t,Date.now(),0,Number.MAX_SAFE_INTEGER),m:neutralText(l.m,'Событие',500)||'Событие'
   }));
   const applied=new Set();
   arr(src.applied,LIMITS.applied).forEach(v=>{const x=cleanText(v,'',240);if(x)applied.add(x);});
   s.applied=Array.from(applied);
+  const rawPersonal=isObj(src.personalization)?src.personalization:{};
+  if(rawPersonal.id===PERSONALIZATION_ID)s.personalization={
+    id:PERSONALIZATION_ID,mode:rawPersonal.mode==='archive'?'archive':'personal',
+    appliedAt:finite(rawPersonal.appliedAt,Date.now(),0,Number.MAX_SAFE_INTEGER)
+  };
+  const rawArchive=isObj(src.archive)?src.archive:{};
+  s.archive={
+    dailies:arr(rawArchive.dailies).filter(isObj).map(normDaily),
+    quests:arr(rawArchive.quests).filter(isObj).map(normQuest),
+    dungeons:arr(rawArchive.dungeons).filter(isObj).map(normDungeon),
+    shop:arr(rawArchive.shop).filter(isObj).map(normShop)
+  };
   const knownTitles=new Set(TITLES.map(t=>t.id));
   s.titles=arr(src.titles,TITLES.length).filter(id=>knownTitles.has(id)).filter((id,i,a)=>a.indexOf(id)===i);
   s.activeTitle=s.titles.indexOf(src.activeTitle)>=0?src.activeTitle:null;
@@ -641,7 +702,8 @@ function normalize(saved){
   s.training.goals={
     strength:finite(goals.strength,2,0,5),
     run:finite(goals.run,2,0,5),
-    walk:finite(goals.walk,3,0,7)
+    walk:finite(goals.walk,1,0,7),
+    yoga:finite(goals.yoga,2,0,7)
   };
   const profile=isObj(tr.profile)?tr.profile:{};
   const setup=TRAINING_SETUPS[profile.setup]?profile.setup:'bodyweight';
@@ -663,19 +725,56 @@ function normalize(saved){
     const value=rawSchedule[day.key];
     s.training.schedule[day.key]=SCHEDULE_TYPES[value]?value:fallbackSchedule[day.key];
   });
+  const rawWellness=isObj(tr.wellness)?tr.wellness:{};
+  const rawWellnessSchedule=isObj(rawWellness.schedule)?rawWellness.schedule:{};
+  const wellnessDefaults=defaultWellness();
+  s.training.wellness={schedule:{},timer:null};
+  ['yoga','meditation'].forEach(type=>{
+    const raw=isObj(rawWellnessSchedule[type])?rawWellnessSchedule[type]:{};
+    const days=arr(raw.days,7).map(v=>finite(v,-1,-1,6)).filter(v=>v>=0).filter((v,i,a)=>a.indexOf(v)===i);
+    const practiceId=cleanText(raw.practiceId,'',80);
+    s.training.wellness.schedule[type]={
+      days:days.length?days:wellnessDefaults.schedule[type].days.slice(),
+      practiceId:PRACTICE_TEMPLATES[practiceId]&&PRACTICE_TEMPLATES[practiceId].type===type
+        ?practiceId:wellnessDefaults.schedule[type].practiceId
+    };
+  });
+  if(isObj(rawWellness.timer)){
+    const timerType=rawWellness.timer.type;
+    const practiceId=cleanText(rawWellness.timer.practiceId,'',80);
+    const practice=PRACTICE_TEMPLATES[practiceId];
+    if((timerType==='yoga'||timerType==='meditation')&&practice&&practice.type===timerType){
+      const targetSec=finite(rawWellness.timer.targetSec,practice.duration*60,60,7200);
+      let accumulatedSec=finite(rawWellness.timer.accumulatedSec,0,0,targetSec);
+      const rawRunningSince=rawWellness.timer.runningSince;
+      let runningSince=rawRunningSince!==null&&Number.isFinite(Number(rawRunningSince))&&Number(rawRunningSince)>0?finite(rawRunningSince,0,1,Number.MAX_SAFE_INTEGER):null;
+      const now=Date.now();
+      const invalidTimestamp=!!runningSince&&(now-runningSince>24*60*60*1000||runningSince>now+60000);
+      if(invalidTimestamp)runningSince=null;
+      if(runningSince){
+        const elapsed=Math.max(0,Math.floor((now-runningSince)/1000));
+        if(accumulatedSec+elapsed>=targetSec){accumulatedSec=targetSec;runningSince=null;}
+      }
+      if(!invalidTimestamp)s.training.wellness.timer={type:timerType,practiceId,targetSec,accumulatedSec,runningSince};
+    }
+  }
   s.training.sessions=arr(tr.sessions,LIMITS.trainingSessions).filter(isObj).map(item=>{
     const type=TRAINING_TYPES[item.type]?item.type:null;if(!type)return null;
     const runLevel=finite(item.runLevel,s.training.runLevel,1,RUN_LEVELS.length);
     const walkType=WALK_TYPES[item.walkType]?item.walkType:'recovery';
-    const fallbackDuration=type==='strength'?45:type==='run'?RUN_LEVELS[runLevel-1].duration:WALK_TYPES[walkType].duration;
+    const rawPracticeId=cleanText(item.practiceId,'',80);
+    const fallbackPractice=(type==='yoga'||type==='meditation')?s.training.wellness.schedule[type].practiceId:null;
+    const practiceId=PRACTICE_TEMPLATES[rawPracticeId]&&PRACTICE_TEMPLATES[rawPracticeId].type===type?rawPracticeId:fallbackPractice;
+    const practice=practiceId?PRACTICE_TEMPLATES[practiceId]:null;
+    const fallbackDuration=type==='strength'?45:type==='run'?RUN_LEVELS[runLevel-1].duration:type==='walk'?WALK_TYPES[walkType].duration:practice?practice.duration:5;
     const session={
       id:idOf(item.id),type,date:isDateKey(item.date)?item.date:today(),
       at:finite(item.at,Date.now(),0,Number.MAX_SAFE_INTEGER),
       duration:finite(item.duration,fallbackDuration,1,1440),
       distance:decimal(item.distance,0,0,1000,2),steps:finite(item.steps,0,0,200000),
       effort:EFFORTS[item.effort]?item.effort:'moderate',note:cleanText(item.note,'',500),
-      variant:item.variant==='B'?'B':'A',runLevel,walkType,
-      planText:cleanText(item.planText,'',500),exercises:[]
+      variant:item.variant==='B'?'B':'A',runLevel,walkType,practiceId,
+      planText:cleanText(item.planText,practice?practice.text:'',500),exercises:[]
     };
     if(type==='strength')session.exercises=arr(item.exercises,LIMITS.trainingExercises).filter(isObj).map(ex=>({
       slot:cleanText(ex.slot,'exercise',60)||'exercise',name:cleanText(ex.name,'Упражнение',120)||'Упражнение',
@@ -683,6 +782,25 @@ function normalize(saved){
     }));
     return session;
   }).filter(Boolean).sort((a,b)=>b.date.localeCompare(a.date)||b.at-a.at);
+  if(!s.personalization){
+    const oldDailies=s.dailies;
+    const completedToday=s.bonusDay===today();
+    const carryComplete=s.lastDay!==today()&&(!oldDailies.length||oldDailies.every(d=>d.done));
+    s.archive={dailies:s.dailies,quests:s.quests,dungeons:s.dungeons,shop:s.shop};
+    s.dailies=freshDailies();
+    if(completedToday||carryComplete)s.dailies.forEach(d=>d.done=true);
+    s.quests=freshQuests();s.dungeons=freshProjects();s.shop=freshRewards();
+    s.hunter.name='Артём';s.focus=['str','vit','int'];
+    s.training.profile={experience:'beginner',setup:'compact'};
+    s.training.preferences=defaultPreferences('compact');
+    s.training.runLevel=1;s.training.schedule=defaultTrainingSchedule();
+    s.training.goals=scheduleGoals(s.training.schedule);
+    s.training.wellness=defaultWellness();
+    s.personalization={id:PERSONALIZATION_ID,mode:'personal',appliedAt:Date.now()};
+    s.log.unshift({t:Date.now(),m:'Подключён персональный план Артёма; прежний каталог сохранён в архиве'});
+    s.log=s.log.slice(0,LIMITS.log);
+  }
+  BUILTIN_CONTENT_IDS.forEach(id=>{if(!applied.has(id)&&s.applied.length<LIMITS.applied){applied.add(id);s.applied.push(id);}});
   return s;
 }
 function validateBackup(obj){
@@ -698,6 +816,10 @@ function validateBackup(obj){
   if(obj.dungeons.some(x=>!isObj(x)||typeof x.title!=='string'||!Array.isArray(x.floors)||x.floors.length>LIMITS.floors))return {ok:false,error:'Повреждён список проектов'};
   if(obj.shop.some(x=>!isObj(x)||typeof x.title!=='string'||!Number.isFinite(x.cost)))return {ok:false,error:'Повреждён список наград'};
   if(obj.training!==undefined&&!isObj(obj.training))return {ok:false,error:'Повреждён раздел тренировок'};
+  if(obj.archive!==undefined){
+    if(!isObj(obj.archive))return {ok:false,error:'Повреждён архив каталога'};
+    for(const k of ['dailies','quests','dungeons','shop'])if(obj.archive[k]!==undefined&&(!Array.isArray(obj.archive[k])||obj.archive[k].length>LIMITS.items))return {ok:false,error:'Повреждён раздел архива '+k};
+  }
   return {ok:true,state:normalize(obj)};
 }
 function load(){
@@ -813,9 +935,8 @@ function finishDailySet(){
 }
 
 /* ---------- действия ---------- */
-function doDaily(id){
-  const d=S.dailies.find(x=>x.id===id);
-  if(!d||d.done)return;
+function completeDailyRecord(d,notify=true){
+  if(!d||d.done)return null;
   const m=isFocus(d.stat)?2:1;
   d.done=true;
   S.stats[d.stat]=(S.stats[d.stat]||0)+m;
@@ -824,11 +945,25 @@ function doDaily(id){
   addXP(10*m);
   log('Ежедневная задача: '+d.title);
   const bonus=finishDailySet();
-  if(bonus){
+  if(notify&&bonus){
     sysMsg('ПЛАН ДНЯ ЗАВЕРШЁН. +25 баллов. Серия: '+S.streak+' дн.');
-  }else{
+  }else if(notify){
     sysMsg('+5 баллов, +'+m+' в категории «'+STATS[d.stat]+'»'+(m>1?' · ПРИОРИТЕТ ×2':''));
   }
+  return {bonus,m};
+}
+function completeDailyByKind(kind){
+  return completeDailyRecord(S.dailies.find(d=>d.kind===kind),false);
+}
+function doDaily(id){
+  const d=S.dailies.find(x=>x.id===id);
+  if(!d||d.done)return;
+  if(d.kind==='meditation'){
+    tab='training';ui.trainingSection='meditation';render();
+    sysMsg('Запусти практику или запиши уже выполненную медитацию');
+    return;
+  }
+  completeDailyRecord(d,true);
   save();render();
 }
 function doQuest(id){
@@ -913,9 +1048,26 @@ function delFrom(arr,id,label){
   });
 }
 function resetAll(){
-  ask('Полностью сбросить весь прогресс? Это необратимо.',()=>{
+  ask('Полностью сбросить прогресс, персональные настройки и архив прежнего каталога? Это необратимо.',()=>{
     localStorage.removeItem(KEY);
     location.reload();
+  });
+}
+function catalogSize(catalog){
+  if(!isObj(catalog))return 0;
+  return ['dailies','quests','dungeons','shop'].reduce((sum,key)=>sum+(Array.isArray(catalog[key])?catalog[key].length:0),0);
+}
+function swapCatalogArchive(){
+  if(!S.personalization||catalogSize(S.archive)===0){sysMsg('Архив прежнего каталога пуст');return;}
+  const toArchive=S.personalization.mode==='personal';
+  ask(toArchive?'Открыть прежний каталог? Персональные задачи Артёма останутся в архиве и их можно будет вернуть.':'Вернуть персональный каталог Артёма? Текущее состояние прежнего каталога сохранится.',()=>{
+    if(!saveRecoveryPoint())return;
+    const active={dailies:S.dailies,quests:S.quests,dungeons:S.dungeons,shop:S.shop};
+    S.dailies=S.archive.dailies;S.quests=S.archive.quests;S.dungeons=S.archive.dungeons;S.shop=S.archive.shop;
+    S.archive=active;
+    S.personalization.mode=toArchive?'archive':'personal';
+    log(toArchive?'Открыт прежний каталог':'Возвращён персональный каталог Артёма');
+    save();render();sysMsg(toArchive?'ОТКРЫТ ПРЕЖНИЙ КАТАЛОГ':'ПЕРСОНАЛЬНЫЙ КАТАЛОГ АРТЁМА ВОЗВРАЩЁН');
   });
 }
 
@@ -981,7 +1133,7 @@ function applyPack(p){
       arr.push(o);if(S.applied.length>=LIMITS.applied)S.applied.shift();S.applied.push(pid);n++;
     });
   };
-  take(S.dailies,p.dailies,it=>{const title=neutralText(it.title,'',240);return title?{id:uid(),title,stat:STATS[it.stat]?it.stat:'wil',done:false}:null;});
+  take(S.dailies,p.dailies,it=>{const title=neutralText(it.title,'',240);return title?{id:uid(),title,stat:STATS[it.stat]?it.stat:'wil',done:false,kind:DAILY_KINDS[it.kind]?it.kind:null}:null;});
   take(S.quests,p.quests,it=>{const title=neutralText(it.title,'',240);return title?{id:uid(),title,stat:STATS[it.stat]?it.stat:'wil',diff:DIFFS[it.diff]?it.diff:'D',done:false}:null;});
   take(S.dungeons,p.dungeons,it=>{
     if(!it||!it.title||!Array.isArray(it.floors)||!it.floors.length)return null;
@@ -995,10 +1147,15 @@ function applyPack(p){
   return n;
 }
 function contentSync(manual){
+  if(S.personalization&&S.personalization.mode!=='personal'){
+    if(manual)sysMsg('Сначала верни персональный каталог Артёма');
+    return;
+  }
   fetch('content.json?t='+Date.now(),{cache:'no-store'})
     .then(r=>r.ok?r.json():null)
     .then(p=>{
       if(!p){if(manual)sysMsg('content.json не найден');return;}
+      if(p.profile!==PERSONALIZATION_ID){if(manual)sysMsg('Пакет предназначен для другого профиля');return;}
       const n=applyPack(p);
       if(manual)sysMsg(n?('Обновление контента: +'+n+' записей'):'Новых записей нет');
       else if(n)sysMsg('С ПК загружено новых записей: '+n);
@@ -1155,7 +1312,10 @@ function trainingWeekStats(){
     strength:items.filter(x=>x.type==='strength').length,
     run:items.filter(x=>x.type==='run').length,
     walk:items.filter(x=>x.type==='walk').length,
-    minutes:items.reduce((n,x)=>n+x.duration,0),
+    yoga:items.filter(x=>x.type==='yoga').length,
+    meditation:items.filter(x=>x.type==='meditation').length,
+    minutes:items.filter(x=>x.type!=='meditation').reduce((n,x)=>n+x.duration,0),
+    meditationMinutes:items.filter(x=>x.type==='meditation').reduce((n,x)=>n+x.duration,0),
     runKm:decimal(items.filter(x=>x.type==='run').reduce((n,x)=>n+x.distance,0),0,0,10000,2),
     walkKm:decimal(items.filter(x=>x.type==='walk').reduce((n,x)=>n+x.distance,0),0,0,10000,2)
   };
@@ -1180,7 +1340,8 @@ function scheduleGoals(schedule=S.training.schedule){
   return {
     strength:values.filter(x=>x==='strength').length,
     run:values.filter(x=>x==='run').length,
-    walk:values.filter(x=>x==='walkRecovery'||x==='walkBrisk'||x==='walkLong').length
+    walk:values.filter(x=>x==='walkRecovery'||x==='walkBrisk'||x==='walkLong').length,
+    yoga:values.filter(x=>x==='yoga').length
   };
 }
 function weekPlanRows(){
@@ -1194,6 +1355,7 @@ function scheduledCompletion(date,code){
   const sessions=S.training.sessions.filter(x=>x.date===date);
   if(code==='strength')return sessions.some(x=>x.type==='strength');
   if(code==='run')return sessions.some(x=>x.type==='run');
+  if(code==='yoga')return sessions.some(x=>x.type==='yoga');
   if(code==='walkRecovery')return sessions.some(x=>x.type==='walk'&&x.walkType==='recovery');
   if(code==='walkBrisk')return sessions.some(x=>x.type==='walk'&&x.walkType==='brisk');
   if(code==='walkLong')return sessions.some(x=>x.type==='walk'&&x.walkType==='long');
@@ -1335,16 +1497,20 @@ function formStrength(variant,id){
     const record={type:'strength',date,at:existing?existing.at:Date.now(),duration,distance:0,steps:0,
       effort:EFFORTS[$('#mTrainEffort').value]?$('#mTrainEffort').value:'moderate',note:cleanText($('#mTrainNote').value,'',500),
       variant,runLevel:S.training.runLevel,walkType:'recovery',planText:'',exercises};
+    let dailyResult=null;
     if(existing)Object.assign(existing,record);
-    else{record.id=uid();S.training.sessions.unshift(record);log('Записана силовая тренировка: '+plan.title);}
+    else{
+      record.id=uid();S.training.sessions.unshift(record);log('Записана силовая тренировка: '+plan.title);
+      if(date===today())dailyResult=completeDailyByKind('movement');
+    }
     recalculateNextStrength();
-    if(!existing)sysMsg(plan.title+' СОХРАНЕНА. Следующая — Full Body '+S.training.nextStrength+'.');
+    if(!existing)sysMsg(dailyResult&&dailyResult.bonus?'ПЛАН ДНЯ ЗАВЕРШЁН. Серия: '+S.streak+' дн.':plan.title+' СОХРАНЕНА. Следующая — Full Body '+S.training.nextStrength+'.');
     save();render();
   });
 }
 function formCardio(type,id,preferredWalkType){
   const existing=id?S.training.sessions.find(x=>x.id===id&&x.type===type):null;
-  if(!TRAINING_TYPES[type]||type==='strength')return;
+  if(type!=='run'&&type!=='walk')return;
   const runLevel=existing?existing.runLevel:S.training.runLevel;
   const walkType=existing?existing.walkType:(WALK_TYPES[preferredWalkType]?preferredWalkType:'recovery');
   const template=type==='run'?RUN_LEVELS[runLevel-1]:WALK_TYPES[walkType];
@@ -1365,11 +1531,112 @@ function formCardio(type,id,preferredWalkType){
       distance:decimal($('#mTrainDistance').value,0,0,1000,2),steps:type==='walk'?finite($('#mTrainSteps').value,0,0,200000):0,
       effort:EFFORTS[$('#mTrainEffort').value]?$('#mTrainEffort').value:'moderate',note:cleanText($('#mTrainNote').value,'',500),
       variant:'A',runLevel,walkType:selectedWalk,planText:currentTemplate.text,exercises:[]};
+    let dailyResult=null;
     if(existing)Object.assign(existing,record);
     else{
       record.id=uid();S.training.sessions.unshift(record);
-      log('Записана тренировка: '+TRAINING_TYPES[type]);sysMsg(TRAINING_TYPES[type].toUpperCase()+' СОХРАНЕНА');
+      log('Записана тренировка: '+TRAINING_TYPES[type]);
+      if(date===today())dailyResult=completeDailyByKind('movement');
+      sysMsg(dailyResult&&dailyResult.bonus?'ПЛАН ДНЯ ЗАВЕРШЁН. Серия: '+S.streak+' дн.':TRAINING_TYPES[type].toUpperCase()+' СОХРАНЕНА');
     }
+    save();render();
+  });
+}
+function practiceEntries(type){
+  return Object.entries(PRACTICE_TEMPLATES).filter(([,item])=>item.type===type);
+}
+function practiceTimerElapsed(timer,now=Date.now()){
+  if(!timer)return 0;
+  const running=timer.runningSince?Math.max(0,Math.floor((now-timer.runningSince)/1000)):0;
+  return Math.min(timer.targetSec,Math.max(0,timer.accumulatedSec+running));
+}
+function practiceTimerRemaining(timer){return timer?Math.max(0,timer.targetSec-practiceTimerElapsed(timer)):0;}
+function timerLabel(seconds){
+  const min=Math.floor(seconds/60),sec=Math.floor(seconds%60);
+  return String(min).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+}
+function startPracticeTimer(practiceId){
+  const practice=PRACTICE_TEMPLATES[practiceId];if(!practice)return;
+  const start=()=>{
+    S.training.wellness.timer={type:practice.type,practiceId,targetSec:practice.duration*60,accumulatedSec:0,runningSince:Date.now()};
+    save();render();sysMsg('ТАЙМЕР ЗАПУЩЕН: '+practice.title);
+  };
+  if(S.training.wellness.timer)ask('Заменить текущий таймер новой практикой?',start);else start();
+}
+function pausePracticeTimer(){
+  const timer=S.training.wellness.timer;if(!timer||!timer.runningSince)return;
+  timer.accumulatedSec=practiceTimerElapsed(timer);timer.runningSince=null;save();render();
+}
+function resumePracticeTimer(){
+  const timer=S.training.wellness.timer;if(!timer||timer.runningSince||practiceTimerRemaining(timer)<=0)return;
+  timer.runningSince=Date.now();save();render();
+}
+function cancelPracticeTimer(){
+  if(!S.training.wellness.timer)return;
+  ask('Отменить текущий таймер? Запись практики не будет создана.',()=>{
+    S.training.wellness.timer=null;save();render();sysMsg('Таймер отменён');
+  });
+}
+function finishPracticeTimer(){
+  const timer=S.training.wellness.timer;if(!timer)return;
+  const elapsed=practiceTimerElapsed(timer);
+  formPractice(timer.type,null,timer.practiceId,Math.max(1,Math.ceil(elapsed/60)));
+}
+function practiceTimerTick(){
+  const timer=S.training&&S.training.wellness&&S.training.wellness.timer;
+  const output=document.querySelector('[data-timer-remaining]');
+  if(output)output.textContent=timerLabel(practiceTimerRemaining(timer));
+  if(timer&&timer.runningSince&&practiceTimerRemaining(timer)<=0){
+    timer.accumulatedSec=timer.targetSec;timer.runningSince=null;save();
+    if(tab==='training'&&(ui.trainingSection==='yoga'||ui.trainingSection==='meditation'))render();
+    sysMsg('ТАЙМЕР ЗАВЕРШЁН. Сохрани практику, когда будешь готов.');
+  }
+}
+function formPractice(type,id,practiceId,suggestedDuration){
+  if(type!=='yoga'&&type!=='meditation')return;
+  const existing=id?S.training.sessions.find(x=>x.id===id&&x.type===type):null;
+  const entries=practiceEntries(type);
+  const fallback=S.training.wellness.schedule[type].practiceId;
+  const selected=existing&&PRACTICE_TEMPLATES[existing.practiceId]?existing.practiceId:PRACTICE_TEMPLATES[practiceId]?practiceId:fallback;
+  const template=PRACTICE_TEMPLATES[selected];
+  const duration=existing?existing.duration:suggestedDuration||template.duration;
+  const fields='<label class="f" for="mPracticeTemplate">Практика</label><select id="mPracticeTemplate">'+entries.map(([key,item])=>'<option value="'+key+'"'+(key===selected?' selected':'')+'>'+esc(item.title)+'</option>').join('')+'</select>'+
+    '<label class="f" for="mPracticeDate">Дата</label><input type="date" id="mPracticeDate" value="'+(existing?existing.date:today())+'">'+
+    '<label class="f" for="mPracticeDuration">Фактическая длительность, минут</label><input type="number" id="mPracticeDuration" value="'+duration+'" min="1" max="120">'+
+    '<label class="f" for="mPracticeNote">Заметка</label><textarea id="mPracticeNote" maxlength="500" style="min-height:72px" placeholder="Самочувствие, что заметил">'+esc(existing?existing.note:'')+'</textarea>';
+  modal((existing?'Изменить: ':'Записать: ')+TRAINING_TYPES[type],fields,existing?'Сохранить':'Завершить',()=>{
+    const date=$('#mPracticeDate').value,duration=finite($('#mPracticeDuration').value,0,0,120);
+    const chosen=$('#mPracticeTemplate').value,current=PRACTICE_TEMPLATES[chosen];
+    if(!isDateKey(date)||duration<1||!current||current.type!==type)return false;
+    const record={type,date,at:existing?existing.at:Date.now(),duration,distance:0,steps:0,effort:'easy',note:cleanText($('#mPracticeNote').value,'',500),
+      variant:'A',runLevel:S.training.runLevel,walkType:'recovery',practiceId:chosen,planText:current.text,exercises:[]};
+    let dailyResult=null;
+    if(existing)Object.assign(existing,record);
+    else{
+      record.id=uid();S.training.sessions.unshift(record);log('Записана практика: '+TRAINING_TYPES[type]);
+      if(date===today())dailyResult=completeDailyByKind(type==='meditation'?'meditation':'movement');
+    }
+    const timer=S.training.wellness.timer;
+    if(timer&&timer.type===type&&timer.practiceId===chosen)S.training.wellness.timer=null;
+    save();render();
+    sysMsg(dailyResult&&dailyResult.bonus?'ПЛАН ДНЯ ЗАВЕРШЁН. Серия: '+S.streak+' дн.':TRAINING_TYPES[type].toUpperCase()+' СОХРАНЕНА');
+  });
+}
+function formWellnessSettings(){
+  const wellness=S.training.wellness;
+  const yogaDays=wellness.schedule.yoga.days;
+  let fields='<div class="askText">Йога стоит в плане как мягкое восстановление. Медитация остаётся ежедневной практикой.</div><label class="f">Дни йоги</label>';
+  WEEK_DAYS.forEach(day=>{
+    fields+='<label class="todayRow" style="min-height:44px;align-items:center"><span>'+day.name+'</span><input type="checkbox" id="mYogaDay'+day.key+'" data-wellness-kind="yoga" data-day="'+day.key+'" '+(yogaDays.includes(day.key)?'checked':'')+' style="width:26px;height:26px"></label>';
+  });
+  fields+='<label class="f" for="mYogaPractice">Практика йоги по умолчанию</label><select id="mYogaPractice" data-wellness-practice="yoga">'+practiceEntries('yoga').map(([key,item])=>'<option value="'+key+'"'+(key===wellness.schedule.yoga.practiceId?' selected':'')+'>'+esc(item.title)+'</option>').join('')+'</select>'+
+    '<label class="f" for="mMeditationPractice">Медитация по умолчанию</label><select id="mMeditationPractice" data-wellness-practice="meditation">'+practiceEntries('meditation').map(([key,item])=>'<option value="'+key+'"'+(key===wellness.schedule.meditation.practiceId?' selected':'')+'>'+esc(item.title)+'</option>').join('')+'</select>';
+  modal('Йога и медитация',fields,'Сохранить',()=>{
+    const days=WEEK_DAYS.filter(day=>$('#mYogaDay'+day.key).checked).map(day=>day.key);
+    if(!days.length){sysMsg('Выбери хотя бы один день йоги');return false;}
+    const yoga=$('#mYogaPractice').value,meditation=$('#mMeditationPractice').value;
+    wellness.schedule.yoga={days,practiceId:PRACTICE_TEMPLATES[yoga]&&PRACTICE_TEMPLATES[yoga].type==='yoga'?yoga:'yoga-mobility-10'};
+    wellness.schedule.meditation={days:[0,1,2,3,4,5,6],practiceId:PRACTICE_TEMPLATES[meditation]&&PRACTICE_TEMPLATES[meditation].type==='meditation'?meditation:'med-body-5'};
     save();render();
   });
 }
@@ -1414,12 +1681,13 @@ function renderStrengthPlan(variant){
 }
 function renderTrainingSession(item){
   const pace=paceLabel(item.duration,item.distance);
-  const title=item.type==='strength'?'Full Body '+item.variant:item.type==='run'?'Бег · R'+item.runLevel:(WALK_TYPES[item.walkType]||WALK_TYPES.recovery).title;
+  const practice=PRACTICE_TEMPLATES[item.practiceId];
+  const title=item.type==='strength'?'Full Body '+item.variant:item.type==='run'?'Бег · R'+item.runLevel:item.type==='walk'?(WALK_TYPES[item.walkType]||WALK_TYPES.recovery).title:practice?practice.title:TRAINING_TYPES[item.type];
   const meta=[dateLabel(item.date),item.duration+' мин'];
   if(item.distance)meta.push(item.distance.toLocaleString('ru-RU')+' км');
   if(pace)meta.push(pace);
   if(item.steps)meta.push(item.steps.toLocaleString('ru-RU')+' шагов');
-  meta.push(EFFORTS[item.effort]||EFFORTS.moderate);
+  if(item.type!=='yoga'&&item.type!=='meditation')meta.push(EFFORTS[item.effort]||EFFORTS.moderate);
   return '<div class="train-session"><div class="train-session-head">'+
     '<div class="train-session-main" data-act="edittraining" data-id="'+item.id+'"><div class="train-session-title">'+esc(title)+'</div>'+
     '<div class="train-session-meta">'+meta.join(' · ')+'</div></div>'+
@@ -1437,8 +1705,9 @@ function renderTrainingNav(){
 function renderTrainingSummary(){
   const w=trainingWeekStats(),g=S.training.goals;
   return '<div class="panel"><div class="dgHead"><h2>Эта неделя</h2><button class="btn small" data-act="trainsettings">Расписание</button></div>'+
-    '<div class="train-summary">'+trainingMetric('Full Body',w.strength,g.strength)+trainingMetric('Бег',w.run,g.run)+trainingMetric('Ходьба',w.walk,g.walk)+'</div>'+
+    '<div class="train-summary">'+trainingMetric('Full Body',w.strength,g.strength)+trainingMetric('Бег',w.run,g.run)+trainingMetric('Ходьба',w.walk,g.walk)+trainingMetric('Йога',w.yoga,g.yoga)+'</div>'+
     '<div class="todayRow" style="margin-top:9px"><span>Всего движения</span><b>'+w.minutes+' мин</b></div>'+
+    '<div class="todayRow"><span>Медитации</span><b>'+w.meditation+' · '+w.meditationMinutes+' мин</b></div>'+
     '<div class="todayRow"><span>Дистанция</span><b>бег '+w.runKm+' км · ходьба '+w.walkKm+' км</b></div>'+
     '<div class="muted sec-note">Ориентиры без штрафов. Отдых и повторение комфортного уровня — часть плана.</div></div>';
 }
@@ -1469,6 +1738,10 @@ function todayPlanInfo(){
     const completed=sessions.find(x=>x.type==='run'),level=completed?completed.runLevel:S.training.runLevel,run=RUN_LEVELS[level-1];
     return {code,done,title:run.title,text:run.text,act:'addrun',id:'',button:done?'Записать ещё одну пробежку':'Начать запись бега'};
   }
+  if(code==='yoga'){
+    const practiceId=S.training.wellness.schedule.yoga.practiceId,practice=PRACTICE_TEMPLATES[practiceId];
+    return {code,done,title:practice.title,text:practice.text,act:'startpractice',id:practiceId,button:done?'Начать ещё одну практику':'Начать йогу по таймеру'};
+  }
   const walkMap={walkRecovery:'recovery',walkBrisk:'brisk',walkLong:'long'};
   if(walkMap[code]){
     const kind=walkMap[code],walk=WALK_TYPES[kind];
@@ -1487,11 +1760,12 @@ function renderTodaySection(){
     '<div class="panel"><h2>Неделя одним взглядом</h2>'+renderWeekPlan()+'<button class="btn block" data-act="trainsection" data-id="week">Открыть план недели</button></div>'+
     '<div class="panel"><h2>Записать другую активность</h2><div class="train-quick">'+
       '<button class="btn" data-act="addstrength" data-id="'+S.training.nextStrength+'">Full Body '+S.training.nextStrength+'</button>'+
-      '<button class="btn" data-act="addrun">Бег</button><button class="btn" data-act="addwalk" data-id="recovery">Ходьба</button></div></div>'+
+      '<button class="btn" data-act="addrun">Бег</button><button class="btn" data-act="addwalk" data-id="recovery">Ходьба</button>'+
+      '<button class="btn" data-act="trainsection" data-id="yoga">Йога</button><button class="btn" data-act="trainsection" data-id="meditation">Медитация</button></div></div>'+
     '<div class="panel"><h2>Безопасность</h2><div class="muted">Остановись при боли или недомогании. При травме, симптомах, недавней операции, хроническом состоянии, беременности или сомнениях сначала обсуди нагрузку с медицинским специалистом.</div></div>';
 }
 function renderWeekSection(){
-  return '<div class="train-section-note">Основная активность на каждый день. Пропуск не создаёт штраф и не влияет на серию задач.</div>'+
+  return '<div class="train-section-note">Основная активность на каждый день. Сохранённая силовая, бег, ходьба или йога автоматически закрывает пункт «Движение» строгого ежедневного плана.</div>'+
     '<div class="panel"><div class="dgHead"><h2>План недели</h2><button class="btn small" data-act="trainsettings">Изменить</button></div>'+renderWeekPlan()+'<button class="btn block" data-act="trainweekreset">Вернуть рекомендуемую неделю</button></div>'+
     renderTrainingSummary()+
     '<div class="panel"><h2>Как переставлять дни</h2><div class="muted">Оставляй хотя бы один день между силовыми и небеговой день между пробежками. Если восстановление не успевает — замени занятие прогулкой или отдыхом.</div></div>';
@@ -1522,10 +1796,35 @@ function renderWalkSection(){
   }).join('')+'<div class="muted sec-note">Восстановительную прогулку делай в удобном темпе. Для быстрой ходьбы ориентир простой: говорить можно, петь уже трудно.</div></div>'+
     '<div class="panel"><h2>Последние прогулки</h2>'+(recent.map(renderTrainingSession).join('')||'<div class="empty">Прогулок пока нет</div>')+'</div>';
 }
+function renderPracticeTimer(type){
+  const timer=S.training.wellness.timer;
+  if(!timer||timer.type!==type)return '';
+  const practice=PRACTICE_TEMPLATES[timer.practiceId],remaining=practiceTimerRemaining(timer),running=!!timer.runningSince;
+  const state=remaining<=0?'Время вышло · запись ещё не создана':running?'Идёт практика':'Пауза';
+  return '<div class="practice-timer" data-wellness-timer><div class="practice-timer-name">'+esc(practice.title)+'</div>'+
+    '<div class="practice-timer-value" data-timer-remaining>'+timerLabel(remaining)+'</div><div class="practice-timer-state">'+state+'</div>'+
+    '<div class="practice-timer-actions">'+
+      (running?'<button class="btn" data-act="pausetimer">Пауза</button>':remaining>0?'<button class="btn" data-act="resumetimer">Продолжить</button>':'')+
+      '<button class="btn primary" data-act="finishtimer">'+(remaining<=0?'Сохранить практику':'Завершить и записать')+'</button>'+
+      '<button class="btn" data-act="canceltimer">Отменить таймер</button></div></div>';
+}
+function renderPracticeSection(type){
+  const schedule=S.training.wellness.schedule[type],entries=practiceEntries(type),day=new Date().getDay();
+  const recent=trainingSessions().filter(x=>x.type===type).slice(0,3);
+  const todayDone=S.training.sessions.some(x=>x.type===type&&x.date===today());
+  const days=schedule.days.map(key=>{const found=WEEK_DAYS.find(d=>d.key===key);return found?found.short:'';}).filter(Boolean).join(', ');
+  const isYoga=type==='yoga';
+  return '<div class="train-section-note">'+(isYoga?'Мягкая практика для подвижности и восстановления. Ни одно движение не выполняется через боль.':'Практика внимания для новичка: отвлекаться нормально, задача — спокойно возвращаться к выбранному объекту.')+'</div>'+
+    '<div class="panel"><div class="dgHead"><h2>'+(isYoga?'Расписание йоги':'Ежедневная медитация')+'</h2><button class="btn small" data-act="wellnesssettings">Изменить</button></div>'+
+    '<div class="todayRow"><span>Дни</span><b>'+days+'</b></div><div class="todayRow"><span>Сегодня</span><b>'+(todayDone?'Запись есть':schedule.days.includes(day)?'По плану':'По желанию')+'</b></div></div>'+
+    '<div class="panel"><h2>Практики для начинающих</h2><button class="btn block" data-act="addpractice" data-id="'+type+'">Записать выполненную практику</button>'+entries.map(([key,item])=>'<div class="train-plan'+(key===schedule.practiceId?' next':'')+'"><div class="train-plan-head"><strong>'+esc(item.title)+'</strong>'+(key===schedule.practiceId?'<span class="badge rS">ПО УМОЛЧАНИЮ</span>':'')+'</div><div class="askText">'+esc(item.text)+'</div><div class="train-actions"><button class="btn primary" data-act="startpractice" data-id="'+key+'">Таймер</button><button class="btn" data-act="addpractice" data-id="'+key+'">Записать без таймера</button></div></div>').join('')+renderPracticeTimer(type)+'</div>'+
+    '<div class="panel"><h2>Последние записи</h2>'+(recent.map(renderTrainingSession).join('')||'<div class="empty">Записей пока нет</div>')+'</div>'+
+    '<div class="panel"><h2>Безопасность</h2><div class="muted">'+(isYoga?'Остановись при острой боли, головокружении или недомогании. Сохраняй комфортный диапазон движений и устойчивую опору.':'Можно сидеть на стуле или лежать. Медитация не заменяет медицинскую или психологическую помощь; при заметном ухудшении самочувствия остановись.')+'</div></div>';
+}
 function renderJournalSection(){
   const filtered=trainingSessions().filter(x=>ui.trainingFilter==='all'||x.type===ui.trainingFilter);
   const visible=filtered.slice(0,ui.trainingVisible);
-  return '<div class="panel"><h2>Журнал тренировок · '+S.training.sessions.length+'</h2>'+
+  return '<div class="panel"><h2>Журнал активности · '+S.training.sessions.length+'</h2>'+
       '<div class="chips" role="group" aria-label="Фильтр журнала тренировок">'+
       '<button class="chip'+(ui.trainingFilter==='all'?' on':'')+'" aria-pressed="'+(ui.trainingFilter==='all')+'" data-act="trainfilter" data-id="all">ВСЕ</button>'+
       Object.keys(TRAINING_TYPES).map(k=>'<button class="chip'+(ui.trainingFilter===k?' on':'')+'" aria-pressed="'+(ui.trainingFilter===k)+'" data-act="trainfilter" data-id="'+k+'">'+TRAINING_TYPES[k]+'</button>').join('')+'</div>'+
@@ -1536,14 +1835,14 @@ function renderTrainingSettingsSection(){
   const profile=S.training.profile,setup=TRAINING_SETUPS[profile.setup];
   return '<div class="panel"><h2>Профиль</h2><div class="profile-grid"><div class="profile-cell"><span>Опыт</span><b>'+TRAINING_EXPERIENCE[profile.experience]+'</b></div><div class="profile-cell"><span>Оборудование</span><b>'+setup.label+'</b></div></div>'+
     '<button class="btn block" data-act="trainprofile">Изменить профиль</button><button class="btn block" data-act="trainexercises">Выбрать упражнения</button></div>'+
-    '<div class="panel"><h2>Планирование</h2><div class="todayRow"><span>Силовые</span><b>'+S.training.goals.strength+' в неделю</b></div><div class="todayRow"><span>Бег</span><b>'+S.training.goals.run+' в неделю</b></div><div class="todayRow"><span>Ходьба</span><b>'+S.training.goals.walk+' в неделю</b></div>'+
-    '<button class="btn block" data-act="trainsettings">Изменить расписание</button><button class="btn block" data-act="trainweekreset">Рекомендуемая неделя</button></div>'+
-    '<div class="panel"><h2>Принципы программы</h2><div class="muted">Full Body A и B чередуются по фактически сохранённым занятиям. Изменение профиля не переписывает журнал. Расписание — ориентир: оно не создаёт задачи, не начисляет баллы и не наказывает за пропуск.</div>'+
+    '<div class="panel"><h2>Планирование</h2><div class="todayRow"><span>Силовые</span><b>'+S.training.goals.strength+' в неделю</b></div><div class="todayRow"><span>Бег</span><b>'+S.training.goals.run+' в неделю</b></div><div class="todayRow"><span>Ходьба</span><b>'+S.training.goals.walk+' в неделю</b></div><div class="todayRow"><span>Йога</span><b>'+S.training.goals.yoga+' в неделю</b></div><div class="todayRow"><span>Медитация</span><b>ежедневно</b></div>'+
+    '<button class="btn block" data-act="trainsettings">Изменить расписание движения</button><button class="btn block" data-act="wellnesssettings">Настроить йогу и медитацию</button><button class="btn block" data-act="trainweekreset">Рекомендуемая неделя</button></div>'+
+    '<div class="panel"><h2>Принципы программы</h2><div class="muted">Full Body A и B чередуются по фактически сохранённым занятиям. Изменение профиля не переписывает журнал. Расписание задаёт реалистичный ритм; баллы начисляются один раз через связанные ежедневные пункты.</div>'+
     '<div class="muted sec-note source-links">Справочные материалы: <a href="https://acsm.org/education-resources/trending-topics-resources/physical-activity-guidelines/" target="_blank" rel="noopener">ACSM</a>, <a href="https://www.cdc.gov/physical-activity/php/about/index.html" target="_blank" rel="noopener">CDC</a>, <a href="https://www.nhs.uk/better-health/get-active/get-running-with-couch-to-5k/" target="_blank" rel="noopener">NHS</a>.</div></div>';
 }
 function renderTraining(){
   if(!TRAINING_SECTIONS[ui.trainingSection])ui.trainingSection='today';
-  const sections={today:renderTodaySection,week:renderWeekSection,strength:renderStrengthSection,run:renderRunSection,walk:renderWalkSection,journal:renderJournalSection,settings:renderTrainingSettingsSection};
+  const sections={today:renderTodaySection,week:renderWeekSection,strength:renderStrengthSection,run:renderRunSection,walk:renderWalkSection,yoga:()=>renderPracticeSection('yoga'),meditation:()=>renderPracticeSection('meditation'),journal:renderJournalSection,settings:renderTrainingSettingsSection};
   return renderTrainingNav()+sections[ui.trainingSection]();
 }
 function renderStatus(){
@@ -1626,7 +1925,7 @@ function renderQuests(){
       (isFocus(d.stat)?'<span class="badge rS">ПРИОРИТЕТ</span>':'')+'</div></div>'+
       '<button class="xdel" aria-label="Удалить ежедневную задачу" data-act="deldaily" data-id="'+d.id+'">✕</button></div>').join('')||'<div class="empty">Ежедневных задач пока нет</div>')+
     '<button class="btn block" data-act="addDaily">+ Ежедневная задача</button>'+
-    '<div class="muted sec-note">Список обновляется в полночь. За весь план дня начисляется ещё 20 баллов и продолжается серия.</div></div>';
+    '<div class="muted sec-note">Список обновляется в полночь. Медитация отмечается через таймер или запись практики; сохранённая активность автоматически закрывает движение. За весь план дня начисляется ещё 20 баллов и продолжается строгая серия.</div></div>';
   html+='<div class="panel"><h2>Задачи · '+act.length+(ui.taskFilter==='all'?'':' из '+allAct.length)+'</h2>'+
     '<div class="chips" role="group" aria-label="Фильтр задач по категории">'+
     '<button class="chip'+(ui.taskFilter==='all'?' on':'')+'" aria-pressed="'+(ui.taskFilter==='all')+'" data-act="taskfilter" data-id="all">ВСЕ</button>'+
@@ -1679,13 +1978,14 @@ function renderShop(){
       '<button class="btn small" data-act="buy" data-id="'+it.id+'" '+(S.hunter.gold<it.cost||restActive?'disabled':'')+'>'+(restActive?'Активно':'Получить')+'</button>'+
       '<button class="xdel" aria-label="Удалить награду" data-act="delshop" data-id="'+it.id+'">✕</button></div>';}).join('')||'<div class="empty">Добавь награды, ради которых стоит копить баллы</div>')+
     '<button class="btn block" data-act="addShop">+ Новая награда</button>'+
-    '<div class="muted sec-note">Баллы начисляются за завершённые задачи. Выбирай реальные небольшие награды, которые поддерживают привычки и не мешают целям.</div></div>';
+    '<div class="muted sec-note">Денежные лимиты — стартовое предложение. Нажми на название награды, чтобы изменить её или цену под семейный бюджет. Баллы начисляются за завершённые задачи.</div></div>';
 }
 function renderMore(){
+  const personalMode=!S.personalization||S.personalization.mode==='personal',archived=catalogSize(S.archive);
   return '<div class="panel"><h2>Статистика</h2>'+
     '<div class="todayRow"><span>Задач выполнено</span><b>'+S.done.quests+'</b></div>'+
     '<div class="todayRow"><span>Проектов завершено</span><b>'+S.done.dungeons+'</b></div>'+
-    '<div class="todayRow"><span>Тренировок записано</span><b>'+S.training.sessions.length+'</b></div>'+
+    '<div class="todayRow"><span>Активностей записано</span><b>'+S.training.sessions.length+'</b></div>'+
     '<div class="todayRow"><span>Дополнительных задач</span><b>'+(S.done.hidden||0)+'</b></div>'+
     '<div class="todayRow"><span>Наград получено</span><b>'+S.done.buys+'</b></div>'+
     '<div class="todayRow"><span>Лучшая серия</span><b>'+S.done.bestStreak+' дн.</b></div>'+
@@ -1694,6 +1994,13 @@ function renderMore(){
     '<div class="todayRow"><span>Доступно</span><b>'+S.hunter.gold+' баллов</b></div>'+
     '<div class="todayRow"><span>Наград в магазине</span><b>'+S.shop.length+'</b></div>'+
     '<button class="btn block" data-act="openshop">Открыть магазин</button></div>'+
+    '<div class="panel"><h2>Персональный план Артёма</h2><div class="todayRow"><span>Сейчас открыт</span><b>'+(personalMode?'Персональный каталог':'Прежний каталог')+'</b></div>'+
+    '<div class="todayRow"><span>Записей в архиве</span><b>'+archived+'</b></div>'+
+    '<button class="btn block" data-act="swaparchive" '+(archived?'':'disabled')+'>'+(personalMode?'Открыть прежний каталог':'Вернуть каталог Артёма')+'</button>'+
+    '<div class="muted sec-note">Баллы, серия, статистика, история и журнал тренировок общие. Переключаются только ежедневные задачи, разовые задачи, проекты и награды.</div></div>'+
+    '<div class="panel"><h2>Учебный ритм</h2><div class="todayRow"><span>Пн / Чт</span><b>Слаботочные системы</b></div><div class="todayRow"><span>Вт / Пт</span><b>Системное администрирование</b></div><div class="todayRow"><span>Ср / Сб</span><b>Электрика: теория и симулятор</b></div><div class="todayRow"><span>Вс</span><b>Повторение и ошибки</b></div>'+
+    '<div class="muted sec-note">Электрика — только безопасная теория, симуляторы и обесточенные учебные макеты. Не разбирай щит, не касайся проводки и не выполняй самостоятельные работы под напряжением.</div>'+
+    '<div class="muted sec-note source-links"><a href="https://learn.microsoft.com/en-us/training/paths/windows-server-deployment-configuration-administration/" target="_blank" rel="noopener">Microsoft Learn</a> · <a href="https://documentation.ubuntu.com/server/" target="_blank" rel="noopener">Ubuntu Server</a> · <a href="https://www.osha.gov/sites/default/files/publications/OSHA4472.pdf" target="_blank" rel="noopener">Электробезопасность</a></div></div>'+
     '<div class="panel"><h2>Данные · Синхронизация</h2>'+
     '<button class="btn block" data-act="export">⇩ Экспорт бэкапа (JSON)</button>'+
     '<button class="btn block" data-act="importP">⇪ Импорт пакета задач с ПК</button>'+
@@ -1747,14 +2054,27 @@ $('#view').addEventListener('click',e=>{
     case 'addstrength':formStrength(id);break;
     case 'addrun':formCardio('run');break;
     case 'addwalk':formCardio('walk',null,id);break;
+    case 'startpractice':startPracticeTimer(id);break;
+    case 'addpractice':{
+      const practice=PRACTICE_TEMPLATES[id];
+      if(practice)formPractice(practice.type,null,id);
+      else if(id==='yoga'||id==='meditation')formPractice(id,null,S.training.wellness.schedule[id].practiceId);
+      break;
+    }
+    case 'pausetimer':pausePracticeTimer();break;
+    case 'resumetimer':resumePracticeTimer();break;
+    case 'finishtimer':finishPracticeTimer();break;
+    case 'canceltimer':cancelPracticeTimer();break;
     case 'edittraining':{
       const item=S.training.sessions.find(x=>x.id===id);if(!item)break;
       if(item.type==='strength')formStrength(item.variant,id);
+      else if(item.type==='yoga'||item.type==='meditation')formPractice(item.type,id,item.practiceId);
       else formCardio(item.type,id,item.walkType);
       break;
     }
     case 'deltraining':deleteTraining(id);break;
     case 'trainsettings':formTrainingSettings();break;
+    case 'wellnesssettings':formWellnessSettings();break;
     case 'trainprofile':formTrainingProfile();break;
     case 'trainexercises':formExercisePreferences();break;
     case 'changeexercise':formExercisePreference(id);break;
@@ -1800,6 +2120,7 @@ $('#view').addEventListener('click',e=>{
     case 'importB':$('#fileB').click();break;
     case 'importP':$('#fileP').click();break;
     case 'rollback':rollbackRestore();break;
+    case 'swaparchive':swapCatalogArchive();break;
     case 'sync':contentSync(true);break;
     case 'reset':resetAll();break;
   }
@@ -1810,7 +2131,7 @@ $('#fileP').addEventListener('change',e=>readFile(e,obj=>{
   sysMsg(n?('Загружено новых записей: '+n):'Новых записей нет');
 }));
 document.addEventListener('visibilitychange',()=>{
-  if(!document.hidden){checkDailyReset();scheduleRollover();render();}
+  if(!document.hidden){checkDailyReset();scheduleRollover();render();practiceTimerTick();}
 });
 
 /* ---------- запуск ---------- */
@@ -1818,6 +2139,7 @@ checkDailyReset();
 save();
 render();
 scheduleRollover();
+setInterval(practiceTimerTick,1000);
 contentSync(false);
 if('serviceWorker' in navigator){
   addEventListener('load',()=>{
